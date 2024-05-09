@@ -52,6 +52,17 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return !isEmpty(str);
     }
 
+    public static boolean isAllNotEmpty(Object... objects) {
+        boolean bool = true;
+        for (Object o : objects) {
+            if (o == null) {
+                bool = false;
+                break;
+            }
+        }
+        return bool;
+    }
+
     /**
      * 去空格
      */

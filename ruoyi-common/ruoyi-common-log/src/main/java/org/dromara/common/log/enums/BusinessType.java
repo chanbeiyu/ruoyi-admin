@@ -26,6 +26,11 @@ public enum BusinessType {
      */
     DELETE,
 
+    PUBLISH,
+
+    LOCK,
+    UNLOCK,
+
     /**
      * 授权
      */

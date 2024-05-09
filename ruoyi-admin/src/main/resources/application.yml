@@ -134,6 +134,9 @@ tenant:
     - sys_user_role
     - sys_client
     - sys_oss_config
+    - thot_album_thought
+    - thot_channel_thought
+    - thot_topic_attend
 
 # MyBatisPlus配置
 # https://baomidou.com/config/
