@@ -1,7 +1,8 @@
 package org.dromara.platform.mapper;
 
-import org.dromara.platform.domain.SocialMember;
+import org.dromara.platform.domain.social.SocialMember;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * 成员信息Mapper接口
@@ -9,6 +10,7 @@ import org.dromara.common.mybatis.core.mapper.IBaseMapper;
  * @author chanbeiyu
  * @date 2023-06-28
  */
+@Repository
 public interface SocialMemberMapper extends IBaseMapper<SocialMember> {
 
 }

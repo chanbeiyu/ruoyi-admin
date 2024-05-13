@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
-import org.dromara.platform.domain.bo.TradeOrderItemBo;
+import org.dromara.platform.domain.trade.bo.TradeOrderItemBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -17,7 +17,7 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.vo.trade.TradeOrderItemVo;
+import org.dromara.platform.domain.trade.vo.TradeOrderItemVo;
 import org.dromara.platform.service.trade.TradeOrderItemService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

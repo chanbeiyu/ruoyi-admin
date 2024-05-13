@@ -1,7 +1,8 @@
 package org.dromara.platform.mapper;
 
-import org.dromara.platform.domain.ThotTopic;
+import org.dromara.platform.domain.thoughts.ThotTopic;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * 话题信息Mapper接口
@@ -9,6 +10,7 @@ import org.dromara.common.mybatis.core.mapper.IBaseMapper;
  * @author chanbeiyu
  * @date 2023-07-01
  */
+@Repository
 public interface ThotTopicMapper extends IBaseMapper<ThotTopic> {
 
 }

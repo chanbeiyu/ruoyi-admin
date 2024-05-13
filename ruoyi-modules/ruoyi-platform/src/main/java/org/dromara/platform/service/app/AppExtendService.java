@@ -3,16 +3,15 @@ package org.dromara.platform.service.app;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.AppExtend;
-import org.dromara.platform.domain.bo.AppExtendBo;
+import org.dromara.platform.domain.app.AppExtend;
+import org.dromara.platform.domain.app.bo.AppExtendBo;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
 import org.dromara.common.mybatis.core.service.IBaseService;
-import org.dromara.platform.domain.vo.app.AppExtendVo;
+import org.dromara.platform.domain.app.vo.AppExtendVo;
 import org.dromara.platform.mapper.AppExtendMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 
 /**

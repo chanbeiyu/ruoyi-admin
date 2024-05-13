@@ -22,4 +22,9 @@ public class LoginTenantVo {
      */
     private List<TenantListVo> voList;
 
+    /**
+     * 应用对象列表
+     */
+    private List<AppListVo> appList;
+
 }

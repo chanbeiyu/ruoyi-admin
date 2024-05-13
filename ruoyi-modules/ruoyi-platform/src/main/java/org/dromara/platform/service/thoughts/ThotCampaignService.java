@@ -12,9 +12,9 @@ import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.mybatis.core.service.IBaseService;
 import org.dromara.platform.constant.DataStatus;
-import org.dromara.platform.domain.ThotCampaign;
-import org.dromara.platform.domain.bo.ThotCampaignBo;
-import org.dromara.platform.domain.vo.thoughts.ThotCampaignVo;
+import org.dromara.platform.domain.thoughts.ThotCampaign;
+import org.dromara.platform.domain.thoughts.bo.ThotCampaignBo;
+import org.dromara.platform.domain.thoughts.vo.ThotCampaignVo;
 import org.dromara.platform.mapper.ThotCampaignMapper;
 import org.springframework.stereotype.Service;
 

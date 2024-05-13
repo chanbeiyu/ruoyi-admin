@@ -5,8 +5,8 @@
 //import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 //import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 //import lombok.RequiredArgsConstructor;
-//import org.dromara.platform.domain.AppInfo;
-//import org.dromara.platform.domain.AppUser;
+//import org.dromara.platform.domain.app.AppInfo;
+//import org.dromara.platform.domain.app.AppUser;
 //import org.dromara.common.core.exception.ServiceException;
 //import org.dromara.common.core.utils.StreamUtils;
 //import org.dromara.common.core.utils.StringUtils;

@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
 import org.dromara.common.mybatis.core.service.IBaseService;
-import org.dromara.platform.domain.ThotStyle;
-import org.dromara.platform.domain.bo.ThotStyleBo;
-import org.dromara.platform.domain.vo.thoughts.ThotStyleVo;
+import org.dromara.platform.domain.thoughts.ThotStyle;
+import org.dromara.platform.domain.thoughts.bo.ThotStyleBo;
+import org.dromara.platform.domain.thoughts.vo.ThotStyleVo;
 import org.dromara.platform.mapper.ThotStyleMapper;
 import org.springframework.stereotype.Service;
 

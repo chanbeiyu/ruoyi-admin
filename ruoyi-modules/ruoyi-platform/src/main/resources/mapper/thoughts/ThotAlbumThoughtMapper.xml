@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.dromara.platform.mapper.ThotAlbumThoughtMapper">
 
-    <resultMap type="org.dromara.platform.domain.vo.ThotAlbumThoughtVo" id="AlbumThoughtResult"/>
+    <resultMap type="org.dromara.platform.domain.thoughts.vo.ThotAlbumThoughtVo" id="AlbumThoughtResult"/>
 
     <select id="selectAlbumThoughtByAlbumId" parameterType="Long" resultMap="AlbumThoughtResult">
         SELECT tat.id,

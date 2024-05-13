@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
 import org.dromara.common.mybatis.core.service.IBaseService;
-import org.dromara.platform.domain.ThotAlbumThought;
-import org.dromara.platform.domain.vo.ThotAlbumThoughtVo;
+import org.dromara.platform.domain.thoughts.ThotAlbumThought;
+import org.dromara.platform.domain.thoughts.vo.ThotAlbumThoughtVo;
 import org.dromara.platform.mapper.ThotAlbumThoughtMapper;
 import org.springframework.stereotype.Service;
 

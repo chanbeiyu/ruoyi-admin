@@ -1,8 +1,9 @@
 package org.dromara.platform.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.dromara.platform.domain.ThotThought;
+import org.dromara.platform.domain.thoughts.ThotThought;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * 思绪信息Mapper接口
@@ -10,7 +11,8 @@ import org.dromara.common.mybatis.core.mapper.IBaseMapper;
  * @author chanbeiyu
  * @date 2023-07-01
  */
-@Mapper
+
+@Repository
 public interface ThotThoughtMapper extends IBaseMapper<ThotThought> {
 
 }

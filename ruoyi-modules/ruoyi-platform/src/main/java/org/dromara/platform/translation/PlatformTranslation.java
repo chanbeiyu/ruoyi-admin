@@ -1,8 +1,10 @@
 package org.dromara.platform.translation;
 
 import lombok.RequiredArgsConstructor;
+import org.dromara.common.redis.utils.RedisUtils;
 import org.dromara.common.translation.annotation.TranslationType;
 import org.dromara.common.translation.core.TranslationInterface;
+import org.dromara.platform.constant.RedisKey;
 import org.dromara.platform.mapper.*;
 import org.springframework.stereotype.Component;
 
@@ -27,9 +29,11 @@ public class PlatformTranslation implements TranslationInterface<String> {
     @Override
     public String translation(Object key, String other) {
         switch (other) {
-            case Other.APP -> {
-                //return CacheUtils.get(RedisKey.APP_ID_NAME, key);
-                return appInfoMapper.selectById(Long.parseLong(key.toString())).getAppName();
+            case Other.APP_NAME -> {
+                return RedisUtils.getCacheMapValue(RedisKey.APP_ID_NAME, String.valueOf(key));
+            }
+            case Other.APP_CODE -> {
+                return RedisUtils.getCacheMapValue(RedisKey.APP_ID_CODE, String.valueOf(key));
             }
             case Other.MEMBER_INFO -> {
                 //return CacheUtils.get(RedisKey.MEMBER_INFO_ID_NAME, key);
@@ -58,7 +62,8 @@ public class PlatformTranslation implements TranslationInterface<String> {
     }
 
     public interface Other {
-        String APP = "app";
+        String APP_CODE = "app_code";
+        String APP_NAME = "app_name";
         String MEMBER_INFO = "member_info";
         String MEMBER_TYPE = "member_type";
         String SOCIAL_SUBJECT = "subject";

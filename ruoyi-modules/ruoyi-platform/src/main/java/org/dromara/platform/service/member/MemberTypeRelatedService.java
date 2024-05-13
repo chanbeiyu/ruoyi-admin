@@ -3,11 +3,11 @@ package org.dromara.platform.service.member;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.MemberTypeRelated;
-import org.dromara.platform.domain.bo.MemberTypeRelatedBo;
+import org.dromara.platform.domain.member.MemberTypeRelated;
+import org.dromara.platform.domain.member.bo.MemberTypeRelatedBo;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
 import org.dromara.common.mybatis.core.service.IBaseService;
-import org.dromara.platform.domain.vo.member.MemberTypeRelatedVo;
+import org.dromara.platform.domain.member.vo.MemberTypeRelatedVo;
 import org.dromara.platform.mapper.MemberTypeRelatedMapper;
 import org.springframework.stereotype.Service;
 

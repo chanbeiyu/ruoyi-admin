@@ -4,13 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.SocialFavorite;
-import org.dromara.platform.domain.bo.SocialFavoriteBo;
+import org.dromara.platform.domain.social.SocialFavorite;
+import org.dromara.platform.domain.social.bo.SocialFavoriteBo;
 import org.dromara.platform.mapper.SocialFavoriteMapper;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
 import org.dromara.common.mybatis.core.service.IBaseService;
-import org.dromara.platform.domain.vo.social.SocialFavoriteVo;
+import org.dromara.platform.domain.social.vo.SocialFavoriteVo;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;

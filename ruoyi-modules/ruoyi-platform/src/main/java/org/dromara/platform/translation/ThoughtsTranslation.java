@@ -22,7 +22,8 @@ public class ThoughtsTranslation implements TranslationInterface<String> {
     public String translation(Object key, String other) {
         switch (other) {
             case Other.APP -> {
-                return appInfoService.queryById(Long.parseLong(key.toString())).getAppName();
+                return "";
+                //return appInfoService.queryById(Long.parseLong(key.toString())).getAppName();
             }
             default -> {
                 return null;

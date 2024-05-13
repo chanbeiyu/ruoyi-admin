@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
 import org.dromara.common.mybatis.core.service.IBaseService;
-import org.dromara.platform.domain.ThotTopicAttend;
-import org.dromara.platform.domain.vo.thoughts.ThotTopicAttendVo;
+import org.dromara.platform.domain.thoughts.ThotTopicAttend;
+import org.dromara.platform.domain.thoughts.vo.ThotTopicAttendVo;
 import org.dromara.platform.mapper.ThotTopicAttendMapper;
 import org.springframework.stereotype.Service;
 

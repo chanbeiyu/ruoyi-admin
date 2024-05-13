@@ -2,8 +2,17 @@ package org.dromara.platform.constant;
 
 public interface RedisKey {
 
+    String APP_ID_CODE = "global:app:id-code";
     String APP_ID_NAME = "global:app:id-name";
     String APP_CODE_NAME = "global:app:code-name";
+
+    String APP_TAG_ID_CODE = "global:app:tag:id-code";
+    String APP_TAG_ID_NAME = "global:app:tag:id-name";
+    String APP_TAG_CODE_NAME = "global:app:tag:code-name";
+
+    String APP_SUBJECT_ID_CODE = "global:app:subject:id-code";
+    String APP_SUBJECT_ID_NAME = "global:app:subject:id-name";
+    String APP_SUBJECT_CODE_NAME = "global:app:subject:code-name";
 
     String SOCIAL_SUBJECT_ID_NAME = "global:social:subject:id-name";
     String SOCIAL_SUBJECT_CODE_NAME = "global:social:subject:code-name";

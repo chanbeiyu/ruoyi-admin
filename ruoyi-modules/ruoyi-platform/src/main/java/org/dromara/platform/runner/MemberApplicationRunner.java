@@ -2,9 +2,10 @@ package org.dromara.platform.runner;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.common.redis.utils.RedisUtils;
 import org.dromara.platform.constant.RedisKey;
-import org.dromara.platform.domain.MemberInfo;
-import org.dromara.platform.domain.MemberType;
+import org.dromara.platform.domain.member.MemberInfo;
+import org.dromara.platform.domain.member.MemberType;
 import org.dromara.common.redis.utils.CacheUtils;
 import org.dromara.platform.mapper.MemberInfoMapper;
 import org.dromara.platform.mapper.MemberTypeMapper;
@@ -38,20 +39,20 @@ public class MemberApplicationRunner implements ApplicationRunner, DisposableBea
         List<MemberInfo> memberInfos = memberInfoMapper.selectList();
         List<MemberType> memberTypes = memberTypeMapper.selectList();
         memberInfos.forEach(o -> {
-            CacheUtils.put(RedisKey.MEMBER_INFO_ID_NAME, o.getMemberId(), o.getNickName());
-            CacheUtils.put(RedisKey.MEMBER_INFO_UNIONID_NAME, o.getUnionId(), o.getNickName());
+            RedisUtils.setCacheMapValue(RedisKey.MEMBER_INFO_ID_NAME, o.getMemberId() + "", o.getNickName());
+            RedisUtils.setCacheMapValue(RedisKey.MEMBER_INFO_UNIONID_NAME, o.getUnionId(), o.getNickName());
         });
         memberTypes.forEach(o -> {
-            CacheUtils.put(RedisKey.MEMBER_TYPE_ID_NAME, o.getTypeId(), o.getTypeName());
-            CacheUtils.put(RedisKey.MEMBER_TYPE_CODE_NAME, o.getTypeCode(), o.getTypeName());
+            RedisUtils.setCacheMapValue(RedisKey.MEMBER_TYPE_ID_NAME, o.getTypeId() + "", o.getTypeName());
+            RedisUtils.setCacheMapValue(RedisKey.MEMBER_TYPE_CODE_NAME, o.getTypeCode(), o.getTypeName());
         });
     }
 
     @Override
     public void destroy() throws Exception {
-        CacheUtils.clear(RedisKey.MEMBER_INFO_ID_NAME);
-        CacheUtils.clear(RedisKey.MEMBER_INFO_UNIONID_NAME);
-        CacheUtils.clear(RedisKey.MEMBER_TYPE_ID_NAME);
-        CacheUtils.clear(RedisKey.MEMBER_TYPE_CODE_NAME);
+        RedisUtils.deleteObject(RedisKey.MEMBER_INFO_ID_NAME);
+        RedisUtils.deleteObject(RedisKey.MEMBER_INFO_UNIONID_NAME);
+        RedisUtils.deleteObject(RedisKey.MEMBER_TYPE_ID_NAME);
+        RedisUtils.deleteObject(RedisKey.MEMBER_TYPE_CODE_NAME);
     }
 }

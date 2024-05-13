@@ -3,13 +3,13 @@ package org.dromara.platform.service.trade;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
-import org.dromara.basal.trade.domain.TradeOrderOperate;
-import org.dromara.platform.domain.bo.TradeOrderOperateBo;
+import org.dromara.platform.domain.trade.TradeOrderOperate;
+import org.dromara.platform.domain.trade.bo.TradeOrderOperateBo;
 import org.dromara.platform.mapper.TradeOrderOperateMapper;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
 import org.dromara.common.mybatis.core.service.IBaseService;
-import org.dromara.platform.domain.vo.trade.TradeOrderOperateVo;
+import org.dromara.platform.domain.trade.vo.TradeOrderOperateVo;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;

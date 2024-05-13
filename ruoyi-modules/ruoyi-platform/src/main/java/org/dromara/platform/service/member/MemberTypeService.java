@@ -6,14 +6,14 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.dromara.platform.constant.RedisKey;
-import org.dromara.platform.domain.MemberType;
-import org.dromara.platform.domain.bo.MemberTypeBo;
+import org.dromara.platform.domain.member.MemberType;
+import org.dromara.platform.domain.member.bo.MemberTypeBo;
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
 import org.dromara.common.mybatis.core.service.IBaseService;
 import org.dromara.common.redis.utils.CacheUtils;
-import org.dromara.platform.domain.vo.member.MemberTypeVo;
+import org.dromara.platform.domain.member.vo.MemberTypeVo;
 import org.dromara.platform.mapper.MemberTypeMapper;
 import org.springframework.stereotype.Service;
 

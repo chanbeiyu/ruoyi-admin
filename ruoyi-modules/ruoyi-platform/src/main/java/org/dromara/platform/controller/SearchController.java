@@ -38,7 +38,7 @@ public class SearchController extends BaseController {
      * 查询主题列表，用于搜索/选择
      */
     //@SaCheckPermission("platfrom:search:subject")
-    @GetMapping("/social/subject/search")
+    @GetMapping({"/app/subject/search"})
     public TableDataInfo<SearchVo> searchSubject(@RequestParam(required = false) String query,
                                                  @RequestParam(required = false) Long appId,
                                                  @RequestParam(required = false, defaultValue = "false") boolean cascade) {

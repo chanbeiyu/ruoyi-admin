@@ -5,12 +5,12 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.MemberInfo;
-import org.dromara.platform.domain.bo.MemberInfoBo;
+import org.dromara.platform.domain.member.MemberInfo;
+import org.dromara.platform.domain.member.bo.MemberInfoBo;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
 import org.dromara.common.mybatis.core.service.IBaseService;
-import org.dromara.platform.domain.vo.member.MemberInfoVo;
+import org.dromara.platform.domain.member.vo.MemberInfoVo;
 import org.dromara.platform.mapper.MemberInfoMapper;
 import org.springframework.stereotype.Service;
 

@@ -4,16 +4,17 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
+import org.dromara.common.redis.utils.RedisUtils;
 import org.dromara.platform.constant.RedisKey;
-import org.dromara.platform.domain.AppInfo;
-import org.dromara.platform.domain.bo.AppExtendBo;
-import org.dromara.platform.domain.bo.AppInfoBo;
+import org.dromara.platform.domain.app.AppInfo;
+import org.dromara.platform.domain.app.bo.AppExtendBo;
+import org.dromara.platform.domain.app.bo.AppInfoBo;
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
 import org.dromara.common.mybatis.core.service.IBaseService;
 import org.dromara.common.redis.utils.CacheUtils;
-import org.dromara.platform.domain.vo.app.AppInfoVo;
+import org.dromara.platform.domain.app.vo.AppInfoVo;
 import org.dromara.platform.mapper.AppInfoMapper;
 import org.springframework.stereotype.Service;
 
@@ -64,8 +65,9 @@ public class AppInfoService implements IBaseService<AppInfo, AppInfoVo, AppInfoB
             AppExtendBo extendBo = new AppExtendBo();
             extendBo.setAppId(add.getAppId());
             appExtendService.insertByBo(extendBo);
-            CacheUtils.put(RedisKey.APP_ID_NAME, add.getAppId(), bo.getAppName());
-            CacheUtils.put(RedisKey.APP_CODE_NAME, add.getAppCode(), bo.getAppName());
+            RedisUtils.setCacheMapValue(RedisKey.APP_ID_NAME, add.getAppId() + "", bo.getAppName());
+            RedisUtils.setCacheMapValue(RedisKey.APP_ID_CODE, add.getAppId() + "", add.getAppCode());
+            RedisUtils.setCacheMapValue(RedisKey.APP_CODE_NAME, add.getAppCode(), bo.getAppName());
         }
         return flag;
     }
@@ -78,8 +80,9 @@ public class AppInfoService implements IBaseService<AppInfo, AppInfoVo, AppInfoB
         AppInfo update = MapstructUtils.convert(bo, AppInfo.class);
         boolean bool = appInfoMapper.updateById(update) > 0;
         if (bool) {
-            CacheUtils.put(RedisKey.APP_ID_NAME, update.getAppId(), update.getAppName());
-            CacheUtils.put(RedisKey.APP_CODE_NAME, update.getAppCode(), update.getAppName());
+            RedisUtils.setCacheMapValue(RedisKey.APP_ID_NAME, update.getAppId() + "", update.getAppName());
+            RedisUtils.setCacheMapValue(RedisKey.APP_ID_CODE, update.getAppId() + "", update.getAppCode());
+            RedisUtils.setCacheMapValue(RedisKey.APP_CODE_NAME, update.getAppCode(), update.getAppName());
         }
         return bool;
     }
@@ -105,8 +108,9 @@ public class AppInfoService implements IBaseService<AppInfo, AppInfoVo, AppInfoB
         boolean bool = appInfoMapper.deleteBatchIds(ids) > 0;
         if (bool) {
             appInfos.forEach(o -> {
-                CacheUtils.evict(RedisKey.APP_ID_NAME, o.getAppId());
-                CacheUtils.evict(RedisKey.APP_CODE_NAME, o.getAppCode());
+                RedisUtils.delCacheMapValue(RedisKey.APP_ID_NAME, o.getAppId() + "");
+                RedisUtils.delCacheMapValue(RedisKey.APP_ID_CODE, o.getAppCode());
+                RedisUtils.delCacheMapValue(RedisKey.APP_CODE_NAME, o.getAppCode());
             });
         }
         return bool;

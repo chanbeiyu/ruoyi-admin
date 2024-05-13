@@ -5,12 +5,12 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.dromara.common.mybatis.core.service.IBaseService;
-import org.dromara.platform.domain.SocialComment;
-import org.dromara.platform.domain.bo.SocialCommentBo;
+import org.dromara.platform.domain.social.SocialComment;
+import org.dromara.platform.domain.social.bo.SocialCommentBo;
 import org.dromara.platform.mapper.SocialCommentMapper;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
-import org.dromara.platform.domain.vo.social.SocialCommentVo;
+import org.dromara.platform.domain.social.vo.SocialCommentVo;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;

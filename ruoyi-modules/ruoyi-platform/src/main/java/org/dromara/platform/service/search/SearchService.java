@@ -3,7 +3,13 @@ package org.dromara.platform.service.search;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.*;
+import org.dromara.platform.domain.app.AppInfo;
+import org.dromara.platform.domain.app.AppSubject;
+import org.dromara.platform.domain.member.MemberInfo;
+import org.dromara.platform.domain.member.MemberType;
+import org.dromara.platform.domain.social.SocialSubject;
+import org.dromara.platform.domain.thoughts.ThotStyle;
+import org.dromara.platform.domain.thoughts.ThotThought;
 import org.dromara.platform.mapper.*;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
@@ -27,7 +33,7 @@ public class SearchService {
     private final AppInfoMapper appInfoMapper;
     private final MemberInfoMapper memberInfoMapper;
     private final MemberTypeMapper memberTypeMapper;
-    private final SocialSubjectMapper socialSubjectMapper;
+    private final AppSubjectMapper appSubjectMapper;
     private final ThotThoughtMapper thotThoughtMapper;
     private final ThotStyleMapper thotStyleMapper;
 
@@ -147,20 +153,20 @@ public class SearchService {
 
     private List<SearchVo> searchSubject(String query, Long appId) {
 
-        LambdaQueryWrapper<SocialSubject> lqw = Wrappers.lambdaQuery();
-        lqw.eq(appId != null, SocialSubject::getAppId, appId);
+        LambdaQueryWrapper<AppSubject> lqw = Wrappers.lambdaQuery();
+        lqw.eq(appId != null, AppSubject::getAppId, appId);
 
         if (StringUtils.isNotBlank(query)) {
-            lqw.and(i -> i.like(SocialSubject::getSubjectId, query)
-                .or().like(SocialSubject::getSubjectName, query)
-                .or().like(SocialSubject::getSubjectCode, query));
+            lqw.and(i -> i.like(AppSubject::getSubjectId, query)
+                .or().like(AppSubject::getSubjectName, query)
+                .or().like(AppSubject::getSubjectCode, query));
         }
 
-        return socialSubjectMapper.selectList(lqw, socialSubject -> {
-            return SearchVo.builder().value(socialSubject.getSubjectId())
-                .code(socialSubject.getSubjectCode())
-                .label(socialSubject.getSubjectName())
-                .parentValue(socialSubject.getAppId()).build();
+        return appSubjectMapper.selectList(lqw, appSubject -> {
+            return SearchVo.builder().value(appSubject.getSubjectId())
+                .code(appSubject.getSubjectCode())
+                .label(appSubject.getSubjectName())
+                .parentValue(appSubject.getAppId()).build();
         });
     }
 

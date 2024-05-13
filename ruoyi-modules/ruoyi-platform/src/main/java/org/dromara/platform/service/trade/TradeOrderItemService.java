@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
 import org.dromara.common.mybatis.core.service.IBaseService;
-import org.dromara.platform.domain.TradeOrderItem;
-import org.dromara.platform.domain.bo.TradeOrderItemBo;
+import org.dromara.platform.domain.trade.TradeOrderItem;
+import org.dromara.platform.domain.trade.bo.TradeOrderItemBo;
 import org.dromara.platform.mapper.TradeOrderItemMapper;
 import org.dromara.common.core.utils.StringUtils;
-import org.dromara.platform.domain.vo.trade.TradeOrderItemVo;
+import org.dromara.platform.domain.trade.vo.TradeOrderItemVo;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
