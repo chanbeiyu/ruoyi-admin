@@ -18,6 +18,12 @@ public class LoginTenantVo {
     private Boolean tenantEnabled;
 
     /**
+     * 当前值
+     */
+    private String tenantId;
+    private List<Long> appIds;
+
+    /**
      * 租户对象列表
      */
     private List<TenantListVo> voList;

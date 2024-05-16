@@ -1,0 +1,33 @@
+{
+  "properties": [
+    {
+      "name": "springdoc.info.contact.name",
+      "type": "java.lang.String",
+      "description": "Description for springdoc.info.contact.name."
+    },
+    {
+      "name": "springdoc.info.contact.email",
+      "type": "java.lang.String",
+      "description": "Description for springdoc.info.contact.email."
+    },
+    {
+      "name": "springdoc.info.contact.url",
+      "type": "java.lang.String",
+      "description": "Description for springdoc.info.contact.url."
+    },
+    {
+      "name": "springdoc.components.security-schemes.apiKey.type",
+      "type": "java.lang.String",
+      "description": "Description for springdoc.components.security-schemes.apiKey.type."
+    },
+    {
+      "name": "springdoc.components.security-schemes.apiKey.in",
+      "type": "java.lang.String",
+      "description": "Description for springdoc.components.security-schemes.apiKey.in."
+    },
+    {
+      "name": "springdoc.components.security-schemes.apiKey.name",
+      "type": "java.lang.String",
+      "description": "Description for springdoc.components.security-schemes.apiKey.name."
+    }
+  ] }

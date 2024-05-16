@@ -22,8 +22,12 @@ import org.dromara.common.satoken.utils.LoginHelper;
 import org.dromara.common.social.config.properties.SocialLoginConfigProperties;
 import org.dromara.common.social.config.properties.SocialProperties;
 import org.dromara.common.social.utils.SocialUtils;
+import org.dromara.common.tenant.helper.AppHelper;
 import org.dromara.common.tenant.helper.TenantHelper;
 import org.dromara.common.websocket.utils.WebSocketUtils;
+import org.dromara.platform.domain.app.bo.AppInfoBo;
+import org.dromara.platform.domain.app.vo.AppInfoVo;
+import org.dromara.platform.service.app.AppInfoService;
 import org.dromara.system.domain.SysClient;
 import org.dromara.system.domain.bo.SysTenantBo;
 import org.dromara.system.domain.vo.SysTenantVo;
@@ -31,6 +35,7 @@ import org.dromara.system.service.ISysClientService;
 import org.dromara.system.service.ISysConfigService;
 import org.dromara.system.service.ISysSocialService;
 import org.dromara.system.service.ISysTenantService;
+import org.dromara.web.domain.vo.AppListVo;
 import org.dromara.web.domain.vo.LoginTenantVo;
 import org.dromara.web.domain.vo.LoginVo;
 import org.dromara.web.domain.vo.TenantListVo;
@@ -61,6 +66,7 @@ public class AuthController {
     private final SysLoginService loginService;
     private final SysRegisterService registerService;
     private final ISysConfigService configService;
+    private final AppInfoService appInfoService;
     private final ISysTenantService tenantService;
     private final ISysSocialService socialUserService;
     private final ISysClientService clientService;
@@ -182,7 +188,10 @@ public class AuthController {
     @GetMapping("/tenant/list")
     public R<LoginTenantVo> tenantList(HttpServletRequest request) throws Exception {
         List<SysTenantVo> tenantList = tenantService.queryList(new SysTenantBo());
+        List<AppInfoVo> appVoList = appInfoService.queryList(new AppInfoBo());
         List<TenantListVo> voList = MapstructUtils.convert(tenantList, TenantListVo.class);
+        List<AppListVo> appListVos = MapstructUtils.convert(appVoList, AppListVo.class);
+
         // 获取域名
         String host;
         String referer = request.getHeader("referer");
@@ -195,10 +204,14 @@ public class AuthController {
         // 根据域名进行筛选
         List<TenantListVo> list = StreamUtils.filter(voList, vo ->
                 StringUtils.equals(vo.getDomain(), host));
+
         // 返回对象
         LoginTenantVo vo = new LoginTenantVo();
         vo.setVoList(CollUtil.isNotEmpty(list) ? list : voList);
+        vo.setAppList(appListVos);
         vo.setTenantEnabled(TenantHelper.isEnable());
+        vo.setTenantId(TenantHelper.getTenantId());
+        vo.setAppIds(AppHelper.getAppId());
         return R.ok(vo);
     }
 

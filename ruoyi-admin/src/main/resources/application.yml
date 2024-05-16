@@ -137,6 +137,14 @@ tenant:
     - thot_album_thought
     - thot_channel_thought
     - thot_topic_attend
+  app-includes:
+    - app_advice
+    - app_extend
+    - app_iap
+    - app_iap_record
+    - app_subject
+    - app_tag
+    - app_version
 
 # MyBatisPlus配置
 # https://baomidou.com/config/

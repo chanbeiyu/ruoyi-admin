@@ -24,4 +24,9 @@ public class TenantProperties {
      */
     private List<String> excludes;
 
+    /**
+     * App 包含的表
+     */
+    private List<String> appIncludes;
+
 }

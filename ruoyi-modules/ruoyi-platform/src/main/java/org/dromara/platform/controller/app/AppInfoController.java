@@ -2,10 +2,10 @@ package org.dromara.platform.controller.app;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.app.bo.AppInfoBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -15,7 +15,9 @@ import org.dromara.common.log.annotation.Log;
 import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
+import org.dromara.common.tenant.helper.AppHelper;
 import org.dromara.common.web.core.BaseController;
+import org.dromara.platform.domain.app.bo.AppInfoBo;
 import org.dromara.platform.domain.app.vo.AppInfoVo;
 import org.dromara.platform.service.app.AppInfoService;
 import org.springframework.validation.annotation.Validated;
@@ -112,4 +114,29 @@ public class AppInfoController extends BaseController {
     public R<Void> remove(@NotEmpty(message = "主键不能为空") @PathVariable Long[] appIds) {
         return toAjax(appInfoService.deleteByIds(List.of(appIds)));
     }
+
+
+    /**
+     * 动态切换应用
+     *
+     * @param appIds 应用ID
+     */
+    //@SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
+    @GetMapping("/dynamic/{appIds}")
+    public R<Void> dynamicTenant(@NotBlank(message = "AppId不能为空") @PathVariable String appIds) {
+        AppHelper.setDynamic(appIds);
+        return R.ok();
+    }
+
+    /**
+     * 清除动态应用
+     */
+    //@SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
+    @GetMapping("/dynamic/clear")
+    public R<Void> dynamicClear() {
+        AppHelper.clearDynamic();
+        return R.ok();
+    }
+
+
 }

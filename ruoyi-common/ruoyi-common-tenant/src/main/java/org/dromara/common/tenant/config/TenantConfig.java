@@ -3,6 +3,8 @@ package org.dromara.common.tenant.config;
 import cn.dev33.satoken.dao.SaTokenDao;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.handler.MultiDataPermissionHandler;
+import com.baomidou.mybatisplus.extension.plugins.inner.DataPermissionInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import org.dromara.common.core.utils.reflect.ReflectUtils;
@@ -10,6 +12,7 @@ import org.dromara.common.mybatis.config.MybatisPlusConfig;
 import org.dromara.common.redis.config.RedisConfig;
 import org.dromara.common.redis.config.properties.RedissonProperties;
 import org.dromara.common.tenant.core.TenantSaTokenDao;
+import org.dromara.common.tenant.handle.AppDataPermissionHandler;
 import org.dromara.common.tenant.handle.PlusTenantLineHandler;
 import org.dromara.common.tenant.handle.TenantKeyPrefixHandler;
 import org.dromara.common.tenant.manager.TenantSpringCacheManager;
@@ -46,6 +49,7 @@ public class TenantConfig {
         List<InnerInterceptor> interceptors = new ArrayList<>();
         // 多租户插件 必须放到第一位
         interceptors.add(tenantLineInnerInterceptor(tenantProperties));
+        interceptors.add(appDataPermissionInterceptor(tenantProperties));
         interceptors.addAll(mybatisPlusInterceptor.getInterceptors());
         mybatisPlusInterceptor.setInterceptors(interceptors);
         return true;
@@ -56,6 +60,9 @@ public class TenantConfig {
      */
     public TenantLineInnerInterceptor tenantLineInnerInterceptor(TenantProperties tenantProperties) {
         return new TenantLineInnerInterceptor(new PlusTenantLineHandler(tenantProperties));
+    }
+    public DataPermissionInterceptor appDataPermissionInterceptor(TenantProperties tenantProperties) {
+        return new DataPermissionInterceptor(new AppDataPermissionHandler(tenantProperties));
     }
 
     @Bean
