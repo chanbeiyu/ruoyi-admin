@@ -4,6 +4,7 @@ import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.ListUtil;
+import cn.hutool.json.JSON;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.baomidou.mybatisplus.core.plugins.IgnoreStrategy;
 import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
@@ -11,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.common.core.constant.GlobalConstants;
+import org.dromara.common.json.utils.JsonUtils;
 import org.dromara.common.redis.utils.RedisUtils;
 import org.dromara.common.satoken.utils.LoginHelper;
 
@@ -92,7 +94,7 @@ public class AppHelper {
         clearDynamic();
         String cacheKey = DYNAMIC_APP_KEY + ":" + LoginHelper.getUserId();
         RedisUtils.setCacheList(cacheKey, appIds);
-        SaHolder.getStorage().set(cacheKey, appIds);
+        SaHolder.getStorage().set(cacheKey, JsonUtils.toJsonString(appIds));
     }
 
     /**
@@ -105,7 +107,7 @@ public class AppHelper {
             return TEMP_DYNAMIC_APP.get();
         }
         String cacheKey = DYNAMIC_APP_KEY + ":" + LoginHelper.getUserId();
-        List<Long> appIds = SaHolder.getStorage().getModel(cacheKey, ArrayList.class);
+        List<Long> appIds = JsonUtils.parseArray(SaHolder.getStorage().getString(cacheKey), Long.class);
         if (CollUtil.isNotEmpty(appIds)) {
             return appIds;
         }
