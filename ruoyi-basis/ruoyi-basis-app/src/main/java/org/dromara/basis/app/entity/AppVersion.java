@@ -56,6 +56,11 @@ public class AppVersion extends TenantEntity {
      */
     private Date publishTime;
 
+     /**
+     * 状态
+     */
+    private String status;
+
     /**
      * 版本描述
      */

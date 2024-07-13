@@ -91,6 +91,17 @@ public class AppVersionController extends BaseController {
     }
 
     /**
+     * 状态修改
+     */
+    @SaCheckPermission("app:info:edit")
+    @Log(title = "状态变更", businessType = BusinessType.UPDATE)
+    @PutMapping("/status")
+    public R<Void> changeStatus(@RequestBody AppVersionBo bo) {
+        return toAjax(appVersionService.updateStatus(bo.getVersionId(), bo.getStatus()));
+    }
+
+
+    /**
      * 删除应用版本信息
      *
      * @param versionIds 主键串

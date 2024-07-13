@@ -6,6 +6,8 @@ import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.dromara.basis.app.entity.AppVersion;
+import org.dromara.common.excel.annotation.ExcelDictFormat;
+import org.dromara.common.excel.convert.ExcelDictConvert;
 import org.dromara.platform.core.AppBaseVo;
 
 import java.util.Date;
@@ -52,6 +54,13 @@ public class AppVersionVo extends AppBaseVo {
      */
     @ExcelProperty(value = "发布时间")
     private Date publishTime;
+
+    /**
+     * 状态
+     */
+    @ExcelProperty(value = "状态", converter = ExcelDictConvert.class)
+    @ExcelDictFormat(dictType = "sys_yes_no")
+    private String status;
 
     /**
      * 版本描述

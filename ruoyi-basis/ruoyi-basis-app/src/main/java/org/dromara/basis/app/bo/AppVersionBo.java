@@ -50,7 +50,6 @@ public class AppVersionBo extends BaseEntity {
     /**
      * 强制升级
      */
-    @NotNull(message = "强制升级不能为空", groups = { AddGroup.class, EditGroup.class })
     private String forced;
 
     /**
@@ -60,9 +59,13 @@ public class AppVersionBo extends BaseEntity {
     private Date publishTime;
 
      /**
+     * 状态
+     */
+    private String status;
+
+     /**
      * 版本描述
      */
-    @NotNull(message = "版本描述不能为空", groups = { AddGroup.class, EditGroup.class })
     private String description;
 
 }
