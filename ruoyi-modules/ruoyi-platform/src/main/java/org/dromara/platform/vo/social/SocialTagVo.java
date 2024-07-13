@@ -5,6 +5,7 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.dromara.basis.constant.TranslationConst;
 import org.dromara.common.excel.annotation.ExcelDictFormat;
 import org.dromara.common.excel.convert.ExcelDictConvert;
 import org.dromara.common.translation.annotation.Translation;
@@ -57,7 +58,7 @@ public class SocialTagVo extends AppBaseVo {
     private Long subjectId;
 
     @ExcelProperty(value = "所属主题")
-    @Translation(type = PlatformTranslation.key, mapper = "subjectId", other = PlatformTranslation.Other.SOCIAL_SUBJECT)
+    @Translation(type = TranslationConst.key, mapper = "subjectId", other = TranslationConst.SOCIAL_SUBJECT)
     private String subjectName;
 
     /**

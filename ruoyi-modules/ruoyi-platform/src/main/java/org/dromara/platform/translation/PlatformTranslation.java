@@ -1,16 +1,21 @@
 package org.dromara.platform.translation;
 
 import lombok.RequiredArgsConstructor;
+import org.dromara.basis.app.entity.AppInfo;
 import org.dromara.basis.app.mapper.AppInfoMapper;
+import org.dromara.basis.constant.TranslationConst;
+import org.dromara.basis.member.entity.MemberInfo;
+import org.dromara.basis.member.entity.MemberType;
 import org.dromara.basis.member.mapper.MemberInfoMapper;
 import org.dromara.basis.member.mapper.MemberTypeMapper;
+import org.dromara.basis.social.entity.SocialNoticeType;
+import org.dromara.basis.social.entity.SocialSubject;
+import org.dromara.basis.social.entity.SocialTag;
 import org.dromara.basis.social.mapper.SocialNoticeTypeMapper;
 import org.dromara.basis.social.mapper.SocialSubjectMapper;
 import org.dromara.basis.social.mapper.SocialTagMapper;
-import org.dromara.common.redis.utils.RedisUtils;
 import org.dromara.common.translation.annotation.TranslationType;
 import org.dromara.common.translation.core.TranslationInterface;
-import org.dromara.platform.constant.RedisKey;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,10 +23,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RequiredArgsConstructor
-@TranslationType(type = PlatformTranslation.key)
+@TranslationType(type = TranslationConst.key)
 public class PlatformTranslation implements TranslationInterface<String> {
-
-    public static final String key = "PLATFORM_ID_TO_NAME";
 
     private final AppInfoMapper appInfoMapper;
     private final MemberInfoMapper memberInfoMapper;
@@ -34,46 +37,50 @@ public class PlatformTranslation implements TranslationInterface<String> {
     @Override
     public String translation(Object key, String other) {
         switch (other) {
-            case Other.APP_NAME -> {
-                return RedisUtils.getCacheMapValue(RedisKey.APP_ID_NAME, String.valueOf(key));
+            case TranslationConst.APP_NAME -> {
+                AppInfo appInfo = appInfoMapper.selectById(Long.parseLong(key.toString()));
+                if (appInfo != null) {
+                    return appInfo.getAppName();
+                }
             }
-            case Other.APP_CODE -> {
-                return RedisUtils.getCacheMapValue(RedisKey.APP_ID_CODE, String.valueOf(key));
+            case TranslationConst.APP_CODE -> {
+                AppInfo appInfo = appInfoMapper.selectById(Long.parseLong(key.toString()));
+                if (appInfo != null) {
+                    return appInfo.getAppCode();
+                }
             }
-            case Other.MEMBER_INFO -> {
-                //return CacheUtils.get(RedisKey.MEMBER_INFO_ID_NAME, key);
-                return memberInfoMapper.selectById(Long.parseLong(key.toString())).getNickName();
+            case TranslationConst.MEMBER_INFO -> {
+                MemberInfo memberInfo = memberInfoMapper.selectById(Long.parseLong(key.toString()));
+                if (memberInfo != null) {
+                    return memberInfo.getNickName();
+                }
             }
-            case Other.MEMBER_TYPE -> {
-                //return CacheUtils.get(RedisKey.MEMBER_TYPE_ID_NAME, key);
-                return memberTypeMapper.selectById(Long.parseLong(key.toString())).getTypeName();
+            case TranslationConst.MEMBER_TYPE -> {
+                MemberType memberType = memberTypeMapper.selectById(Long.parseLong(key.toString()));
+                if (memberType != null) {
+                    return memberType.getTypeName();
+                }
             }
-            case Other.SOCIAL_NOTICE -> {
-                // return CacheUtils.get(RedisKey.SOCIAL_NOTICTYPE_ID_NAME, key);
-                return socialNoticeTypeMapper.selectById(Long.parseLong(key.toString())).getNoticeTypeName();
+            case TranslationConst.SOCIAL_NOTICE -> {
+                SocialNoticeType socialNoticeType = socialNoticeTypeMapper.selectById(Long.parseLong(key.toString()));
+                if (socialNoticeType != null) {
+                    return socialNoticeType.getNoticeTypeName();
+                }
             }
-            case Other.SOCIAL_TAG -> {
-                // return CacheUtils.get(RedisKey.SOCIAL_TAG_ID_NAME, key);
-                return socialTagMapper.selectById(Long.parseLong(key.toString())).getTagName();
+            case TranslationConst.SOCIAL_TAG -> {
+                SocialTag socialTag = socialTagMapper.selectById(Long.parseLong(key.toString()));
+                if (socialTag != null) {
+                    return socialTag.getTagName();
+                }
             }
-            case Other.SOCIAL_SUBJECT -> {
-                // return CacheUtils.get(RedisKey.SOCIAL_SUBJECT_ID_NAME, key);
-                return socialSubjectMapper.selectById(Long.parseLong(key.toString())).getSubjectName();
-            }
-            default -> {
-                return null;
+            case TranslationConst.SOCIAL_SUBJECT -> {
+                SocialSubject socialSubject = socialSubjectMapper.selectById(Long.parseLong(key.toString()));
+                if (socialSubject != null) {
+                    return socialSubject.getSubjectName();
+                }
             }
         }
-    }
-
-    public interface Other {
-        String APP_CODE = "app_code";
-        String APP_NAME = "app_name";
-        String MEMBER_INFO = "member_info";
-        String MEMBER_TYPE = "member_type";
-        String SOCIAL_SUBJECT = "subject";
-        String SOCIAL_NOTICE = "notice";
-        String SOCIAL_TAG = "tag";
+        return null;
     }
 
 }

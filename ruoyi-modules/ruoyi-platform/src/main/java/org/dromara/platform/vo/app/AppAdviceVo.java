@@ -6,6 +6,8 @@ import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.dromara.basis.app.entity.AppAdvice;
+import org.dromara.basis.constant.TranslationConst;
+import org.dromara.common.translation.annotation.Translation;
 import org.dromara.platform.core.AppBaseVo;
 
 import java.util.Date;
@@ -34,6 +36,13 @@ public class AppAdviceVo extends AppBaseVo {
      */
     @ExcelProperty(value = "成员id")
     private Long memberId;
+
+    /**
+     * 成员名称
+     */
+    @ExcelProperty(value = "成员名称")
+    @Translation(type = TranslationConst.key, mapper = "memberId", other = TranslationConst.MEMBER_INFO)
+    private String memberName;
 
     /**
      * 联系方式

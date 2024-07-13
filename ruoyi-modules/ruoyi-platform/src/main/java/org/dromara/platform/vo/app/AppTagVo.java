@@ -6,11 +6,11 @@ import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.dromara.basis.app.entity.AppTag;
+import org.dromara.basis.constant.TranslationConst;
 import org.dromara.common.excel.annotation.ExcelDictFormat;
 import org.dromara.common.excel.convert.ExcelDictConvert;
 import org.dromara.common.translation.annotation.Translation;
 import org.dromara.platform.core.AppBaseVo;
-import org.dromara.platform.translation.PlatformTranslation;
 
 /**
  * 标签信息视图对象 social_tag
@@ -56,7 +56,7 @@ public class AppTagVo extends AppBaseVo {
     private Long subjectId;
 
     @ExcelProperty(value = "所属主题")
-    @Translation(type = PlatformTranslation.key, mapper = "subjectId", other = PlatformTranslation.Other.SOCIAL_SUBJECT)
+    @Translation(type = TranslationConst.key, mapper = "subjectId", other = TranslationConst.SOCIAL_SUBJECT)
     private String subjectName;
 
     /**

@@ -2,8 +2,8 @@ package org.dromara.platform.runner;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.basis.constant.RedisKey;
 import org.dromara.common.redis.utils.RedisUtils;
-import org.dromara.platform.constant.RedisKey;
 import org.dromara.basis.member.entity.MemberInfo;
 import org.dromara.basis.member.entity.MemberType;
 import org.dromara.basis.member.mapper.MemberInfoMapper;

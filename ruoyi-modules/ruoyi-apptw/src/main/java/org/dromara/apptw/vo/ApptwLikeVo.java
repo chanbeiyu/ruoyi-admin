@@ -5,6 +5,8 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import org.dromara.basis.apptw.entity.ApptwLike;
+import org.dromara.basis.constant.TranslationConst;
+import org.dromara.common.translation.annotation.Translation;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -35,6 +37,13 @@ public class ApptwLikeVo implements Serializable {
      */
     @ExcelProperty(value = "成员ID")
     private Long memberId;
+
+    /**
+     * 成员名称
+     */
+    @ExcelProperty(value = "成员名称")
+    @Translation(type = TranslationConst.key, mapper = "memberId", other = TranslationConst.MEMBER_INFO)
+    private String memberName;
 
     /**
      * 品类ID

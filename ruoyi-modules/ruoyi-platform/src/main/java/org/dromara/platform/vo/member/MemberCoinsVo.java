@@ -5,10 +5,10 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.dromara.platform.core.AppBaseVo;
+import org.dromara.basis.constant.TranslationConst;
 import org.dromara.basis.member.entity.MemberCoins;
 import org.dromara.common.translation.annotation.Translation;
-import org.dromara.platform.translation.PlatformTranslation;
+import org.dromara.platform.core.AppBaseVo;
 
 import java.util.Date;
 
@@ -38,7 +38,7 @@ public class MemberCoinsVo extends AppBaseVo {
     private Long memberId;
 
     @ExcelProperty(value = "成员名称")
-    @Translation(type = PlatformTranslation.key, mapper = "memberId", other = PlatformTranslation.Other.MEMBER_INFO)
+    @Translation(type = TranslationConst.key, mapper = "memberId", other = TranslationConst.MEMBER_INFO)
     private String memberName;
 
     /**

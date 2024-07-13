@@ -2,8 +2,8 @@ package org.dromara.platform.runner;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.basis.constant.RedisKey;
 import org.dromara.common.redis.utils.RedisUtils;
-import org.dromara.platform.constant.RedisKey;
 import org.dromara.basis.social.entity.SocialNoticeType;
 import org.dromara.basis.social.entity.SocialSubject;
 import org.dromara.basis.social.entity.SocialTag;
