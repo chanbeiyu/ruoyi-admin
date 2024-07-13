@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.dromara.common.excel.utils.ExcelUtil;
-import org.dromara.platform.domain.member.bo.MemberInfoBo;
+import org.dromara.basis.member.bo.MemberInfoBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +16,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.member.vo.MemberInfoVo;
-import org.dromara.platform.service.member.MemberInfoService;
+import org.dromara.platform.vo.member.MemberInfoVo;
+import org.dromara.basis.member.service.MemberInfoService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class MemberInfoController extends BaseController {
     @SaCheckPermission("member:info:list")
     @GetMapping("/list")
     public TableDataInfo<MemberInfoVo> list(MemberInfoBo bo, PageQuery pageQuery) {
-        return memberInfoService.queryPageList(bo, pageQuery);
+        return memberInfoService.queryPageList(bo, pageQuery, MemberInfoVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MemberInfoController extends BaseController {
     @Log(title = "成员信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(MemberInfoBo bo, HttpServletResponse response) {
-        List<MemberInfoVo> list = memberInfoService.queryList(bo);
+        List<MemberInfoVo> list = memberInfoService.queryList(bo, MemberInfoVo.class);
         ExcelUtil.exportExcel(list, "成员信息", MemberInfoVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class MemberInfoController extends BaseController {
     @SaCheckPermission("member:info:query")
     @GetMapping("/{memberId}")
     public R<MemberInfoVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long memberId) {
-        return R.ok(memberInfoService.queryById(memberId));
+        return R.ok(memberInfoService.queryById(memberId, MemberInfoVo.class));
     }
 
     /**

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.dromara</groupId>
-    <artifactId>ruoyi-vue-plus</artifactId>
+    <artifactId>ensoul-admin-service</artifactId>
     <version>${revision}</version>
 
     <name>RuoYi-Vue-Plus</name>
@@ -125,6 +125,45 @@
                 <version>${revision}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <!-- basis 的依赖配置-->
+            <!--            <dependency>-->
+            <!--                <groupId>org.dromara</groupId>-->
+            <!--                <artifactId>ruoyi-basis-bom</artifactId>-->
+            <!--                <version>${revision}</version>-->
+            <!--                <type>pom</type>-->
+            <!--                <scope>import</scope>-->
+            <!--            </dependency>-->
+
+            <dependency>
+                <groupId>org.dromara</groupId>
+                <artifactId>ruoyi-basis-app</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.dromara</groupId>
+                <artifactId>ruoyi-basis-apptw</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.dromara</groupId>
+                <artifactId>ruoyi-basis-common</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.dromara</groupId>
+                <artifactId>ruoyi-basis-member</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.dromara</groupId>
+                <artifactId>ruoyi-basis-social</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.dromara</groupId>
+                <artifactId>ruoyi-basis-trade</artifactId>
+                <version>${revision}</version>
             </dependency>
 
             <dependency>
@@ -323,6 +362,11 @@
 
             <dependency>
                 <groupId>org.dromara</groupId>
+                <artifactId>ruoyi-apptw</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.dromara</groupId>
                 <artifactId>ruoyi-platform</artifactId>
                 <version>${revision}</version>
             </dependency>
@@ -349,7 +393,6 @@
                 <artifactId>ruoyi-demo</artifactId>
                 <version>${revision}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
@@ -358,6 +401,7 @@
         <module>ruoyi-common</module>
         <module>ruoyi-extend</module>
         <module>ruoyi-modules</module>
+        <module>ruoyi-basis</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -464,28 +508,31 @@
 
     <repositories>
         <repository>
-            <id>public</id>
-            <name>huawei nexus</name>
-            <url>https://mirrors.huaweicloud.com/repository/maven/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>public</id>
-            <name>huawei nexus</name>
-            <url>https://mirrors.huaweicloud.com/repository/maven/</url>
+            <id>aliyun-release</id>
+            <url>https://packages.aliyun.com/maven/repository/2363266-release-xD3Oyp</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
+        </repository>
+        <repository>
+            <id>aliyun-snapshot</id>
+            <url>https://packages.aliyun.com/maven/repository/2363266-snapshot-AY0Hg6</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>cloudbase</id>
+            <name>maven</name>
+            <url>https://cloudbase-100017518810-maven.pkg.coding.net/repository/ensoul/maven/</url>
+        </repository>
+    </repositories>
 
 </project>
 

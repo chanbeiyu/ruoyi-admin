@@ -1,11 +1,16 @@
 package org.dromara.platform.translation;
 
 import lombok.RequiredArgsConstructor;
+import org.dromara.basis.app.mapper.AppInfoMapper;
+import org.dromara.basis.member.mapper.MemberInfoMapper;
+import org.dromara.basis.member.mapper.MemberTypeMapper;
+import org.dromara.basis.social.mapper.SocialNoticeTypeMapper;
+import org.dromara.basis.social.mapper.SocialSubjectMapper;
+import org.dromara.basis.social.mapper.SocialTagMapper;
 import org.dromara.common.redis.utils.RedisUtils;
 import org.dromara.common.translation.annotation.TranslationType;
 import org.dromara.common.translation.core.TranslationInterface;
 import org.dromara.platform.constant.RedisKey;
-import org.dromara.platform.mapper.*;
 import org.springframework.stereotype.Component;
 
 /**

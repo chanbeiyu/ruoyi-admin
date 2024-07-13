@@ -5,7 +5,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.app.bo.AppExtendBo;
+import org.dromara.basis.app.bo.AppExtendBo;
+import org.dromara.basis.app.service.AppExtendService;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +17,7 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.app.vo.AppExtendVo;
-import org.dromara.platform.service.app.AppExtendService;
+import org.dromara.platform.vo.app.AppExtendVo;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +44,7 @@ public class AppExtendController extends BaseController {
     @SaCheckPermission("app:extend:list")
     @GetMapping("/list")
     public TableDataInfo<AppExtendVo> list(AppExtendBo bo, PageQuery pageQuery) {
-        return appExtendService.queryPageList(bo, pageQuery, "value");
+        return appExtendService.queryPageList(bo, pageQuery, AppExtendVo.class, "value");
     }
 
     /**
@@ -54,7 +54,7 @@ public class AppExtendController extends BaseController {
     @Log(title = "应用扩展信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(AppExtendBo bo, HttpServletResponse response) {
-        List<AppExtendVo> list = appExtendService.queryList(bo, "value");
+        List<AppExtendVo> list = appExtendService.queryList(bo, AppExtendVo.class, "value");
         ExcelUtil.exportExcel(list, "应用扩展信息", AppExtendVo.class, response);
     }
 
@@ -66,7 +66,7 @@ public class AppExtendController extends BaseController {
     @SaCheckPermission("app:extend:query")
     @GetMapping(value = "/content/{appId}", produces = MediaType.TEXT_HTML_VALUE)
     public String getContent(@NotNull(message = "主键不能为空") @PathVariable Long appId) {
-        return appExtendService.queryById(appId).getValue();
+        return appExtendService.queryById(appId, AppExtendVo.class).getValue();
     }
 
     /**
@@ -77,7 +77,7 @@ public class AppExtendController extends BaseController {
     @SaCheckPermission("app:extend:query")
     @GetMapping("/{appId}")
     public R<AppExtendVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long appId) {
-        return R.ok(appExtendService.queryById(appId));
+        return R.ok(appExtendService.queryById(appId, AppExtendVo.class));
     }
 
     /**

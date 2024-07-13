@@ -5,7 +5,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.trade.bo.TradeOrderOperateBo;
+import org.dromara.basis.trade.bo.TradeOrderOperateBo;
+import org.dromara.basis.trade.service.TradeOrderOperateService;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +17,7 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.trade.vo.TradeOrderOperateVo;
-import org.dromara.platform.service.trade.TradeOrderOperateService;
+import org.dromara.platform.vo.trade.TradeOrderOperateVo;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class TradeOrderOperateController extends BaseController {
     @SaCheckPermission("trade:order:operate:list")
     @GetMapping("/list")
     public TableDataInfo<TradeOrderOperateVo> list(TradeOrderOperateBo bo, PageQuery pageQuery) {
-        return tradeOrderOperateService.queryPageList(bo, pageQuery);
+        return tradeOrderOperateService.queryPageList(bo, pageQuery, TradeOrderOperateVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class TradeOrderOperateController extends BaseController {
     @Log(title = "订单操作历史记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(TradeOrderOperateBo bo, HttpServletResponse response) {
-        List<TradeOrderOperateVo> list = tradeOrderOperateService.queryList(bo);
+        List<TradeOrderOperateVo> list = tradeOrderOperateService.queryList(bo, TradeOrderOperateVo.class);
         ExcelUtil.exportExcel(list, "订单操作历史记录", TradeOrderOperateVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class TradeOrderOperateController extends BaseController {
     @SaCheckPermission("trade:order:operate:query")
     @GetMapping("/{operateId}")
     public R<TradeOrderOperateVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long operateId) {
-        return R.ok(tradeOrderOperateService.queryById(operateId));
+        return R.ok(tradeOrderOperateService.queryById(operateId, TradeOrderOperateVo.class));
     }
 
     /**

@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.social.bo.SocialTagBo;
+import org.dromara.basis.social.bo.SocialTagBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +16,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.social.vo.SocialTagVo;
-import org.dromara.platform.service.social.SocialTagService;
+import org.dromara.platform.vo.social.SocialTagVo;
+import org.dromara.basis.social.service.SocialTagService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class SocialTagController extends BaseController {
     @SaCheckPermission("social:tag:list")
     @GetMapping("/list")
     public TableDataInfo<SocialTagVo> list(SocialTagBo bo, PageQuery pageQuery) {
-        return socialTagService.queryPageList(bo, pageQuery);
+        return socialTagService.queryPageList(bo, pageQuery, SocialTagVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SocialTagController extends BaseController {
     @Log(title = "标签信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialTagBo bo, HttpServletResponse response) {
-        List<SocialTagVo> list = socialTagService.queryList(bo);
+        List<SocialTagVo> list = socialTagService.queryList(bo, SocialTagVo.class);
         ExcelUtil.exportExcel(list, "标签信息", SocialTagVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class SocialTagController extends BaseController {
     @SaCheckPermission("social:tag:query")
     @GetMapping("/{tagId}")
     public R<SocialTagVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long tagId) {
-        return R.ok(socialTagService.queryById(tagId));
+        return R.ok(socialTagService.queryById(tagId, SocialTagVo.class));
     }
 
     /**

@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.member.bo.MemberLevelBo;
+import org.dromara.basis.member.bo.MemberLevelBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +16,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.member.vo.MemberLevelVo;
-import org.dromara.platform.service.member.MemberLevelService;
+import org.dromara.platform.vo.member.MemberLevelVo;
+import org.dromara.basis.member.service.MemberLevelService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class MemberLevelController extends BaseController {
     @SaCheckPermission("member:level:list")
     @GetMapping("/list")
     public TableDataInfo<MemberLevelVo> list(MemberLevelBo bo, PageQuery pageQuery) {
-        return memberLevelService.queryPageList(bo, pageQuery);
+        return memberLevelService.queryPageList(bo, pageQuery, MemberLevelVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MemberLevelController extends BaseController {
     @Log(title = "会员级别信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(MemberLevelBo bo, HttpServletResponse response) {
-        List<MemberLevelVo> list = memberLevelService.queryList(bo);
+        List<MemberLevelVo> list = memberLevelService.queryList(bo, MemberLevelVo.class);
         ExcelUtil.exportExcel(list, "会员级别信息", MemberLevelVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class MemberLevelController extends BaseController {
     @SaCheckPermission("member:level:query")
     @GetMapping("/{levelId}")
     public R<MemberLevelVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long levelId) {
-        return R.ok(memberLevelService.queryById(levelId));
+        return R.ok(memberLevelService.queryById(levelId, MemberLevelVo.class));
     }
 
     /**

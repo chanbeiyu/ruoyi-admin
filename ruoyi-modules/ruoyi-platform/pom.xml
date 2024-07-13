@@ -18,25 +18,12 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.alibaba.fastjson2</groupId>
-            <artifactId>fastjson2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.dromara</groupId>
-            <artifactId>ruoyi-common-mybatis</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.dromara</groupId>
             <artifactId>ruoyi-common-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.dromara</groupId>
             <artifactId>ruoyi-common-idempotent</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.dromara</groupId>
-            <artifactId>ruoyi-common-log</artifactId>
         </dependency>
         <dependency>
             <groupId>org.dromara</groupId>
@@ -58,9 +45,23 @@
             <groupId>org.dromara</groupId>
             <artifactId>ruoyi-common-translation</artifactId>
         </dependency>
+
+
         <dependency>
             <groupId>org.dromara</groupId>
-            <artifactId>ruoyi-common-tenant</artifactId>
+            <artifactId>ruoyi-basis-app</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.dromara</groupId>
+            <artifactId>ruoyi-basis-member</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.dromara</groupId>
+            <artifactId>ruoyi-basis-social</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.dromara</groupId>
+            <artifactId>ruoyi-basis-trade</artifactId>
         </dependency>
 
     </dependencies>

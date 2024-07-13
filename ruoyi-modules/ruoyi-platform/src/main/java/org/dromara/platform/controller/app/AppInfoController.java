@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.dromara.basis.app.bo.AppInfoBo;
+import org.dromara.basis.app.service.AppInfoService;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -17,9 +19,7 @@ import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.tenant.helper.AppHelper;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.app.bo.AppInfoBo;
-import org.dromara.platform.domain.app.vo.AppInfoVo;
-import org.dromara.platform.service.app.AppInfoService;
+import org.dromara.platform.vo.app.AppInfoVo;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,7 +45,7 @@ public class AppInfoController extends BaseController {
     @SaCheckPermission("app:info:list")
     @GetMapping("/list")
     public TableDataInfo<AppInfoVo> list(AppInfoBo bo, PageQuery pageQuery) {
-        return appInfoService.queryPageList(bo, pageQuery);
+        return appInfoService.queryPageList(bo, pageQuery, AppInfoVo.class);
     }
 
     /**
@@ -55,7 +55,7 @@ public class AppInfoController extends BaseController {
     @Log(title = "应用信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(AppInfoBo bo, HttpServletResponse response) {
-        List<AppInfoVo> list = appInfoService.queryList(bo);
+        List<AppInfoVo> list = appInfoService.queryList(bo, AppInfoVo.class);
         ExcelUtil.exportExcel(list, "应用信息", AppInfoVo.class, response);
     }
 
@@ -67,7 +67,7 @@ public class AppInfoController extends BaseController {
     @SaCheckPermission("app:info:query")
     @GetMapping("/{appId}")
     public R<AppInfoVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long appId) {
-        return R.ok(appInfoService.queryById(appId));
+        return R.ok(appInfoService.queryById(appId, AppInfoVo.class));
     }
 
     /**

@@ -1,10 +1,10 @@
-package org.dromara.platform.controller;
+package org.dromara.apptw.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.search.SearchVo;
-import org.dromara.platform.service.search.SearchService;
+import org.dromara.platform.vo.search.SearchVo;
+import org.dromara.platform.search.SearchService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,28 +65,6 @@ public class SearchController extends BaseController {
                                                     @RequestParam(required = false) Long appId,
                                                     @RequestParam(required = false, defaultValue = "false") boolean cascade) {
         return searchService.searchMemberType(query, appId, cascade);
-    }
-
-    /**
-     * 查询主题列表，用于搜索/选择
-     */
-    //@SaCheckPermission("platfrom:search:style")
-    @GetMapping("/thought/search")
-    public TableDataInfo<SearchVo> searchThought(@RequestParam(required = false) String query,
-                                                 @RequestParam(required = false) Long appId,
-                                                 @RequestParam(required = false, defaultValue = "false") boolean cascade) {
-        return searchService.searchThoughtList(query, appId, cascade);
-    }
-
-    /**
-     * 查询主题列表，用于搜索/选择
-     */
-    //@SaCheckPermission("platfrom:search:style")
-    @GetMapping("/thought/style/search")
-    public TableDataInfo<SearchVo> searchStyle(@RequestParam(required = false) String query,
-                                               @RequestParam(required = false) Long appId,
-                                               @RequestParam(required = false, defaultValue = "false") boolean cascade) {
-        return searchService.searchStyleList(query, appId, cascade);
     }
 
 }

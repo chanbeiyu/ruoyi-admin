@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.member.bo.MemberActionBo;
+import org.dromara.basis.member.bo.MemberActionBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +16,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.member.vo.MemberActionVo;
-import org.dromara.platform.service.member.MemberActionService;
+import org.dromara.platform.vo.member.MemberActionVo;
+import org.dromara.basis.member.service.MemberActionService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class MemberActionController extends BaseController {
     @SaCheckPermission("member:action:list")
     @GetMapping("/list")
     public TableDataInfo<MemberActionVo> list(MemberActionBo bo, PageQuery pageQuery) {
-        return memberActionService.queryPageList(bo, pageQuery);
+        return memberActionService.queryPageList(bo, pageQuery, MemberActionVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MemberActionController extends BaseController {
     @Log(title = "会员积分", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(MemberActionBo bo, HttpServletResponse response) {
-        List<MemberActionVo> list = memberActionService.queryList(bo);
+        List<MemberActionVo> list = memberActionService.queryList(bo, MemberActionVo.class);
         ExcelUtil.exportExcel(list, "会员积分", MemberActionVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class MemberActionController extends BaseController {
     @SaCheckPermission("member:action:query")
     @GetMapping("/{actionId}")
     public R<MemberActionVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long actionId) {
-        return R.ok(memberActionService.queryById(actionId));
+        return R.ok(memberActionService.queryById(actionId, MemberActionVo.class));
     }
 
     /**

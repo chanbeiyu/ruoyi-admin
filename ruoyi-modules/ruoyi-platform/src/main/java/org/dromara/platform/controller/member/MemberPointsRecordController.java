@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.member.bo.MemberPointsRecordBo;
+import org.dromara.basis.member.bo.MemberPointsRecordBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +16,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.member.vo.MemberPointsRecordVo;
-import org.dromara.platform.service.member.MemberPointsRecordService;
+import org.dromara.platform.vo.member.MemberPointsRecordVo;
+import org.dromara.basis.member.service.MemberPointsRecordService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class MemberPointsRecordController extends BaseController {
     @SaCheckPermission("member:points:record:list")
     @GetMapping("/list")
     public TableDataInfo<MemberPointsRecordVo> list(MemberPointsRecordBo bo, PageQuery pageQuery) {
-        return memberPointsRecordService.queryPageList(bo, pageQuery);
+        return memberPointsRecordService.queryPageList(bo, pageQuery, MemberPointsRecordVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MemberPointsRecordController extends BaseController {
     @Log(title = "会员积分记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(MemberPointsRecordBo bo, HttpServletResponse response) {
-        List<MemberPointsRecordVo> list = memberPointsRecordService.queryList(bo);
+        List<MemberPointsRecordVo> list = memberPointsRecordService.queryList(bo, MemberPointsRecordVo.class);
         ExcelUtil.exportExcel(list, "会员积分记录", MemberPointsRecordVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class MemberPointsRecordController extends BaseController {
     @SaCheckPermission("member:points:record:query")
     @GetMapping("/{recordId}")
     public R<MemberPointsRecordVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long recordId) {
-        return R.ok(memberPointsRecordService.queryById(recordId));
+        return R.ok(memberPointsRecordService.queryById(recordId, MemberPointsRecordVo.class));
     }
 
     /**

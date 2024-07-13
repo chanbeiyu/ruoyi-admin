@@ -5,7 +5,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.app.bo.AppVersionBo;
+import org.dromara.basis.app.bo.AppVersionBo;
+import org.dromara.basis.app.service.AppVersionService;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +17,7 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.app.vo.AppVersionVo;
-import org.dromara.platform.service.app.AppVersionService;
+import org.dromara.platform.vo.app.AppVersionVo;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class AppVersionController extends BaseController {
     @SaCheckPermission("app:version:list")
     @GetMapping("/list")
     public TableDataInfo<AppVersionVo> list(AppVersionBo bo, PageQuery pageQuery) {
-        return appVersionService.queryPageList(bo, pageQuery);
+        return appVersionService.queryPageList(bo, pageQuery, AppVersionVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class AppVersionController extends BaseController {
     @Log(title = "应用版本信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(AppVersionBo bo, HttpServletResponse response) {
-        List<AppVersionVo> list = appVersionService.queryList(bo);
+        List<AppVersionVo> list = appVersionService.queryList(bo, AppVersionVo.class);
         ExcelUtil.exportExcel(list, "应用版本信息", AppVersionVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class AppVersionController extends BaseController {
     @SaCheckPermission("app:version:query")
     @GetMapping("/{versionId}")
     public R<AppVersionVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long versionId) {
-        return R.ok(appVersionService.queryById(versionId));
+        return R.ok(appVersionService.queryById(versionId, AppVersionVo.class));
     }
 
     /**

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
-import org.dromara.platform.domain.trade.bo.TradeOrderItemBo;
+import org.dromara.basis.trade.bo.TradeOrderItemBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -17,8 +17,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.trade.vo.TradeOrderItemVo;
-import org.dromara.platform.service.trade.TradeOrderItemService;
+import org.dromara.platform.vo.trade.TradeOrderItemVo;
+import org.dromara.basis.trade.service.TradeOrderItemService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +44,7 @@ public class TradeOrderItemController extends BaseController {
     @SaCheckPermission("trade:order:item:list")
     @GetMapping("/list")
     public TableDataInfo<TradeOrderItemVo> list(TradeOrderItemBo bo, PageQuery pageQuery) {
-        return tradeOrderItemService.queryPageList(bo, pageQuery);
+        return tradeOrderItemService.queryPageList(bo, pageQuery, TradeOrderItemVo.class);
     }
 
     /**
@@ -54,7 +54,7 @@ public class TradeOrderItemController extends BaseController {
     @Log(title = "订单商品", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(TradeOrderItemBo bo, HttpServletResponse response) {
-        List<TradeOrderItemVo> list = tradeOrderItemService.queryList(bo);
+        List<TradeOrderItemVo> list = tradeOrderItemService.queryList(bo, TradeOrderItemVo.class);
         ExcelUtil.exportExcel(list, "订单商品", TradeOrderItemVo.class, response);
     }
 
@@ -66,7 +66,7 @@ public class TradeOrderItemController extends BaseController {
     @SaCheckPermission("trade:order:item:query")
     @GetMapping("/{itemId}")
     public R<TradeOrderItemVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long itemId) {
-        return R.ok(tradeOrderItemService.queryById(itemId));
+        return R.ok(tradeOrderItemService.queryById(itemId, TradeOrderItemVo.class));
     }
 
     /**

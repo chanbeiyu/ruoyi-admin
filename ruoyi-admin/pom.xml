@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>ruoyi-vue-plus</artifactId>
+        <artifactId>ensoul-admin-service</artifactId>
         <groupId>org.dromara</groupId>
         <version>${revision}</version>
     </parent>
@@ -53,6 +53,10 @@
             <artifactId>ruoyi-common-ratelimiter</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.dromara</groupId>
+            <artifactId>ruoyi-apptw</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.dromara</groupId>
             <artifactId>ruoyi-platform</artifactId>

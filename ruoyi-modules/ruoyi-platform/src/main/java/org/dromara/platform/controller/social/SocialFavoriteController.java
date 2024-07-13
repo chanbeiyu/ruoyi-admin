@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.social.bo.SocialFavoriteBo;
+import org.dromara.basis.social.bo.SocialFavoriteBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +16,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.social.vo.SocialFavoriteVo;
-import org.dromara.platform.service.social.SocialFavoriteService;
+import org.dromara.platform.vo.social.SocialFavoriteVo;
+import org.dromara.basis.social.service.SocialFavoriteService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class SocialFavoriteController extends BaseController {
     @SaCheckPermission("social:favorite:list")
     @GetMapping("/list")
     public TableDataInfo<SocialFavoriteVo> list(SocialFavoriteBo bo, PageQuery pageQuery) {
-        return socialFavoriteService.queryPageList(bo, pageQuery);
+        return socialFavoriteService.queryPageList(bo, pageQuery, SocialFavoriteVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SocialFavoriteController extends BaseController {
     @Log(title = "收藏信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialFavoriteBo bo, HttpServletResponse response) {
-        List<SocialFavoriteVo> list = socialFavoriteService.queryList(bo);
+        List<SocialFavoriteVo> list = socialFavoriteService.queryList(bo, SocialFavoriteVo.class);
         ExcelUtil.exportExcel(list, "收藏信息", SocialFavoriteVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class SocialFavoriteController extends BaseController {
     @SaCheckPermission("social:favorite:query")
     @GetMapping("/{favoriteId}")
     public R<SocialFavoriteVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long favoriteId) {
-        return R.ok(socialFavoriteService.queryById(favoriteId));
+        return R.ok(socialFavoriteService.queryById(favoriteId, SocialFavoriteVo.class));
     }
 
     /**

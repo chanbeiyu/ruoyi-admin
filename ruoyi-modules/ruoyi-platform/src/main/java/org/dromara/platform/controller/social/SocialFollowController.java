@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.social.bo.SocialFollowBo;
+import org.dromara.basis.social.bo.SocialFollowBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +16,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.social.vo.SocialFollowVo;
-import org.dromara.platform.service.social.SocialFollowService;
+import org.dromara.platform.vo.social.SocialFollowVo;
+import org.dromara.basis.social.service.SocialFollowService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class SocialFollowController extends BaseController {
     @SaCheckPermission("social:follow:list")
     @GetMapping("/list")
     public TableDataInfo<SocialFollowVo> list(SocialFollowBo bo, PageQuery pageQuery) {
-        return socialFollowService.queryPageList(bo, pageQuery);
+        return socialFollowService.queryPageList(bo, pageQuery, SocialFollowVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SocialFollowController extends BaseController {
     @Log(title = "关注信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialFollowBo bo, HttpServletResponse response) {
-        List<SocialFollowVo> list = socialFollowService.queryList(bo);
+        List<SocialFollowVo> list = socialFollowService.queryList(bo, SocialFollowVo.class);
         ExcelUtil.exportExcel(list, "关注信息", SocialFollowVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class SocialFollowController extends BaseController {
     @SaCheckPermission("social:follow:query")
     @GetMapping("/{followId}")
     public R<SocialFollowVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long followId) {
-        return R.ok(socialFollowService.queryById(followId));
+        return R.ok(socialFollowService.queryById(followId, SocialFollowVo.class));
     }
 
     /**

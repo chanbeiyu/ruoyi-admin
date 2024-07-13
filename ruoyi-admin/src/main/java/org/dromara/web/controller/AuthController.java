@@ -10,6 +10,8 @@ import me.zhyd.oauth.model.AuthResponse;
 import me.zhyd.oauth.model.AuthUser;
 import me.zhyd.oauth.request.AuthRequest;
 import me.zhyd.oauth.utils.AuthStateUtils;
+import org.dromara.basis.app.bo.AppInfoBo;
+import org.dromara.basis.app.service.AppInfoService;
 import org.dromara.common.core.constant.UserConstants;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.domain.model.LoginBody;
@@ -25,9 +27,7 @@ import org.dromara.common.social.utils.SocialUtils;
 import org.dromara.common.tenant.helper.AppHelper;
 import org.dromara.common.tenant.helper.TenantHelper;
 import org.dromara.common.websocket.utils.WebSocketUtils;
-import org.dromara.platform.domain.app.bo.AppInfoBo;
-import org.dromara.platform.domain.app.vo.AppInfoVo;
-import org.dromara.platform.service.app.AppInfoService;
+import org.dromara.platform.vo.app.AppInfoVo;
 import org.dromara.system.domain.SysClient;
 import org.dromara.system.domain.bo.SysTenantBo;
 import org.dromara.system.domain.vo.SysTenantVo;
@@ -188,7 +188,7 @@ public class AuthController {
     @GetMapping("/tenant/list")
     public R<LoginTenantVo> tenantList(HttpServletRequest request) throws Exception {
         List<SysTenantVo> tenantList = tenantService.queryList(new SysTenantBo());
-        List<AppInfoVo> appVoList = appInfoService.queryList(new AppInfoBo());
+        List<AppInfoVo> appVoList = appInfoService.queryList(new AppInfoBo(), AppInfoVo.class);
         List<TenantListVo> voList = MapstructUtils.convert(tenantList, TenantListVo.class);
         List<AppListVo> appListVos = MapstructUtils.convert(appVoList, AppListVo.class);
 

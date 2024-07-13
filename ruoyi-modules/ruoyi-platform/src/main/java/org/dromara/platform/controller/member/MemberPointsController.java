@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.member.bo.MemberPointsBo;
+import org.dromara.basis.member.bo.MemberPointsBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +16,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.member.vo.MemberPointsVo;
-import org.dromara.platform.service.member.MemberPointsService;
+import org.dromara.platform.vo.member.MemberPointsVo;
+import org.dromara.basis.member.service.MemberPointsService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class MemberPointsController extends BaseController {
     @SaCheckPermission("member:points:list")
     @GetMapping("/list")
     public TableDataInfo<MemberPointsVo> list(MemberPointsBo bo, PageQuery pageQuery) {
-        return memberPointsService.queryPageList(bo, pageQuery);
+        return memberPointsService.queryPageList(bo, pageQuery, MemberPointsVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MemberPointsController extends BaseController {
     @Log(title = "会员积分", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(MemberPointsBo bo, HttpServletResponse response) {
-        List<MemberPointsVo> list = memberPointsService.queryList(bo);
+        List<MemberPointsVo> list = memberPointsService.queryList(bo, MemberPointsVo.class);
         ExcelUtil.exportExcel(list, "会员积分", MemberPointsVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class MemberPointsController extends BaseController {
     @SaCheckPermission("member:points:query")
     @GetMapping("/{id}")
     public R<MemberPointsVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long id) {
-        return R.ok(memberPointsService.queryById(id));
+        return R.ok(memberPointsService.queryById(id, MemberPointsVo.class));
     }
 
     /**

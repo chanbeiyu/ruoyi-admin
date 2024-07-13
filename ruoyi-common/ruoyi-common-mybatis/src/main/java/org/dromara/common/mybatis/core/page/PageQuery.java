@@ -2,12 +2,13 @@ package org.dromara.common.mybatis.core.page;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.Data;
 import org.dromara.common.core.exception.ServiceException;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.core.utils.sql.SqlUtil;
-import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -47,6 +48,16 @@ public class PageQuery implements Serializable {
     private String isAsc;
 
     /**
+     * 默认排序列
+     */
+    private String defaultOrderByColumn;
+
+    /**
+     * 默认排序的方向desc或者asc
+     */
+    private String defaultIsAsc;
+
+    /**
      * 当前记录起始索引 默认值
      */
     public static final int DEFAULT_PAGE_NUM = 1;
@@ -66,13 +77,15 @@ public class PageQuery implements Serializable {
         List<OrderItem> orderItems = buildOrderItem();
         if (CollUtil.isNotEmpty(orderItems)) {
             page.addOrder(orderItems);
+        } else if (StrUtil.isNotBlank(defaultOrderByColumn)) {
+            page.addOrder(new OrderItem(defaultOrderByColumn, "asc".equalsIgnoreCase(defaultIsAsc)));
         }
         return page;
     }
 
     /**
      * 构建排序
-     *
+     * <p>
      * 支持的用法如下:
      * {isAsc:"asc",orderByColumn:"id"} order by id asc
      * {isAsc:"asc",orderByColumn:"id,createTime"} order by id asc,create_time asc

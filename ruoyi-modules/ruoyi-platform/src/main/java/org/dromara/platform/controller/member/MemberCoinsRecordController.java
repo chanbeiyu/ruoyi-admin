@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.member.bo.MemberCoinsRecordBo;
+import org.dromara.basis.member.bo.MemberCoinsRecordBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +16,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.member.vo.MemberCoinsRecordVo;
-import org.dromara.platform.service.member.MemberCoinsRecordService;
+import org.dromara.platform.vo.member.MemberCoinsRecordVo;
+import org.dromara.basis.member.service.MemberCoinsRecordService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class MemberCoinsRecordController extends BaseController {
     @SaCheckPermission("member:coins:record:list")
     @GetMapping("/list")
     public TableDataInfo<MemberCoinsRecordVo> list(MemberCoinsRecordBo bo, PageQuery pageQuery) {
-        return memberCoinsRecordService.queryPageList(bo, pageQuery);
+        return memberCoinsRecordService.queryPageList(bo, pageQuery, MemberCoinsRecordVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MemberCoinsRecordController extends BaseController {
     @Log(title = "代币记录信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(MemberCoinsRecordBo bo, HttpServletResponse response) {
-        List<MemberCoinsRecordVo> list = memberCoinsRecordService.queryList(bo);
+        List<MemberCoinsRecordVo> list = memberCoinsRecordService.queryList(bo, MemberCoinsRecordVo.class);
         ExcelUtil.exportExcel(list, "代币记录信息", MemberCoinsRecordVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class MemberCoinsRecordController extends BaseController {
     @SaCheckPermission("member:coins:record:query")
     @GetMapping("/{recordId}")
     public R<MemberCoinsRecordVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long recordId) {
-        return R.ok(memberCoinsRecordService.queryById(recordId));
+        return R.ok(memberCoinsRecordService.queryById(recordId, MemberCoinsRecordVo.class));
     }
 
     /**

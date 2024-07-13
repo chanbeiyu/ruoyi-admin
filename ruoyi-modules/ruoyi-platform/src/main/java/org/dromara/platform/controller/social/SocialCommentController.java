@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.social.bo.SocialCommentBo;
+import org.dromara.basis.social.bo.SocialCommentBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -14,8 +14,8 @@ import org.dromara.common.idempotent.annotation.RepeatSubmit;
 import org.dromara.common.log.annotation.Log;
 import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.social.vo.SocialCommentVo;
-import org.dromara.platform.service.social.SocialCommentService;
+import org.dromara.platform.vo.social.SocialCommentVo;
+import org.dromara.basis.social.service.SocialCommentService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +41,7 @@ public class SocialCommentController extends BaseController {
     @SaCheckPermission("social:comment:list")
     @GetMapping("/list")
     public R<List<SocialCommentVo>> list(SocialCommentBo bo) {
-        List<SocialCommentVo> list = socialCommentService.queryList(bo);
+        List<SocialCommentVo> list = socialCommentService.queryList(bo, SocialCommentVo.class);
         return R.ok(list);
     }
 
@@ -52,7 +52,7 @@ public class SocialCommentController extends BaseController {
     @Log(title = "评论信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialCommentBo bo, HttpServletResponse response) {
-        List<SocialCommentVo> list = socialCommentService.queryList(bo);
+        List<SocialCommentVo> list = socialCommentService.queryList(bo, SocialCommentVo.class);
         ExcelUtil.exportExcel(list, "评论信息", SocialCommentVo.class, response);
     }
 
@@ -64,7 +64,7 @@ public class SocialCommentController extends BaseController {
     @SaCheckPermission("social:comment:query")
     @GetMapping("/{commentId}")
     public R<SocialCommentVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long commentId) {
-        return R.ok(socialCommentService.queryById(commentId));
+        return R.ok(socialCommentService.queryById(commentId, SocialCommentVo.class));
     }
 
     /**

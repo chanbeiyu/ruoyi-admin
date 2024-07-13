@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.social.bo.SocialNoticeTypeBo;
+import org.dromara.basis.social.bo.SocialNoticeTypeBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +16,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.social.vo.SocialNoticeTypeVo;
-import org.dromara.platform.service.social.SocialNoticeTypeService;
+import org.dromara.platform.vo.social.SocialNoticeTypeVo;
+import org.dromara.basis.social.service.SocialNoticeTypeService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class SocialNoticeTypeController extends BaseController {
     @SaCheckPermission("social:noticeType:list")
     @GetMapping("/list")
     public TableDataInfo<SocialNoticeTypeVo> list(SocialNoticeTypeBo bo, PageQuery pageQuery) {
-        return socialNoticeTypeService.queryPageList(bo, pageQuery);
+        return socialNoticeTypeService.queryPageList(bo, pageQuery, SocialNoticeTypeVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SocialNoticeTypeController extends BaseController {
     @Log(title = "信息通知类型", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialNoticeTypeBo bo, HttpServletResponse response) {
-        List<SocialNoticeTypeVo> list = socialNoticeTypeService.queryList(bo);
+        List<SocialNoticeTypeVo> list = socialNoticeTypeService.queryList(bo, SocialNoticeTypeVo.class);
         ExcelUtil.exportExcel(list, "信息通知类型", SocialNoticeTypeVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class SocialNoticeTypeController extends BaseController {
     @SaCheckPermission("social:noticeType:query")
     @GetMapping("/{noticeTypeId}")
     public R<SocialNoticeTypeVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long noticeTypeId) {
-        return R.ok(socialNoticeTypeService.queryById(noticeTypeId));
+        return R.ok(socialNoticeTypeService.queryById(noticeTypeId, SocialNoticeTypeVo.class));
     }
 
     /**

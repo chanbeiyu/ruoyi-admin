@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.member.bo.MemberTypeRelatedBo;
+import org.dromara.basis.member.bo.MemberTypeRelatedBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +16,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.member.vo.MemberTypeRelatedVo;
-import org.dromara.platform.service.member.MemberTypeRelatedService;
+import org.dromara.platform.vo.member.MemberTypeRelatedVo;
+import org.dromara.basis.member.service.MemberTypeRelatedService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class MemberTypeRelatedController extends BaseController {
     @SaCheckPermission("member:typeRelated:list")
     @GetMapping("/list")
     public TableDataInfo<MemberTypeRelatedVo> list(MemberTypeRelatedBo bo, PageQuery pageQuery) {
-        return memberTypeRelatedService.queryPageList(bo, pageQuery);
+        return memberTypeRelatedService.queryPageList(bo, pageQuery, MemberTypeRelatedVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MemberTypeRelatedController extends BaseController {
     @Log(title = "会员类型关联信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(MemberTypeRelatedBo bo, HttpServletResponse response) {
-        List<MemberTypeRelatedVo> list = memberTypeRelatedService.queryList(bo);
+        List<MemberTypeRelatedVo> list = memberTypeRelatedService.queryList(bo, MemberTypeRelatedVo.class);
         ExcelUtil.exportExcel(list, "会员类型关联信息", MemberTypeRelatedVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class MemberTypeRelatedController extends BaseController {
     @SaCheckPermission("member:typeRelated:query")
     @GetMapping("/{id}")
     public R<MemberTypeRelatedVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long id) {
-        return R.ok(memberTypeRelatedService.queryById(id));
+        return R.ok(memberTypeRelatedService.queryById(id, MemberTypeRelatedVo.class));
     }
 
     /**

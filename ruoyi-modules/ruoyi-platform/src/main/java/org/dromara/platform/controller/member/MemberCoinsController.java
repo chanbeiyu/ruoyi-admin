@@ -5,7 +5,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.member.bo.MemberCoinsBo;
+import org.dromara.basis.member.bo.MemberCoinsBo;
+import org.dromara.basis.member.service.MemberCoinsService;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +17,7 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.member.vo.MemberCoinsVo;
-import org.dromara.platform.service.member.MemberCoinsService;
+import org.dromara.platform.vo.member.MemberCoinsVo;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class MemberCoinsController extends BaseController {
     @SaCheckPermission("member:coins:list")
     @GetMapping("/list")
     public TableDataInfo<MemberCoinsVo> list(MemberCoinsBo bo, PageQuery pageQuery) {
-        return memberCoinsService.queryPageList(bo, pageQuery);
+        return memberCoinsService.queryPageList(bo, pageQuery, MemberCoinsVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MemberCoinsController extends BaseController {
     @Log(title = "代币信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(MemberCoinsBo bo, HttpServletResponse response) {
-        List<MemberCoinsVo> list = memberCoinsService.queryList(bo);
+        List<MemberCoinsVo> list = memberCoinsService.queryList(bo, MemberCoinsVo.class);
         ExcelUtil.exportExcel(list, "代币信息", MemberCoinsVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class MemberCoinsController extends BaseController {
     @SaCheckPermission("member:coins:query")
     @GetMapping("/{id}")
     public R<MemberCoinsVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long id) {
-        return R.ok(memberCoinsService.queryById(id));
+        return R.ok(memberCoinsService.queryById(id, MemberCoinsVo.class));
     }
 
     /**

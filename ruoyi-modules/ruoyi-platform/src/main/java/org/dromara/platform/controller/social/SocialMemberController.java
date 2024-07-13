@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.social.bo.SocialMemberBo;
+import org.dromara.basis.social.bo.SocialMemberBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +16,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.social.vo.SocialMemberVo;
-import org.dromara.platform.service.social.SocialMemberService;
+import org.dromara.platform.vo.social.SocialMemberVo;
+import org.dromara.basis.social.service.SocialMemberService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class SocialMemberController extends BaseController {
     @SaCheckPermission("social:member:list")
     @GetMapping("/list")
     public TableDataInfo<SocialMemberVo> list(SocialMemberBo bo, PageQuery pageQuery) {
-        return socialMemberService.queryPageList(bo, pageQuery);
+        return socialMemberService.queryPageList(bo, pageQuery, SocialMemberVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SocialMemberController extends BaseController {
     @Log(title = "成员信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialMemberBo bo, HttpServletResponse response) {
-        List<SocialMemberVo> list = socialMemberService.queryList(bo);
+        List<SocialMemberVo> list = socialMemberService.queryList(bo, SocialMemberVo.class);
         ExcelUtil.exportExcel(list, "成员信息", SocialMemberVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class SocialMemberController extends BaseController {
     @SaCheckPermission("social:member:query")
     @GetMapping("/{memberId}")
     public R<SocialMemberVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long memberId) {
-        return R.ok(socialMemberService.queryById(memberId));
+        return R.ok(socialMemberService.queryById(memberId, SocialMemberVo.class));
     }
 
     /**

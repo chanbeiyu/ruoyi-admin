@@ -2,8 +2,7 @@ package org.dromara.web.domain.vo;
 
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.Data;
-import org.dromara.platform.domain.app.vo.AppInfoVo;
-import org.dromara.system.domain.vo.SysTenantVo;
+import org.dromara.platform.vo.app.AppInfoVo;
 
 /**
  * 应用列表

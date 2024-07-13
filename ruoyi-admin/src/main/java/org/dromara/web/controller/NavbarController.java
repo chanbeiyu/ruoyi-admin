@@ -4,15 +4,15 @@ import cn.hutool.core.collection.CollUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.basis.app.bo.AppInfoBo;
+import org.dromara.basis.app.service.AppInfoService;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StreamUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.tenant.helper.AppHelper;
 import org.dromara.common.tenant.helper.TenantHelper;
-import org.dromara.platform.domain.app.bo.AppInfoBo;
-import org.dromara.platform.domain.app.vo.AppInfoVo;
-import org.dromara.platform.service.app.AppInfoService;
+import org.dromara.platform.vo.app.AppInfoVo;
 import org.dromara.system.domain.bo.SysTenantBo;
 import org.dromara.system.domain.vo.SysTenantVo;
 import org.dromara.system.service.ISysTenantService;
@@ -46,7 +46,7 @@ public class NavbarController {
     @GetMapping("/tenant/list")
     public R<LoginTenantVo> tenantList(HttpServletRequest request) throws Exception {
         List<SysTenantVo> tenantList = tenantService.queryList(new SysTenantBo());
-        List<AppInfoVo> appVoList = appInfoService.queryList(new AppInfoBo());
+        List<AppInfoVo> appVoList = appInfoService.queryList(new AppInfoBo(),  AppInfoVo.class);
         List<TenantListVo> voList = MapstructUtils.convert(tenantList, TenantListVo.class);
         List<AppListVo> appListVos = MapstructUtils.convert(appVoList, AppListVo.class);
 

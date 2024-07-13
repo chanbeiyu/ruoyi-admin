@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.social.bo.SocialLikeBo;
+import org.dromara.basis.social.bo.SocialLikeBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +16,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.social.vo.SocialLikeVo;
-import org.dromara.platform.service.social.SocialLikeService;
+import org.dromara.platform.vo.social.SocialLikeVo;
+import org.dromara.basis.social.service.SocialLikeService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class SocialLikeController extends BaseController {
     @SaCheckPermission("social:like:list")
     @GetMapping("/list")
     public TableDataInfo<SocialLikeVo> list(SocialLikeBo bo, PageQuery pageQuery) {
-        return socialLikeService.queryPageList(bo, pageQuery);
+        return socialLikeService.queryPageList(bo, pageQuery, SocialLikeVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SocialLikeController extends BaseController {
     @Log(title = "点赞信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialLikeBo bo, HttpServletResponse response) {
-        List<SocialLikeVo> list = socialLikeService.queryList(bo);
+        List<SocialLikeVo> list = socialLikeService.queryList(bo, SocialLikeVo.class);
         ExcelUtil.exportExcel(list, "点赞信息", SocialLikeVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class SocialLikeController extends BaseController {
     @SaCheckPermission("social:like:query")
     @GetMapping("/{likeId}")
     public R<SocialLikeVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long likeId) {
-        return R.ok(socialLikeService.queryById(likeId));
+        return R.ok(socialLikeService.queryById(likeId, SocialLikeVo.class));
     }
 
     /**

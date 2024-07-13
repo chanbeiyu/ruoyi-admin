@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.social.bo.SocialSubjectBo;
+import org.dromara.basis.social.bo.SocialSubjectBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +16,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.social.vo.SocialSubjectVo;
-import org.dromara.platform.service.social.SocialSubjectService;
+import org.dromara.platform.vo.social.SocialSubjectVo;
+import org.dromara.basis.social.service.SocialSubjectService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class SocialSubjectController extends BaseController {
     @SaCheckPermission("social:subject:list")
     @GetMapping("/list")
     public TableDataInfo<SocialSubjectVo> list(SocialSubjectBo bo, PageQuery pageQuery) {
-        return socialSubjectService.queryPageList(bo, pageQuery);
+        return socialSubjectService.queryPageList(bo, pageQuery, SocialSubjectVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SocialSubjectController extends BaseController {
     @Log(title = "内容主题", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialSubjectBo bo, HttpServletResponse response) {
-        List<SocialSubjectVo> list = socialSubjectService.queryList(bo);
+        List<SocialSubjectVo> list = socialSubjectService.queryList(bo, SocialSubjectVo.class);
         ExcelUtil.exportExcel(list, "内容主题", SocialSubjectVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class SocialSubjectController extends BaseController {
     @SaCheckPermission("social:subject:query")
     @GetMapping("/{subjectId}")
     public R<SocialSubjectVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long subjectId) {
-        return R.ok(socialSubjectService.queryById(subjectId));
+        return R.ok(socialSubjectService.queryById(subjectId, SocialSubjectVo.class));
     }
 
     /**

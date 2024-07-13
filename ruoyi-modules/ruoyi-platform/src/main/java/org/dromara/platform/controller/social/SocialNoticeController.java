@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.dromara.platform.domain.social.bo.SocialNoticeBo;
+import org.dromara.basis.social.bo.SocialNoticeBo;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
 import org.dromara.common.core.validate.EditGroup;
@@ -16,8 +16,8 @@ import org.dromara.common.log.enums.BusinessType;
 import org.dromara.common.mybatis.core.page.PageQuery;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.domain.social.vo.SocialNoticeVo;
-import org.dromara.platform.service.social.SocialNoticeService;
+import org.dromara.platform.vo.social.SocialNoticeVo;
+import org.dromara.basis.social.service.SocialNoticeService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +43,7 @@ public class SocialNoticeController extends BaseController {
     @SaCheckPermission("social:notice:list")
     @GetMapping("/list")
     public TableDataInfo<SocialNoticeVo> list(SocialNoticeBo bo, PageQuery pageQuery) {
-        return socialNoticeService.queryPageList(bo, pageQuery);
+        return socialNoticeService.queryPageList(bo, pageQuery, SocialNoticeVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SocialNoticeController extends BaseController {
     @Log(title = "信息通知", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialNoticeBo bo, HttpServletResponse response) {
-        List<SocialNoticeVo> list = socialNoticeService.queryList(bo);
+        List<SocialNoticeVo> list = socialNoticeService.queryList(bo, SocialNoticeVo.class);
         ExcelUtil.exportExcel(list, "信息通知", SocialNoticeVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class SocialNoticeController extends BaseController {
     @SaCheckPermission("social:notice:query")
     @GetMapping("/{noticeId}")
     public R<SocialNoticeVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long noticeId) {
-        return R.ok(socialNoticeService.queryById(noticeId));
+        return R.ok(socialNoticeService.queryById(noticeId, SocialNoticeVo.class));
     }
 
     /**
