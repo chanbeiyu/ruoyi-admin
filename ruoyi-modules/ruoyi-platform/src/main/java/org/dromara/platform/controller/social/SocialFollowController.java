@@ -43,7 +43,7 @@ public class SocialFollowController extends BaseController {
     @SaCheckPermission("social:follow:list")
     @GetMapping("/list")
     public TableDataInfo<SocialFollowVo> list(SocialFollowBo bo, PageQuery pageQuery) {
-        return socialFollowService.queryPageList(bo, pageQuery, SocialFollowVo.class);
+        return socialFollowService.selectTableList(bo, pageQuery, SocialFollowVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SocialFollowController extends BaseController {
     @Log(title = "关注信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialFollowBo bo, HttpServletResponse response) {
-        List<SocialFollowVo> list = socialFollowService.queryList(bo, SocialFollowVo.class);
+        List<SocialFollowVo> list = socialFollowService.selectList(bo, SocialFollowVo.class);
         ExcelUtil.exportExcel(list, "关注信息", SocialFollowVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class SocialFollowController extends BaseController {
     @SaCheckPermission("social:follow:query")
     @GetMapping("/{followId}")
     public R<SocialFollowVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long followId) {
-        return R.ok(socialFollowService.queryById(followId, SocialFollowVo.class));
+        return R.ok(socialFollowService.selectById(followId, SocialFollowVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class SocialFollowController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody SocialFollowBo bo) {
-        return toAjax(socialFollowService.insertByBo(bo));
+        return toAjax(socialFollowService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class SocialFollowController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody SocialFollowBo bo) {
-        return toAjax(socialFollowService.updateByBo(bo));
+        return toAjax(socialFollowService.update(bo));
     }
 
     /**

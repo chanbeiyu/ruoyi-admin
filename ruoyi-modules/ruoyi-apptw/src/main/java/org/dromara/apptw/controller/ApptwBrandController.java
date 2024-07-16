@@ -43,7 +43,7 @@ public class ApptwBrandController extends BaseController {
     @SaCheckPermission("apptw:brand:list")
     @GetMapping("/list")
     public TableDataInfo<ApptwBrandVo> list(ApptwBrandBo bo, PageQuery pageQuery) {
-        return apptwBrandService.queryPageList(bo, pageQuery, ApptwBrandVo.class);
+        return apptwBrandService.selectTableList(bo, pageQuery, ApptwBrandVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class ApptwBrandController extends BaseController {
     @Log(title = "香烟品牌", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(ApptwBrandBo bo, HttpServletResponse response) {
-        List<ApptwBrandVo> list = apptwBrandService.queryList(bo, ApptwBrandVo.class);
+        List<ApptwBrandVo> list = apptwBrandService.selectList(bo, ApptwBrandVo.class);
         ExcelUtil.exportExcel(list, "香烟品牌", ApptwBrandVo.class, response);
     }
 
@@ -66,7 +66,7 @@ public class ApptwBrandController extends BaseController {
     @GetMapping("/{id}")
     public R<ApptwBrandVo> getInfo(@NotNull(message = "主键不能为空")
                                    @PathVariable Long id) {
-        return R.ok(apptwBrandService.queryById(id, ApptwBrandVo.class));
+        return R.ok(apptwBrandService.selectById(id, ApptwBrandVo.class));
     }
 
     /**
@@ -77,7 +77,7 @@ public class ApptwBrandController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody ApptwBrandBo bo) {
-        return toAjax(apptwBrandService.insertByBo(bo));
+        return toAjax(apptwBrandService.insert(bo));
     }
 
     /**
@@ -88,7 +88,7 @@ public class ApptwBrandController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody ApptwBrandBo bo) {
-        return toAjax(apptwBrandService.updateByBo(bo));
+        return toAjax(apptwBrandService.update(bo));
     }
 
     /**

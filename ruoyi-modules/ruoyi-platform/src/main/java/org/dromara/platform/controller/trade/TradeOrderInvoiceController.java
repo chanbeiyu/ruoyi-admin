@@ -43,7 +43,7 @@ public class TradeOrderInvoiceController extends BaseController {
     @SaCheckPermission("trade:order:invoice:list")
     @GetMapping("/list")
     public TableDataInfo<TradeOrderInvoiceVo> list(TradeOrderInvoiceBo bo, PageQuery pageQuery) {
-        return tradeOrderInvoiceService.queryPageList(bo, pageQuery, TradeOrderInvoiceVo.class);
+        return tradeOrderInvoiceService.selectTableList(bo, pageQuery, TradeOrderInvoiceVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class TradeOrderInvoiceController extends BaseController {
     @Log(title = "订单信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(TradeOrderInvoiceBo bo, HttpServletResponse response) {
-        List<TradeOrderInvoiceVo> list = tradeOrderInvoiceService.queryList(bo, TradeOrderInvoiceVo.class);
+        List<TradeOrderInvoiceVo> list = tradeOrderInvoiceService.selectList(bo, TradeOrderInvoiceVo.class);
         ExcelUtil.exportExcel(list, "订单信息", TradeOrderInvoiceVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class TradeOrderInvoiceController extends BaseController {
     @SaCheckPermission("trade:order:invoice:query")
     @GetMapping("/{invoiceId}")
     public R<TradeOrderInvoiceVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long invoiceId) {
-        return R.ok(tradeOrderInvoiceService.queryById(invoiceId, TradeOrderInvoiceVo.class));
+        return R.ok(tradeOrderInvoiceService.selectById(invoiceId, TradeOrderInvoiceVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class TradeOrderInvoiceController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody TradeOrderInvoiceBo bo) {
-        return toAjax(tradeOrderInvoiceService.insertByBo(bo));
+        return toAjax(tradeOrderInvoiceService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class TradeOrderInvoiceController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody TradeOrderInvoiceBo bo) {
-        return toAjax(tradeOrderInvoiceService.updateByBo(bo));
+        return toAjax(tradeOrderInvoiceService.update(bo));
     }
 
     /**

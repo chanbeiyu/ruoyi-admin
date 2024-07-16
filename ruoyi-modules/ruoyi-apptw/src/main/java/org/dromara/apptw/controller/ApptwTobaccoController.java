@@ -43,7 +43,7 @@ public class ApptwTobaccoController extends BaseController {
     @SaCheckPermission("apptw:tobacco:list")
     @GetMapping("/list")
     public TableDataInfo<ApptwTobaccoVo> list(ApptwTobaccoBo bo, PageQuery pageQuery) {
-        return apptwTobaccoService.queryPageList(bo, pageQuery, ApptwTobaccoVo.class);
+        return apptwTobaccoService.selectTableList(bo, pageQuery, ApptwTobaccoVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class ApptwTobaccoController extends BaseController {
     @Log(title = "香烟信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(ApptwTobaccoBo bo, HttpServletResponse response) {
-        List<ApptwTobaccoVo> list = apptwTobaccoService.queryList(bo, ApptwTobaccoVo.class);
+        List<ApptwTobaccoVo> list = apptwTobaccoService.selectList(bo, ApptwTobaccoVo.class);
         ExcelUtil.exportExcel(list, "香烟信息", ApptwTobaccoVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class ApptwTobaccoController extends BaseController {
     @SaCheckPermission("apptw:tobacco:query")
     @GetMapping("/{id}")
     public R<ApptwTobaccoVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long id) {
-        return R.ok(apptwTobaccoService.queryById(id, ApptwTobaccoVo.class));
+        return R.ok(apptwTobaccoService.selectById(id, ApptwTobaccoVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class ApptwTobaccoController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody ApptwTobaccoBo bo) {
-        return toAjax(apptwTobaccoService.insertByBo(bo));
+        return toAjax(apptwTobaccoService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class ApptwTobaccoController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody ApptwTobaccoBo bo) {
-        return toAjax(apptwTobaccoService.updateByBo(bo));
+        return toAjax(apptwTobaccoService.update(bo));
     }
 
     /**

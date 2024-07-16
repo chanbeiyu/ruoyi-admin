@@ -43,7 +43,7 @@ public class MemberCoinsRecordController extends BaseController {
     @SaCheckPermission("member:coins:record:list")
     @GetMapping("/list")
     public TableDataInfo<MemberCoinsRecordVo> list(MemberCoinsRecordBo bo, PageQuery pageQuery) {
-        return memberCoinsRecordService.queryPageList(bo, pageQuery, MemberCoinsRecordVo.class);
+        return memberCoinsRecordService.selectTableList(bo, pageQuery, MemberCoinsRecordVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MemberCoinsRecordController extends BaseController {
     @Log(title = "代币记录信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(MemberCoinsRecordBo bo, HttpServletResponse response) {
-        List<MemberCoinsRecordVo> list = memberCoinsRecordService.queryList(bo, MemberCoinsRecordVo.class);
+        List<MemberCoinsRecordVo> list = memberCoinsRecordService.selectList(bo, MemberCoinsRecordVo.class);
         ExcelUtil.exportExcel(list, "代币记录信息", MemberCoinsRecordVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class MemberCoinsRecordController extends BaseController {
     @SaCheckPermission("member:coins:record:query")
     @GetMapping("/{recordId}")
     public R<MemberCoinsRecordVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long recordId) {
-        return R.ok(memberCoinsRecordService.queryById(recordId, MemberCoinsRecordVo.class));
+        return R.ok(memberCoinsRecordService.selectById(recordId, MemberCoinsRecordVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class MemberCoinsRecordController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody MemberCoinsRecordBo bo) {
-        return toAjax(memberCoinsRecordService.insertByBo(bo));
+        return toAjax(memberCoinsRecordService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class MemberCoinsRecordController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody MemberCoinsRecordBo bo) {
-        return toAjax(memberCoinsRecordService.updateByBo(bo));
+        return toAjax(memberCoinsRecordService.update(bo));
     }
 
     /**

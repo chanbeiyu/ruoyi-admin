@@ -43,7 +43,7 @@ public class MemberLevelController extends BaseController {
     @SaCheckPermission("member:level:list")
     @GetMapping("/list")
     public TableDataInfo<MemberLevelVo> list(MemberLevelBo bo, PageQuery pageQuery) {
-        return memberLevelService.queryPageList(bo, pageQuery, MemberLevelVo.class);
+        return memberLevelService.selectTableList(bo, pageQuery, MemberLevelVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MemberLevelController extends BaseController {
     @Log(title = "会员级别信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(MemberLevelBo bo, HttpServletResponse response) {
-        List<MemberLevelVo> list = memberLevelService.queryList(bo, MemberLevelVo.class);
+        List<MemberLevelVo> list = memberLevelService.selectList(bo, MemberLevelVo.class);
         ExcelUtil.exportExcel(list, "会员级别信息", MemberLevelVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class MemberLevelController extends BaseController {
     @SaCheckPermission("member:level:query")
     @GetMapping("/{levelId}")
     public R<MemberLevelVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long levelId) {
-        return R.ok(memberLevelService.queryById(levelId, MemberLevelVo.class));
+        return R.ok(memberLevelService.selectById(levelId, MemberLevelVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class MemberLevelController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody MemberLevelBo bo) {
-        return toAjax(memberLevelService.insertByBo(bo));
+        return toAjax(memberLevelService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class MemberLevelController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody MemberLevelBo bo) {
-        return toAjax(memberLevelService.updateByBo(bo));
+        return toAjax(memberLevelService.update(bo));
     }
 
     /**

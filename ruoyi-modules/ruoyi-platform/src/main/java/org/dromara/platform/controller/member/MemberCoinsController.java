@@ -43,7 +43,7 @@ public class MemberCoinsController extends BaseController {
     @SaCheckPermission("member:coins:list")
     @GetMapping("/list")
     public TableDataInfo<MemberCoinsVo> list(MemberCoinsBo bo, PageQuery pageQuery) {
-        return memberCoinsService.queryPageList(bo, pageQuery, MemberCoinsVo.class);
+        return memberCoinsService.selectTableList(bo, pageQuery, MemberCoinsVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MemberCoinsController extends BaseController {
     @Log(title = "代币信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(MemberCoinsBo bo, HttpServletResponse response) {
-        List<MemberCoinsVo> list = memberCoinsService.queryList(bo, MemberCoinsVo.class);
+        List<MemberCoinsVo> list = memberCoinsService.selectList(bo, MemberCoinsVo.class);
         ExcelUtil.exportExcel(list, "代币信息", MemberCoinsVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class MemberCoinsController extends BaseController {
     @SaCheckPermission("member:coins:query")
     @GetMapping("/{id}")
     public R<MemberCoinsVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long id) {
-        return R.ok(memberCoinsService.queryById(id, MemberCoinsVo.class));
+        return R.ok(memberCoinsService.selectById(id, MemberCoinsVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class MemberCoinsController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody MemberCoinsBo bo) {
-        return toAjax(memberCoinsService.insertByBo(bo));
+        return toAjax(memberCoinsService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class MemberCoinsController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody MemberCoinsBo bo) {
-        return toAjax(memberCoinsService.updateByBo(bo));
+        return toAjax(memberCoinsService.update(bo));
     }
 
     /**

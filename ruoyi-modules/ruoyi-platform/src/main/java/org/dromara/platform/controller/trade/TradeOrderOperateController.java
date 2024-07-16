@@ -43,7 +43,7 @@ public class TradeOrderOperateController extends BaseController {
     @SaCheckPermission("trade:order:operate:list")
     @GetMapping("/list")
     public TableDataInfo<TradeOrderOperateVo> list(TradeOrderOperateBo bo, PageQuery pageQuery) {
-        return tradeOrderOperateService.queryPageList(bo, pageQuery, TradeOrderOperateVo.class);
+        return tradeOrderOperateService.selectTableList(bo, pageQuery, TradeOrderOperateVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class TradeOrderOperateController extends BaseController {
     @Log(title = "订单操作历史记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(TradeOrderOperateBo bo, HttpServletResponse response) {
-        List<TradeOrderOperateVo> list = tradeOrderOperateService.queryList(bo, TradeOrderOperateVo.class);
+        List<TradeOrderOperateVo> list = tradeOrderOperateService.selectList(bo, TradeOrderOperateVo.class);
         ExcelUtil.exportExcel(list, "订单操作历史记录", TradeOrderOperateVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class TradeOrderOperateController extends BaseController {
     @SaCheckPermission("trade:order:operate:query")
     @GetMapping("/{operateId}")
     public R<TradeOrderOperateVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long operateId) {
-        return R.ok(tradeOrderOperateService.queryById(operateId, TradeOrderOperateVo.class));
+        return R.ok(tradeOrderOperateService.selectById(operateId, TradeOrderOperateVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class TradeOrderOperateController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody TradeOrderOperateBo bo) {
-        return toAjax(tradeOrderOperateService.insertByBo(bo));
+        return toAjax(tradeOrderOperateService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class TradeOrderOperateController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody TradeOrderOperateBo bo) {
-        return toAjax(tradeOrderOperateService.updateByBo(bo));
+        return toAjax(tradeOrderOperateService.update(bo));
     }
 
     /**

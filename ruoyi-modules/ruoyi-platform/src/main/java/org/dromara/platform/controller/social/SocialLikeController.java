@@ -43,7 +43,7 @@ public class SocialLikeController extends BaseController {
     @SaCheckPermission("social:like:list")
     @GetMapping("/list")
     public TableDataInfo<SocialLikeVo> list(SocialLikeBo bo, PageQuery pageQuery) {
-        return socialLikeService.queryPageList(bo, pageQuery, SocialLikeVo.class);
+        return socialLikeService.selectTableList(bo, pageQuery, SocialLikeVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SocialLikeController extends BaseController {
     @Log(title = "点赞信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialLikeBo bo, HttpServletResponse response) {
-        List<SocialLikeVo> list = socialLikeService.queryList(bo, SocialLikeVo.class);
+        List<SocialLikeVo> list = socialLikeService.selectList(bo, SocialLikeVo.class);
         ExcelUtil.exportExcel(list, "点赞信息", SocialLikeVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class SocialLikeController extends BaseController {
     @SaCheckPermission("social:like:query")
     @GetMapping("/{likeId}")
     public R<SocialLikeVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long likeId) {
-        return R.ok(socialLikeService.queryById(likeId, SocialLikeVo.class));
+        return R.ok(socialLikeService.selectById(likeId, SocialLikeVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class SocialLikeController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody SocialLikeBo bo) {
-        return toAjax(socialLikeService.insertByBo(bo));
+        return toAjax(socialLikeService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class SocialLikeController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody SocialLikeBo bo) {
-        return toAjax(socialLikeService.updateByBo(bo));
+        return toAjax(socialLikeService.update(bo));
     }
 
     /**

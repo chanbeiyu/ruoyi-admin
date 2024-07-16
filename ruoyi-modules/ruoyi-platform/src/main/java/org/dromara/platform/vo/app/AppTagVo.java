@@ -56,7 +56,7 @@ public class AppTagVo extends AppBaseVo {
     private Long subjectId;
 
     @ExcelProperty(value = "所属主题")
-    @Translation(type = TranslationConst.key, mapper = "subjectId", other = TranslationConst.SOCIAL_SUBJECT)
+    @Translation(type = TranslationConst.TYPE_KEY, mapper = "subjectId", other = TranslationConst.SOCIAL_SUBJECT_NAME)
     private String subjectName;
 
     /**

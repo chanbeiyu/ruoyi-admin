@@ -43,7 +43,7 @@ public class ApptwSmokeDaysController extends BaseController {
     @SaCheckPermission("apptw:days:list")
     @GetMapping("/list")
     public TableDataInfo<ApptwSmokeDaysVo> list(ApptwSmokeDaysBo bo, PageQuery pageQuery) {
-        return apptwSmokeDaysService.queryPageList(bo, pageQuery, ApptwSmokeDaysVo.class);
+        return apptwSmokeDaysService.selectTableList(bo, pageQuery, ApptwSmokeDaysVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class ApptwSmokeDaysController extends BaseController {
     @Log(title = "日抽烟数据", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(ApptwSmokeDaysBo bo, HttpServletResponse response) {
-        List<ApptwSmokeDaysVo> list = apptwSmokeDaysService.queryList(bo, ApptwSmokeDaysVo.class);
+        List<ApptwSmokeDaysVo> list = apptwSmokeDaysService.selectList(bo, ApptwSmokeDaysVo.class);
         ExcelUtil.exportExcel(list, "日抽烟数据", ApptwSmokeDaysVo.class, response);
     }
 
@@ -66,7 +66,7 @@ public class ApptwSmokeDaysController extends BaseController {
     @GetMapping("/{id}")
     public R<ApptwSmokeDaysVo> getInfo(@NotNull(message = "主键不能为空")
                                        @PathVariable Long id) {
-        return R.ok(apptwSmokeDaysService.queryById(id, ApptwSmokeDaysVo.class));
+        return R.ok(apptwSmokeDaysService.selectById(id, ApptwSmokeDaysVo.class));
     }
 
     /**
@@ -77,7 +77,7 @@ public class ApptwSmokeDaysController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody ApptwSmokeDaysBo bo) {
-        return toAjax(apptwSmokeDaysService.insertByBo(bo));
+        return toAjax(apptwSmokeDaysService.insert(bo));
     }
 
     /**
@@ -88,7 +88,7 @@ public class ApptwSmokeDaysController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody ApptwSmokeDaysBo bo) {
-        return toAjax(apptwSmokeDaysService.updateByBo(bo));
+        return toAjax(apptwSmokeDaysService.update(bo));
     }
 
     /**

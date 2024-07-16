@@ -43,7 +43,7 @@ public class SocialNoticeTypeController extends BaseController {
     @SaCheckPermission("social:noticeType:list")
     @GetMapping("/list")
     public TableDataInfo<SocialNoticeTypeVo> list(SocialNoticeTypeBo bo, PageQuery pageQuery) {
-        return socialNoticeTypeService.queryPageList(bo, pageQuery, SocialNoticeTypeVo.class);
+        return socialNoticeTypeService.selectTableList(bo, pageQuery, SocialNoticeTypeVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SocialNoticeTypeController extends BaseController {
     @Log(title = "信息通知类型", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialNoticeTypeBo bo, HttpServletResponse response) {
-        List<SocialNoticeTypeVo> list = socialNoticeTypeService.queryList(bo, SocialNoticeTypeVo.class);
+        List<SocialNoticeTypeVo> list = socialNoticeTypeService.selectList(bo, SocialNoticeTypeVo.class);
         ExcelUtil.exportExcel(list, "信息通知类型", SocialNoticeTypeVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class SocialNoticeTypeController extends BaseController {
     @SaCheckPermission("social:noticeType:query")
     @GetMapping("/{noticeTypeId}")
     public R<SocialNoticeTypeVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long noticeTypeId) {
-        return R.ok(socialNoticeTypeService.queryById(noticeTypeId, SocialNoticeTypeVo.class));
+        return R.ok(socialNoticeTypeService.selectById(noticeTypeId, SocialNoticeTypeVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class SocialNoticeTypeController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody SocialNoticeTypeBo bo) {
-        return toAjax(socialNoticeTypeService.insertByBo(bo));
+        return toAjax(socialNoticeTypeService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class SocialNoticeTypeController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody SocialNoticeTypeBo bo) {
-        return toAjax(socialNoticeTypeService.updateByBo(bo));
+        return toAjax(socialNoticeTypeService.update(bo));
     }
 
     /**

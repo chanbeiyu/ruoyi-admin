@@ -43,7 +43,7 @@ public class MemberTypeRelatedController extends BaseController {
     @SaCheckPermission("member:typeRelated:list")
     @GetMapping("/list")
     public TableDataInfo<MemberTypeRelatedVo> list(MemberTypeRelatedBo bo, PageQuery pageQuery) {
-        return memberTypeRelatedService.queryPageList(bo, pageQuery, MemberTypeRelatedVo.class);
+        return memberTypeRelatedService.selectTableList(bo, pageQuery, MemberTypeRelatedVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MemberTypeRelatedController extends BaseController {
     @Log(title = "会员类型关联信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(MemberTypeRelatedBo bo, HttpServletResponse response) {
-        List<MemberTypeRelatedVo> list = memberTypeRelatedService.queryList(bo, MemberTypeRelatedVo.class);
+        List<MemberTypeRelatedVo> list = memberTypeRelatedService.selectList(bo, MemberTypeRelatedVo.class);
         ExcelUtil.exportExcel(list, "会员类型关联信息", MemberTypeRelatedVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class MemberTypeRelatedController extends BaseController {
     @SaCheckPermission("member:typeRelated:query")
     @GetMapping("/{id}")
     public R<MemberTypeRelatedVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long id) {
-        return R.ok(memberTypeRelatedService.queryById(id, MemberTypeRelatedVo.class));
+        return R.ok(memberTypeRelatedService.selectById(id, MemberTypeRelatedVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class MemberTypeRelatedController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody MemberTypeRelatedBo bo) {
-        return toAjax(memberTypeRelatedService.insertByBo(bo));
+        return toAjax(memberTypeRelatedService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class MemberTypeRelatedController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody MemberTypeRelatedBo bo) {
-        return toAjax(memberTypeRelatedService.updateByBo(bo));
+        return toAjax(memberTypeRelatedService.update(bo));
     }
 
     /**

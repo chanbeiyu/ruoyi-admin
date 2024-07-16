@@ -43,7 +43,7 @@ public class AppTagController extends BaseController {
     @SaCheckPermission("app:tag:list")
     @GetMapping("/list")
     public TableDataInfo<AppTagVo> list(AppTagBo bo, PageQuery pageQuery) {
-        return appTagService.queryPageList(bo, pageQuery, AppTagVo.class);
+        return appTagService.selectTableList(bo, pageQuery, AppTagVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class AppTagController extends BaseController {
     @Log(title = "标签信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(AppTagBo bo, HttpServletResponse response) {
-        List<AppTagVo> list = appTagService.queryList(bo, AppTagVo.class);
+        List<AppTagVo> list = appTagService.selectList(bo, AppTagVo.class);
         ExcelUtil.exportExcel(list, "标签信息", AppTagVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class AppTagController extends BaseController {
     @SaCheckPermission("app:tag:query")
     @GetMapping("/{tagId}")
     public R<AppTagVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long tagId) {
-        return R.ok(appTagService.queryById(tagId, AppTagVo.class));
+        return R.ok(appTagService.selectById(tagId, AppTagVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class AppTagController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody AppTagBo bo) {
-        return toAjax(appTagService.insertByBo(bo));
+        return toAjax(appTagService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class AppTagController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody AppTagBo bo) {
-        return toAjax(appTagService.updateByBo(bo));
+        return toAjax(appTagService.update(bo));
     }
 
     /**

@@ -43,7 +43,7 @@ public class AppVersionController extends BaseController {
     @SaCheckPermission("app:version:list")
     @GetMapping("/list")
     public TableDataInfo<AppVersionVo> list(AppVersionBo bo, PageQuery pageQuery) {
-        return appVersionService.queryPageList(bo, pageQuery, AppVersionVo.class);
+        return appVersionService.selectTableList(bo, pageQuery, AppVersionVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class AppVersionController extends BaseController {
     @Log(title = "应用版本信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(AppVersionBo bo, HttpServletResponse response) {
-        List<AppVersionVo> list = appVersionService.queryList(bo, AppVersionVo.class);
+        List<AppVersionVo> list = appVersionService.selectList(bo, AppVersionVo.class);
         ExcelUtil.exportExcel(list, "应用版本信息", AppVersionVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class AppVersionController extends BaseController {
     @SaCheckPermission("app:version:query")
     @GetMapping("/{versionId}")
     public R<AppVersionVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long versionId) {
-        return R.ok(appVersionService.queryById(versionId, AppVersionVo.class));
+        return R.ok(appVersionService.selectById(versionId, AppVersionVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class AppVersionController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody AppVersionBo bo) {
-        return toAjax(appVersionService.insertByBo(bo));
+        return toAjax(appVersionService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class AppVersionController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody AppVersionBo bo) {
-        return toAjax(appVersionService.updateByBo(bo));
+        return toAjax(appVersionService.update(bo));
     }
 
     /**

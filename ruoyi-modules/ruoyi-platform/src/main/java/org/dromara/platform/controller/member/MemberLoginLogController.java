@@ -39,7 +39,7 @@ public class MemberLoginLogController extends BaseController {
     @SaCheckPermission("member:loginLog:list")
     @GetMapping("/list")
     public TableDataInfo<MemberLoginLogVo> list(MemberLoginLogBo logininfor, PageQuery pageQuery) {
-        return memberLoginLogService.queryPageList(logininfor, pageQuery, MemberLoginLogVo.class);
+        return memberLoginLogService.selectTableList(logininfor, pageQuery, MemberLoginLogVo.class);
     }
 
     /**
@@ -49,7 +49,7 @@ public class MemberLoginLogController extends BaseController {
     @SaCheckPermission("member:loginLog:export")
     @PostMapping("/export")
     public void export(MemberLoginLogBo logininfor, HttpServletResponse response) {
-        List<MemberLoginLogVo> list = memberLoginLogService.queryList(logininfor, MemberLoginLogVo.class);
+        List<MemberLoginLogVo> list = memberLoginLogService.selectList(logininfor, MemberLoginLogVo.class);
         ExcelUtil.exportExcel(list, "登录日志", MemberLoginLogVo.class, response);
     }
 

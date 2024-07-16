@@ -42,7 +42,7 @@ public class MemberInfoVo extends AppBaseVo {
     private Long typeId;
 
     @ExcelProperty(value = "成员名称")
-    @Translation(type = TranslationConst.key, mapper = "typeId", other = TranslationConst.MEMBER_TYPE)
+    @Translation(type = TranslationConst.TYPE_KEY, mapper = "typeId", other = TranslationConst.MEMBER_TYPE_NAME)
     private String typeName;
 
     /**

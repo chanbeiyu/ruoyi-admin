@@ -43,7 +43,7 @@ public class SocialFavoriteController extends BaseController {
     @SaCheckPermission("social:favorite:list")
     @GetMapping("/list")
     public TableDataInfo<SocialFavoriteVo> list(SocialFavoriteBo bo, PageQuery pageQuery) {
-        return socialFavoriteService.queryPageList(bo, pageQuery, SocialFavoriteVo.class);
+        return socialFavoriteService.selectTableList(bo, pageQuery, SocialFavoriteVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SocialFavoriteController extends BaseController {
     @Log(title = "收藏信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialFavoriteBo bo, HttpServletResponse response) {
-        List<SocialFavoriteVo> list = socialFavoriteService.queryList(bo, SocialFavoriteVo.class);
+        List<SocialFavoriteVo> list = socialFavoriteService.selectList(bo, SocialFavoriteVo.class);
         ExcelUtil.exportExcel(list, "收藏信息", SocialFavoriteVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class SocialFavoriteController extends BaseController {
     @SaCheckPermission("social:favorite:query")
     @GetMapping("/{favoriteId}")
     public R<SocialFavoriteVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long favoriteId) {
-        return R.ok(socialFavoriteService.queryById(favoriteId, SocialFavoriteVo.class));
+        return R.ok(socialFavoriteService.selectById(favoriteId, SocialFavoriteVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class SocialFavoriteController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody SocialFavoriteBo bo) {
-        return toAjax(socialFavoriteService.insertByBo(bo));
+        return toAjax(socialFavoriteService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class SocialFavoriteController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody SocialFavoriteBo bo) {
-        return toAjax(socialFavoriteService.updateByBo(bo));
+        return toAjax(socialFavoriteService.update(bo));
     }
 
     /**

@@ -8,11 +8,10 @@ import org.dromara.basis.app.bo.AppExtendBo;
 import org.dromara.basis.app.bo.AppInfoBo;
 import org.dromara.basis.app.entity.AppInfo;
 import org.dromara.basis.app.mapper.AppInfoMapper;
-import org.dromara.basis.constant.RedisKey;
-import org.dromara.common.redis.utils.RedisUtils;
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
+import org.dromara.common.mybatis.core.result.ModifyResult;
 import org.dromara.common.mybatis.core.service.IBaseService;
 import org.springframework.stereotype.Service;
 
@@ -53,40 +52,6 @@ public class AppInfoService implements IBaseService<AppInfo, AppInfoBo> {
     }
 
     /**
-     * 新增应用信息
-     */
-    @Override
-    public Boolean insertByBo(AppInfoBo bo) {
-        AppInfo add = MapstructUtils.convert(bo, AppInfo.class);
-        boolean flag = appInfoMapper.insert(add) > 0;
-        if (flag) {
-            bo.setAppId(add.getAppId());
-            AppExtendBo extendBo = new AppExtendBo();
-            extendBo.setAppId(add.getAppId());
-            appExtendService.insertByBo(extendBo);
-            RedisUtils.setCacheMapValue(RedisKey.APP_ID_NAME, add.getAppId() + "", bo.getAppName());
-            RedisUtils.setCacheMapValue(RedisKey.APP_ID_CODE, add.getAppId() + "", add.getAppCode());
-            RedisUtils.setCacheMapValue(RedisKey.APP_CODE_NAME, add.getAppCode(), bo.getAppName());
-        }
-        return flag;
-    }
-
-    /**
-     * 修改应用信息
-     */
-    @Override
-    public Boolean updateByBo(AppInfoBo bo) {
-        AppInfo update = MapstructUtils.convert(bo, AppInfo.class);
-        boolean bool = appInfoMapper.updateById(update) > 0;
-        if (bool) {
-            RedisUtils.setCacheMapValue(RedisKey.APP_ID_NAME, update.getAppId() + "", update.getAppName());
-            RedisUtils.setCacheMapValue(RedisKey.APP_ID_CODE, update.getAppId() + "", update.getAppCode());
-            RedisUtils.setCacheMapValue(RedisKey.APP_CODE_NAME, update.getAppCode(), update.getAppName());
-        }
-        return bool;
-    }
-
-    /**
      * 修改APP状态
      *
      * @param appId  APPID
@@ -98,20 +63,4 @@ public class AppInfoService implements IBaseService<AppInfo, AppInfoBo> {
             new LambdaUpdateWrapper<AppInfo>().set(AppInfo::getStatus, status).eq(AppInfo::getAppId, appId));
     }
 
-    /**
-     * 批量删除应用信息
-     */
-    @Override
-    public Boolean deleteByIds(Collection<Serializable> ids) {
-        List<AppInfo> appInfos = appInfoMapper.selectBatchIds(ids);
-        boolean bool = appInfoMapper.deleteBatchIds(ids) > 0;
-        if (bool) {
-            appInfos.forEach(o -> {
-                RedisUtils.delCacheMapValue(RedisKey.APP_ID_NAME, o.getAppId() + "");
-                RedisUtils.delCacheMapValue(RedisKey.APP_ID_CODE, o.getAppCode());
-                RedisUtils.delCacheMapValue(RedisKey.APP_CODE_NAME, o.getAppCode());
-            });
-        }
-        return bool;
-    }
 }

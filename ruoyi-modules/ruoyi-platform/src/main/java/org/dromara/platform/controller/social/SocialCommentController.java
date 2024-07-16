@@ -41,7 +41,7 @@ public class SocialCommentController extends BaseController {
     @SaCheckPermission("social:comment:list")
     @GetMapping("/list")
     public R<List<SocialCommentVo>> list(SocialCommentBo bo) {
-        List<SocialCommentVo> list = socialCommentService.queryList(bo, SocialCommentVo.class);
+        List<SocialCommentVo> list = socialCommentService.selectList(bo, SocialCommentVo.class);
         return R.ok(list);
     }
 
@@ -52,7 +52,7 @@ public class SocialCommentController extends BaseController {
     @Log(title = "评论信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialCommentBo bo, HttpServletResponse response) {
-        List<SocialCommentVo> list = socialCommentService.queryList(bo, SocialCommentVo.class);
+        List<SocialCommentVo> list = socialCommentService.selectList(bo, SocialCommentVo.class);
         ExcelUtil.exportExcel(list, "评论信息", SocialCommentVo.class, response);
     }
 
@@ -64,7 +64,7 @@ public class SocialCommentController extends BaseController {
     @SaCheckPermission("social:comment:query")
     @GetMapping("/{commentId}")
     public R<SocialCommentVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long commentId) {
-        return R.ok(socialCommentService.queryById(commentId, SocialCommentVo.class));
+        return R.ok(socialCommentService.selectById(commentId, SocialCommentVo.class));
     }
 
     /**
@@ -75,7 +75,7 @@ public class SocialCommentController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody SocialCommentBo bo) {
-        return toAjax(socialCommentService.insertByBo(bo));
+        return toAjax(socialCommentService.insert(bo));
     }
 
     /**
@@ -86,7 +86,7 @@ public class SocialCommentController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody SocialCommentBo bo) {
-        return toAjax(socialCommentService.updateByBo(bo));
+        return toAjax(socialCommentService.update(bo));
     }
 
     /**

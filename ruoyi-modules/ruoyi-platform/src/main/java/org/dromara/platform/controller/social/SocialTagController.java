@@ -43,7 +43,7 @@ public class SocialTagController extends BaseController {
     @SaCheckPermission("social:tag:list")
     @GetMapping("/list")
     public TableDataInfo<SocialTagVo> list(SocialTagBo bo, PageQuery pageQuery) {
-        return socialTagService.queryPageList(bo, pageQuery, SocialTagVo.class);
+        return socialTagService.selectTableList(bo, pageQuery, SocialTagVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SocialTagController extends BaseController {
     @Log(title = "标签信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialTagBo bo, HttpServletResponse response) {
-        List<SocialTagVo> list = socialTagService.queryList(bo, SocialTagVo.class);
+        List<SocialTagVo> list = socialTagService.selectList(bo, SocialTagVo.class);
         ExcelUtil.exportExcel(list, "标签信息", SocialTagVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class SocialTagController extends BaseController {
     @SaCheckPermission("social:tag:query")
     @GetMapping("/{tagId}")
     public R<SocialTagVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long tagId) {
-        return R.ok(socialTagService.queryById(tagId, SocialTagVo.class));
+        return R.ok(socialTagService.selectById(tagId, SocialTagVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class SocialTagController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody SocialTagBo bo) {
-        return toAjax(socialTagService.insertByBo(bo));
+        return toAjax(socialTagService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class SocialTagController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody SocialTagBo bo) {
-        return toAjax(socialTagService.updateByBo(bo));
+        return toAjax(socialTagService.update(bo));
     }
 
     /**

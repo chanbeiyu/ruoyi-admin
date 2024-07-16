@@ -43,7 +43,7 @@ public class ApptwSmokeController extends BaseController {
     @SaCheckPermission("apptw:smoke:list")
     @GetMapping("/list")
     public TableDataInfo<ApptwSmokeVo> list(ApptwSmokeBo bo, PageQuery pageQuery) {
-        return apptwSmokeService.queryPageList(bo, pageQuery, ApptwSmokeVo.class);
+        return apptwSmokeService.selectTableList(bo, pageQuery, ApptwSmokeVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class ApptwSmokeController extends BaseController {
     @Log(title = "抽烟记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(ApptwSmokeBo bo, HttpServletResponse response) {
-        List<ApptwSmokeVo> list = apptwSmokeService.queryList(bo, ApptwSmokeVo.class);
+        List<ApptwSmokeVo> list = apptwSmokeService.selectList(bo, ApptwSmokeVo.class);
         ExcelUtil.exportExcel(list, "抽烟记录", ApptwSmokeVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class ApptwSmokeController extends BaseController {
     @SaCheckPermission("apptw:smoke:query")
     @GetMapping("/{id}")
     public R<ApptwSmokeVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long id) {
-        return R.ok(apptwSmokeService.queryById(id, ApptwSmokeVo.class));
+        return R.ok(apptwSmokeService.selectById(id, ApptwSmokeVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class ApptwSmokeController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody ApptwSmokeBo bo) {
-        return toAjax(apptwSmokeService.insertByBo(bo));
+        return toAjax(apptwSmokeService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class ApptwSmokeController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody ApptwSmokeBo bo) {
-        return toAjax(apptwSmokeService.updateByBo(bo));
+        return toAjax(apptwSmokeService.update(bo));
     }
 
     /**

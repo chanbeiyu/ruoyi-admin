@@ -8,12 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.dromara.basis.app.bo.AppSubjectBo;
 import org.dromara.basis.app.entity.AppSubject;
 import org.dromara.basis.app.mapper.AppSubjectMapper;
-import org.dromara.basis.constant.RedisKey;
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
+import org.dromara.common.mybatis.core.result.ModifyResult;
 import org.dromara.common.mybatis.core.service.IBaseService;
-import org.dromara.common.redis.utils.RedisUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -52,37 +51,6 @@ public class AppSubjectService implements IBaseService<AppSubject, AppSubjectBo>
     }
 
     /**
-     * 新增内容主题
-     */
-    @Override
-    public Boolean insertByBo(AppSubjectBo bo) {
-        AppSubject add = MapstructUtils.convert(bo, AppSubject.class);
-        boolean flag = appSubjectMapper.insert(add) > 0;
-        if (flag) {
-            bo.setSubjectId(add.getSubjectId());
-            RedisUtils.setCacheMapValue(RedisKey.APP_SUBJECT_ID_CODE, add.getSubjectId() + "", add.getSubjectCode());
-            RedisUtils.setCacheMapValue(RedisKey.APP_SUBJECT_ID_NAME, add.getSubjectId() + "", bo.getSubjectName());
-            RedisUtils.setCacheMapValue(RedisKey.APP_SUBJECT_CODE_NAME, add.getSubjectCode(), bo.getSubjectName());
-        }
-        return flag;
-    }
-
-    /**
-     * 修改内容主题
-     */
-    @Override
-    public Boolean updateByBo(AppSubjectBo bo) {
-        AppSubject update = MapstructUtils.convert(bo, AppSubject.class);
-        boolean bool = appSubjectMapper.updateById(update) > 0;
-        if (bool) {
-            RedisUtils.setCacheMapValue(RedisKey.APP_SUBJECT_ID_CODE, update.getSubjectId() + "", update.getSubjectCode());
-            RedisUtils.setCacheMapValue(RedisKey.APP_SUBJECT_ID_NAME, update.getSubjectId() + "", update.getSubjectName());
-            RedisUtils.setCacheMapValue(RedisKey.APP_SUBJECT_CODE_NAME, update.getSubjectCode(), update.getSubjectName());
-        }
-        return bool;
-    }
-
-    /**
      * 修改主题通知状态
      *
      * @param subjectId 主题ID
@@ -95,20 +63,4 @@ public class AppSubjectService implements IBaseService<AppSubject, AppSubjectBo>
                 .eq(AppSubject::getSubjectId, subjectId));
     }
 
-    /**
-     * 批量删除内容主题
-     */
-    @Override
-    public Boolean deleteByIds(Collection<Serializable> ids) {
-        List<AppSubject> appSubjects = appSubjectMapper.selectBatchIds(ids);
-        boolean bool = appSubjectMapper.deleteBatchIds(ids) > 0;
-        if (bool) {
-            appSubjects.forEach(o -> {
-                RedisUtils.delCacheMapValue(RedisKey.APP_SUBJECT_ID_CODE, o.getSubjectId() + "");
-                RedisUtils.delCacheMapValue(RedisKey.APP_SUBJECT_ID_NAME, o.getSubjectId() + "");
-                RedisUtils.delCacheMapValue(RedisKey.APP_SUBJECT_CODE_NAME, o.getSubjectCode());
-            });
-        }
-        return bool;
-    }
 }

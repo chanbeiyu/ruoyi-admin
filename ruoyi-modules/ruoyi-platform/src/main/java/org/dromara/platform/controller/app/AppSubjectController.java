@@ -43,7 +43,7 @@ public class AppSubjectController extends BaseController {
     @SaCheckPermission("app:subject:list")
     @GetMapping("/list")
     public TableDataInfo<AppSubjectVo> list(AppSubjectBo bo, PageQuery pageQuery) {
-        return appSubjectService.queryPageList(bo, pageQuery, AppSubjectVo.class);
+        return appSubjectService.selectTableList(bo, pageQuery, AppSubjectVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class AppSubjectController extends BaseController {
     @Log(title = "内容主题", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(AppSubjectBo bo, HttpServletResponse response) {
-        List<AppSubjectVo> list = appSubjectService.queryList(bo, AppSubjectVo.class);
+        List<AppSubjectVo> list = appSubjectService.selectList(bo, AppSubjectVo.class);
         ExcelUtil.exportExcel(list, "内容主题", AppSubjectVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class AppSubjectController extends BaseController {
     @SaCheckPermission("app:subject:query")
     @GetMapping("/{subjectId}")
     public R<AppSubjectVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long subjectId) {
-        return R.ok(appSubjectService.queryById(subjectId, AppSubjectVo.class));
+        return R.ok(appSubjectService.selectById(subjectId, AppSubjectVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class AppSubjectController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody AppSubjectBo bo) {
-        return toAjax(appSubjectService.insertByBo(bo));
+        return toAjax(appSubjectService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class AppSubjectController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody AppSubjectBo bo) {
-        return toAjax(appSubjectService.updateByBo(bo));
+        return toAjax(appSubjectService.update(bo));
     }
 
     /**

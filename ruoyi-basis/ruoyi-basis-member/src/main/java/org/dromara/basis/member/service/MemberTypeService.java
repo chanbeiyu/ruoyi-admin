@@ -5,20 +5,16 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
-import org.dromara.basis.constant.RedisKey;
 import org.dromara.basis.member.bo.MemberTypeBo;
 import org.dromara.basis.member.entity.MemberType;
 import org.dromara.basis.member.mapper.MemberTypeMapper;
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
+import org.dromara.common.mybatis.core.result.ModifyResult;
 import org.dromara.common.mybatis.core.service.IBaseService;
-import org.dromara.common.redis.utils.CacheUtils;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,34 +46,6 @@ public class MemberTypeService implements IBaseService<MemberType, MemberTypeBo>
         return lqw;
     }
 
-    /**
-     * 新增会员类型信息
-     */
-    @Override
-    public Boolean insertByBo(MemberTypeBo bo) {
-        MemberType add = MapstructUtils.convert(bo, MemberType.class);
-        boolean flag = memberTypeMapper.insert(add) > 0;
-        if (flag) {
-            bo.setTypeId(add.getTypeId());
-            CacheUtils.put(RedisKey.MEMBER_TYPE_ID_NAME, bo.getTypeId(), bo.getTypeName());
-            CacheUtils.put(RedisKey.MEMBER_TYPE_CODE_NAME, bo.getTypeCode(), bo.getTypeName());
-        }
-        return flag;
-    }
-
-    /**
-     * 修改会员类型信息
-     */
-    @Override
-    public Boolean updateByBo(MemberTypeBo bo) {
-        MemberType update = MapstructUtils.convert(bo, MemberType.class);
-        boolean bool = memberTypeMapper.updateById(update) > 0;
-        if (bool) {
-            CacheUtils.put(RedisKey.MEMBER_TYPE_ID_NAME, bo.getTypeId(), bo.getTypeName());
-            CacheUtils.put(RedisKey.MEMBER_TYPE_CODE_NAME, bo.getTypeCode(), bo.getTypeName());
-        }
-        return bool;
-    }
 
     /**
      * 修改状态
@@ -89,19 +57,4 @@ public class MemberTypeService implements IBaseService<MemberType, MemberTypeBo>
             new LambdaUpdateWrapper<MemberType>().set(MemberType::getStatus, status).eq(MemberType::getTypeId, appId));
     }
 
-    /**
-     * 批量删除会员类型信息
-     */
-    @Override
-    public Boolean deleteByIds(Collection<Serializable> ids) {
-        List<MemberType> memberTypes = memberTypeMapper.selectList();
-        boolean bool = memberTypeMapper.deleteBatchIds(ids) > 0;
-        if (bool) {
-            memberTypes.forEach(bo -> {
-                CacheUtils.put(RedisKey.MEMBER_TYPE_ID_NAME, bo.getTypeId(), bo.getTypeName());
-                CacheUtils.put(RedisKey.MEMBER_TYPE_CODE_NAME, bo.getTypeCode(), bo.getTypeName());
-            });
-        }
-        return bool;
-    }
 }

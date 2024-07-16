@@ -110,17 +110,17 @@ redisson:
 
 --- # mail 邮件发送
 mail:
-  enabled: false
-  host: smtp.163.com
+  enabled: true
+  host: smtp.exmail.qq.com
   port: 465
   # 是否需要用户名密码验证
   auth: true
   # 发送方，遵循RFC-822标准
-  from: xxx@163.com
+  from: noreply@ensoul.club
   # 用户名（注意：如果使用foxmail邮箱，此处user为qq号）
-  user: xxx@163.com
+  user: noreply@ensoul.club
   # 密码（注意，某些邮箱需要为SMTP服务单独设置密码，详情查看相关帮助）
-  pass: xxxxxxxxxx
+  pass: kMJyayK3zb9FGcaM
   # 使用 STARTTLS安全连接，STARTTLS是对纯文本通信协议的扩展。
   starttlsEnable: true
   # 使用SSL安全连接
@@ -138,11 +138,11 @@ sms:
     #请求地址 默认为 dysmsapi.aliyuncs.com 如无特殊改变可以不用设置
     requestUrl: dysmsapi.aliyuncs.com
     #阿里云的accessKey
-    accessKeyId: xxxxxxx
+    accessKeyId: LTAI5t6ef8W9ASbpE8PfrrA7
     #阿里云的accessKeySecret
-    accessKeySecret: xxxxxxx
+    accessKeySecret: F5G0Z8i4KLSS5DQiqvoRUP4eoWPZRi
     #短信签名
-    signature: 测试
+    signature: 阿里云短信测试
   tencent:
     #请求地址默认为 sms.tencentcloudapi.com 如无特殊改变可不用设置
     requestUrl: sms.tencentcloudapi.com

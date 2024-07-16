@@ -45,6 +45,14 @@
             <groupId>org.dromara</groupId>
             <artifactId>ruoyi-common-translation</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.dromara</groupId>
+            <artifactId>ruoyi-common-mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.dromara</groupId>
+            <artifactId>ruoyi-common-sms</artifactId>
+        </dependency>
 
 
         <dependency>

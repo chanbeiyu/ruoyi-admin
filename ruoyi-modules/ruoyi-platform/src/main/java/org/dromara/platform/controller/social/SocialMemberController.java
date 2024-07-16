@@ -43,7 +43,7 @@ public class SocialMemberController extends BaseController {
     @SaCheckPermission("social:member:list")
     @GetMapping("/list")
     public TableDataInfo<SocialMemberVo> list(SocialMemberBo bo, PageQuery pageQuery) {
-        return socialMemberService.queryPageList(bo, pageQuery, SocialMemberVo.class);
+        return socialMemberService.selectTableList(bo, pageQuery, SocialMemberVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SocialMemberController extends BaseController {
     @Log(title = "成员信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialMemberBo bo, HttpServletResponse response) {
-        List<SocialMemberVo> list = socialMemberService.queryList(bo, SocialMemberVo.class);
+        List<SocialMemberVo> list = socialMemberService.selectList(bo, SocialMemberVo.class);
         ExcelUtil.exportExcel(list, "成员信息", SocialMemberVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class SocialMemberController extends BaseController {
     @SaCheckPermission("social:member:query")
     @GetMapping("/{memberId}")
     public R<SocialMemberVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long memberId) {
-        return R.ok(socialMemberService.queryById(memberId, SocialMemberVo.class));
+        return R.ok(socialMemberService.selectById(memberId, SocialMemberVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class SocialMemberController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody SocialMemberBo bo) {
-        return toAjax(socialMemberService.insertByBo(bo));
+        return toAjax(socialMemberService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class SocialMemberController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody SocialMemberBo bo) {
-        return toAjax(socialMemberService.updateByBo(bo));
+        return toAjax(socialMemberService.update(bo));
     }
 
     /**

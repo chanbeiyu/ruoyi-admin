@@ -44,7 +44,7 @@ public class TradeOrderItemController extends BaseController {
     @SaCheckPermission("trade:order:item:list")
     @GetMapping("/list")
     public TableDataInfo<TradeOrderItemVo> list(TradeOrderItemBo bo, PageQuery pageQuery) {
-        return tradeOrderItemService.queryPageList(bo, pageQuery, TradeOrderItemVo.class);
+        return tradeOrderItemService.selectTableList(bo, pageQuery, TradeOrderItemVo.class);
     }
 
     /**
@@ -54,7 +54,7 @@ public class TradeOrderItemController extends BaseController {
     @Log(title = "订单商品", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(TradeOrderItemBo bo, HttpServletResponse response) {
-        List<TradeOrderItemVo> list = tradeOrderItemService.queryList(bo, TradeOrderItemVo.class);
+        List<TradeOrderItemVo> list = tradeOrderItemService.selectList(bo, TradeOrderItemVo.class);
         ExcelUtil.exportExcel(list, "订单商品", TradeOrderItemVo.class, response);
     }
 
@@ -66,7 +66,7 @@ public class TradeOrderItemController extends BaseController {
     @SaCheckPermission("trade:order:item:query")
     @GetMapping("/{itemId}")
     public R<TradeOrderItemVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long itemId) {
-        return R.ok(tradeOrderItemService.queryById(itemId, TradeOrderItemVo.class));
+        return R.ok(tradeOrderItemService.selectById(itemId, TradeOrderItemVo.class));
     }
 
     /**
@@ -77,7 +77,7 @@ public class TradeOrderItemController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody TradeOrderItemBo bo) {
-        return toAjax(tradeOrderItemService.insertByBo(bo));
+        return toAjax(tradeOrderItemService.insert(bo));
     }
 
     /**
@@ -88,7 +88,7 @@ public class TradeOrderItemController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody TradeOrderItemBo bo) {
-        return toAjax(tradeOrderItemService.updateByBo(bo));
+        return toAjax(tradeOrderItemService.update(bo));
     }
 
     /**

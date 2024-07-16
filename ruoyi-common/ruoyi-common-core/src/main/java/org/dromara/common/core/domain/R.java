@@ -1,11 +1,13 @@
 package org.dromara.common.core.domain;
 
+import cn.hutool.core.date.DateUtil;
 import org.dromara.common.core.constant.HttpStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 响应信息主体
@@ -34,6 +36,8 @@ public class R<T> implements Serializable {
     private String msg;
 
     private T data;
+
+    private long timestamp;
 
     public static <T> R<T> ok() {
         return restResult(null, SUCCESS, "操作成功");
@@ -97,6 +101,7 @@ public class R<T> implements Serializable {
         r.setCode(code);
         r.setData(data);
         r.setMsg(msg);
+        r.setTimestamp(System.currentTimeMillis());
         return r;
     }
 

@@ -43,7 +43,7 @@ public class SocialSubjectController extends BaseController {
     @SaCheckPermission("social:subject:list")
     @GetMapping("/list")
     public TableDataInfo<SocialSubjectVo> list(SocialSubjectBo bo, PageQuery pageQuery) {
-        return socialSubjectService.queryPageList(bo, pageQuery, SocialSubjectVo.class);
+        return socialSubjectService.selectTableList(bo, pageQuery, SocialSubjectVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SocialSubjectController extends BaseController {
     @Log(title = "内容主题", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(SocialSubjectBo bo, HttpServletResponse response) {
-        List<SocialSubjectVo> list = socialSubjectService.queryList(bo, SocialSubjectVo.class);
+        List<SocialSubjectVo> list = socialSubjectService.selectList(bo, SocialSubjectVo.class);
         ExcelUtil.exportExcel(list, "内容主题", SocialSubjectVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class SocialSubjectController extends BaseController {
     @SaCheckPermission("social:subject:query")
     @GetMapping("/{subjectId}")
     public R<SocialSubjectVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long subjectId) {
-        return R.ok(socialSubjectService.queryById(subjectId, SocialSubjectVo.class));
+        return R.ok(socialSubjectService.selectById(subjectId, SocialSubjectVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class SocialSubjectController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody SocialSubjectBo bo) {
-        return toAjax(socialSubjectService.insertByBo(bo));
+        return toAjax(socialSubjectService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class SocialSubjectController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody SocialSubjectBo bo) {
-        return toAjax(socialSubjectService.updateByBo(bo));
+        return toAjax(socialSubjectService.update(bo));
     }
 
     /**

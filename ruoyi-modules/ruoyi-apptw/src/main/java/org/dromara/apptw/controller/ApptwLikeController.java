@@ -43,7 +43,7 @@ public class ApptwLikeController extends BaseController {
     @SaCheckPermission("apptw:like:list")
     @GetMapping("/list")
     public TableDataInfo<ApptwLikeVo> list(ApptwLikeBo bo, PageQuery pageQuery) {
-        return apptwLikeService.queryPageList(bo, pageQuery, ApptwLikeVo.class);
+        return apptwLikeService.selectTableList(bo, pageQuery, ApptwLikeVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class ApptwLikeController extends BaseController {
     @Log(title = "喜好品类", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(ApptwLikeBo bo, HttpServletResponse response) {
-        List<ApptwLikeVo> list = apptwLikeService.queryList(bo, ApptwLikeVo.class);
+        List<ApptwLikeVo> list = apptwLikeService.selectList(bo, ApptwLikeVo.class);
         ExcelUtil.exportExcel(list, "喜好品类", ApptwLikeVo.class, response);
     }
 
@@ -66,7 +66,7 @@ public class ApptwLikeController extends BaseController {
     @GetMapping("/{id}")
     public R<ApptwLikeVo> getInfo(@NotNull(message = "主键不能为空")
                                   @PathVariable Long id) {
-        return R.ok(apptwLikeService.queryById(id, ApptwLikeVo.class));
+        return R.ok(apptwLikeService.selectById(id, ApptwLikeVo.class));
     }
 
     /**
@@ -77,7 +77,7 @@ public class ApptwLikeController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody ApptwLikeBo bo) {
-        return toAjax(apptwLikeService.insertByBo(bo));
+        return toAjax(apptwLikeService.insert(bo));
     }
 
     /**
@@ -88,7 +88,7 @@ public class ApptwLikeController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody ApptwLikeBo bo) {
-        return toAjax(apptwLikeService.updateByBo(bo));
+        return toAjax(apptwLikeService.update(bo));
     }
 
     /**

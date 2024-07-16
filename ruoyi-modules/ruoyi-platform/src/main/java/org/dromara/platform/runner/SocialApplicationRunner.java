@@ -2,8 +2,6 @@ package org.dromara.platform.runner;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.basis.constant.RedisKey;
-import org.dromara.common.redis.utils.RedisUtils;
 import org.dromara.basis.social.entity.SocialNoticeType;
 import org.dromara.basis.social.entity.SocialSubject;
 import org.dromara.basis.social.entity.SocialTag;
@@ -42,26 +40,26 @@ public class SocialApplicationRunner implements ApplicationRunner, DisposableBea
         List<SocialSubject> socialSubjects = socialSubjectMapper.selectList();
         List<SocialTag> socialTags = socialTagMapper.selectList();
         socialNoticeTypes.forEach(o -> {
-            RedisUtils.setCacheMapValue(RedisKey.SOCIAL_NOTICTYPE_ID_NAME, o.getNoticeTypeId() + "", o.getNoticeTypeName());
-            RedisUtils.setCacheMapValue(RedisKey.SOCIAL_NOTICTYPE_CODE_NAME, o.getNoticeTypeCode(), o.getNoticeTypeName());
+//            RedisUtils.setCacheMapValue(RedisKey.SOCIAL_NOTICTYPE_ID_NAME, o.getNoticeTypeId() + "", o.getNoticeTypeName());
+//            RedisUtils.setCacheMapValue(RedisKey.SOCIAL_NOTICTYPE_CODE_NAME, o.getNoticeTypeCode(), o.getNoticeTypeName());
         });
         socialSubjects.forEach(o -> {
-            RedisUtils.setCacheMapValue(RedisKey.SOCIAL_SUBJECT_ID_NAME, o.getSubjectId() + "", o.getSubjectName());
-            RedisUtils.setCacheMapValue(RedisKey.SOCIAL_SUBJECT_CODE_NAME, o.getSubjectCode(), o.getSubjectName());
+//            RedisUtils.setCacheMapValue(RedisKey.SOCIAL_SUBJECT_ID_NAME, o.getSubjectId() + "", o.getSubjectName());
+//            RedisUtils.setCacheMapValue(RedisKey.SOCIAL_SUBJECT_CODE_NAME, o.getSubjectCode(), o.getSubjectName());
         });
         socialTags.forEach(o -> {
-            RedisUtils.setCacheMapValue(RedisKey.SOCIAL_TAG_ID_NAME, o.getTagId() + "", o.getTagName());
-            RedisUtils.setCacheMapValue(RedisKey.SOCIAL_TAG_CODE_NAME, o.getTagCode(), o.getTagName());
+//            RedisUtils.setCacheMapValue(RedisKey.SOCIAL_TAG_ID_NAME, o.getTagId() + "", o.getTagName());
+//            RedisUtils.setCacheMapValue(RedisKey.SOCIAL_TAG_CODE_NAME, o.getTagCode(), o.getTagName());
         });
     }
 
     @Override
     public void destroy() throws Exception {
-        RedisUtils.deleteObject(RedisKey.SOCIAL_NOTICTYPE_ID_NAME);
-        RedisUtils.deleteObject(RedisKey.SOCIAL_NOTICTYPE_CODE_NAME);
-        RedisUtils.deleteObject(RedisKey.SOCIAL_SUBJECT_ID_NAME);
-        RedisUtils.deleteObject(RedisKey.SOCIAL_SUBJECT_CODE_NAME);
-        RedisUtils.deleteObject(RedisKey.SOCIAL_TAG_ID_NAME);
-        RedisUtils.deleteObject(RedisKey.SOCIAL_TAG_CODE_NAME);
+//        RedisUtils.deleteObject(RedisKey.SOCIAL_NOTICTYPE_ID_NAME);
+//        RedisUtils.deleteObject(RedisKey.SOCIAL_NOTICTYPE_CODE_NAME);
+//        RedisUtils.deleteObject(RedisKey.SOCIAL_SUBJECT_ID_NAME);
+//        RedisUtils.deleteObject(RedisKey.SOCIAL_SUBJECT_CODE_NAME);
+//        RedisUtils.deleteObject(RedisKey.SOCIAL_TAG_ID_NAME);
+//        RedisUtils.deleteObject(RedisKey.SOCIAL_TAG_CODE_NAME);
     }
 }

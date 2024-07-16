@@ -43,7 +43,7 @@ public class TradeOrderController extends BaseController {
     @SaCheckPermission("trade:order:list")
     @GetMapping("/list")
     public TableDataInfo<TradeOrderVo> list(TradeOrderBo bo, PageQuery pageQuery) {
-        return tradeOrderService.queryPageList(bo, pageQuery, TradeOrderVo.class);
+        return tradeOrderService.selectTableList(bo, pageQuery, TradeOrderVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class TradeOrderController extends BaseController {
     @Log(title = "订单信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(TradeOrderBo bo, HttpServletResponse response) {
-        List<TradeOrderVo> list = tradeOrderService.queryList(bo, TradeOrderVo.class);
+        List<TradeOrderVo> list = tradeOrderService.selectList(bo, TradeOrderVo.class);
         ExcelUtil.exportExcel(list, "订单信息", TradeOrderVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class TradeOrderController extends BaseController {
     @SaCheckPermission("trade:order:query")
     @GetMapping("/{orderId}")
     public R<TradeOrderVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long orderId) {
-        return R.ok(tradeOrderService.queryById(orderId, TradeOrderVo.class));
+        return R.ok(tradeOrderService.selectById(orderId, TradeOrderVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class TradeOrderController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody TradeOrderBo bo) {
-        return toAjax(tradeOrderService.insertByBo(bo));
+        return toAjax(tradeOrderService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class TradeOrderController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody TradeOrderBo bo) {
-        return toAjax(tradeOrderService.updateByBo(bo));
+        return toAjax(tradeOrderService.update(bo));
     }
 
     /**

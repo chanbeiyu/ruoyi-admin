@@ -46,7 +46,7 @@ public class NavbarController {
     @GetMapping("/tenant/list")
     public R<LoginTenantVo> tenantList(HttpServletRequest request) throws Exception {
         List<SysTenantVo> tenantList = tenantService.queryList(new SysTenantBo());
-        List<AppInfoVo> appVoList = appInfoService.queryList(new AppInfoBo(),  AppInfoVo.class);
+        List<AppInfoVo> appVoList = appInfoService.selectList(new AppInfoBo(),  AppInfoVo.class);
         List<TenantListVo> voList = MapstructUtils.convert(tenantList, TenantListVo.class);
         List<AppListVo> appListVos = MapstructUtils.convert(appVoList, AppListVo.class);
 

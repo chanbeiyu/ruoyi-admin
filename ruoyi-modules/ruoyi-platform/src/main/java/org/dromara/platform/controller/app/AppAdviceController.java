@@ -43,7 +43,7 @@ public class AppAdviceController extends BaseController {
     @SaCheckPermission("app:advice:list")
     @GetMapping("/list")
     public TableDataInfo<AppAdviceVo> list(AppAdviceBo bo, PageQuery pageQuery) {
-        return appAdviceService.queryPageList(bo, pageQuery, AppAdviceVo.class);
+        return appAdviceService.selectTableList(bo, pageQuery, AppAdviceVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class AppAdviceController extends BaseController {
     @Log(title = "意见反馈信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(AppAdviceBo bo, HttpServletResponse response) {
-        List<AppAdviceVo> list = appAdviceService.queryList(bo, AppAdviceVo.class);
+        List<AppAdviceVo> list = appAdviceService.selectList(bo, AppAdviceVo.class);
         ExcelUtil.exportExcel(list, "意见反馈信息", AppAdviceVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class AppAdviceController extends BaseController {
     @SaCheckPermission("app:advice:query")
     @GetMapping("/{adviceId}")
     public R<AppAdviceVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long adviceId) {
-        return R.ok(appAdviceService.queryById(adviceId, AppAdviceVo.class));
+        return R.ok(appAdviceService.selectById(adviceId, AppAdviceVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class AppAdviceController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody AppAdviceBo bo) {
-        return toAjax(appAdviceService.insertByBo(bo));
+        return toAjax(appAdviceService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class AppAdviceController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody AppAdviceBo bo) {
-        return toAjax(appAdviceService.updateByBo(bo));
+        return toAjax(appAdviceService.update(bo));
     }
 
     /**
@@ -99,6 +99,6 @@ public class AppAdviceController extends BaseController {
     @Log(title = "意见反馈信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{adviceIds}")
     public R<Void> remove(@NotEmpty(message = "主键不能为空") @PathVariable Long[] adviceIds) {
-        return toAjax(appAdviceService.deleteByIds(List.of(adviceIds)));
+        return toAjax(appAdviceService.deleteByIds(adviceIds));
     }
 }

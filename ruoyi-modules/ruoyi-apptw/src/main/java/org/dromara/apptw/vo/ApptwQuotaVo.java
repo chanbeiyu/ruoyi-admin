@@ -10,7 +10,6 @@ import org.dromara.common.translation.annotation.Translation;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
 
 
 /**
@@ -43,7 +42,7 @@ public class ApptwQuotaVo implements Serializable {
      * 成员名称
      */
     @ExcelProperty(value = "成员名称")
-    @Translation(type = TranslationConst.key, mapper = "memberId", other = TranslationConst.MEMBER_INFO)
+    @Translation(type = TranslationConst.TYPE_KEY, mapper = "memberId", other = TranslationConst.MEMBER_INFO_NAME)
     private String memberName;
 
     /**

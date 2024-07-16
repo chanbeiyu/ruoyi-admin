@@ -12,6 +12,7 @@ import org.dromara.basis.member.mapper.MemberTypeMapper;
 import org.dromara.common.core.utils.MapstructUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.mapper.IBaseMapper;
+import org.dromara.common.mybatis.core.result.ModifyResult;
 import org.dromara.common.mybatis.core.service.IBaseService;
 import org.springframework.stereotype.Service;
 
@@ -46,30 +47,6 @@ public class MemberLevelService implements IBaseService<MemberLevel, MemberLevel
         lqw.like(StringUtils.isNotBlank(bo.getLevelName()), MemberLevel::getLevelName, bo.getLevelName());
         lqw.eq(StringUtils.isNotBlank(bo.getStatus()), MemberLevel::getStatus, bo.getStatus());
         return lqw;
-    }
-
-    /**
-     * 新增会员级别信息
-     */
-    @Override
-    public Boolean insertByBo(MemberLevelBo bo) {
-        MemberLevel add = MapstructUtils.convert(bo, MemberLevel.class);
-        MemberType memberType = memberTypeMapper.selectById(bo.getMemberTypeId());
-        add.setAppId(memberType.getAppId());
-        boolean flag = memberLevelMapper.insert(add) > 0;
-        if (flag) {
-            bo.setLevelId(add.getLevelId());
-        }
-        return flag;
-    }
-
-    /**
-     * 修改会员级别信息
-     */
-    @Override
-    public Boolean updateByBo(MemberLevelBo bo) {
-        MemberLevel update = MapstructUtils.convert(bo, MemberLevel.class);
-        return memberLevelMapper.updateById(update) > 0;
     }
 
     /**

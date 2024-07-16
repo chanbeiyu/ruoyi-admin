@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
-import org.dromara.basis.constant.RedisKey;
 import org.dromara.basis.social.bo.SocialSubjectBo;
 import org.dromara.basis.social.entity.SocialSubject;
 import org.dromara.basis.social.mapper.SocialSubjectMapper;
@@ -52,35 +51,6 @@ public class SocialSubjectService implements IBaseService<SocialSubject, SocialS
     }
 
     /**
-     * 新增内容主题
-     */
-    @Override
-    public Boolean insertByBo(SocialSubjectBo bo) {
-        SocialSubject add = MapstructUtils.convert(bo, SocialSubject.class);
-        boolean flag = socialSubjectMapper.insert(add) > 0;
-        if (flag) {
-            bo.setSubjectId(add.getSubjectId());
-            CacheUtils.put(RedisKey.SOCIAL_SUBJECT_ID_NAME, add.getSubjectId() + "", bo.getSubjectName());
-            CacheUtils.put(RedisKey.SOCIAL_SUBJECT_CODE_NAME, add.getSubjectCode(), bo.getSubjectName());
-        }
-        return flag;
-    }
-
-    /**
-     * 修改内容主题
-     */
-    @Override
-    public Boolean updateByBo(SocialSubjectBo bo) {
-        SocialSubject update = MapstructUtils.convert(bo, SocialSubject.class);
-        boolean bool = socialSubjectMapper.updateById(update) > 0;
-        if (bool) {
-            CacheUtils.put(RedisKey.SOCIAL_SUBJECT_ID_NAME, update.getSubjectId() + "", update.getSubjectName());
-            CacheUtils.put(RedisKey.SOCIAL_SUBJECT_CODE_NAME, update.getSubjectCode(), update.getSubjectName());
-        }
-        return bool;
-    }
-
-    /**
      * 修改主题通知状态
      *
      * @param subjectId 主题ID
@@ -93,19 +63,4 @@ public class SocialSubjectService implements IBaseService<SocialSubject, SocialS
                 .eq(SocialSubject::getSubjectId, subjectId));
     }
 
-    /**
-     * 批量删除内容主题
-     */
-    @Override
-    public Boolean deleteByIds(Collection<Serializable> ids) {
-        List<SocialSubject> socialSubjects = socialSubjectMapper.selectBatchIds(ids);
-        boolean bool = socialSubjectMapper.deleteBatchIds(ids) > 0;
-        if (bool) {
-            socialSubjects.forEach(o -> {
-                CacheUtils.evict(RedisKey.SOCIAL_SUBJECT_ID_NAME, o.getSubjectId() + "");
-                CacheUtils.evict(RedisKey.SOCIAL_SUBJECT_CODE_NAME, o.getSubjectCode());
-            });
-        }
-        return bool;
-    }
 }

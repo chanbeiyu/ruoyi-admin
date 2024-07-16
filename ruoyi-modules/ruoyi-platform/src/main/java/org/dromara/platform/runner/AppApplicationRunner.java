@@ -8,7 +8,6 @@ import org.dromara.basis.app.entity.AppTag;
 import org.dromara.basis.app.mapper.AppInfoMapper;
 import org.dromara.basis.app.mapper.AppSubjectMapper;
 import org.dromara.basis.app.mapper.AppTagMapper;
-import org.dromara.basis.constant.RedisKey;
 import org.dromara.common.redis.utils.RedisUtils;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.boot.ApplicationArguments;
@@ -42,27 +41,27 @@ public class AppApplicationRunner implements ApplicationRunner, DisposableBean {
         List<AppSubject> appSubjects = appSubjectMapper.selectList();
         List<AppTag> appTags = appTagMapper.selectList();
         appInfos.forEach(o -> {
-            RedisUtils.setCacheMapValue(RedisKey.APP_ID_CODE, o.getAppId() + "", o.getAppCode());
-            RedisUtils.setCacheMapValue(RedisKey.APP_ID_NAME, o.getAppId() + "", o.getAppName());
-            RedisUtils.setCacheMapValue(RedisKey.APP_CODE_NAME, o.getAppCode(), o.getAppName());
+//            RedisUtils.setCacheMapValue(RedisKey.APP_ID_CODE, o.getAppId() + "", o.getAppCode());
+//            RedisUtils.setCacheMapValue(RedisKey.APP_ID_NAME, o.getAppId() + "", o.getAppName());
+//            RedisUtils.setCacheMapValue(RedisKey.APP_CODE_NAME, o.getAppCode(), o.getAppName());
         });
         appSubjects.forEach(o -> {
-            RedisUtils.setCacheMapValue(RedisKey.APP_SUBJECT_ID_CODE, o.getSubjectId() + "", o.getSubjectCode());
-            RedisUtils.setCacheMapValue(RedisKey.APP_SUBJECT_ID_NAME, o.getSubjectId() + "", o.getSubjectName());
-            RedisUtils.setCacheMapValue(RedisKey.APP_SUBJECT_CODE_NAME, o.getSubjectCode(), o.getSubjectName());
+//            RedisUtils.setCacheMapValue(RedisKey.APP_SUBJECT_ID_CODE, o.getSubjectId() + "", o.getSubjectCode());
+//            RedisUtils.setCacheMapValue(RedisKey.APP_SUBJECT_ID_NAME, o.getSubjectId() + "", o.getSubjectName());
+//            RedisUtils.setCacheMapValue(RedisKey.APP_SUBJECT_CODE_NAME, o.getSubjectCode(), o.getSubjectName());
         });
         appTags.forEach(o -> {
-            RedisUtils.setCacheMapValue(RedisKey.APP_TAG_ID_CODE, o.getTagId() + "", o.getTagCode());
-            RedisUtils.setCacheMapValue(RedisKey.APP_TAG_ID_NAME, o.getTagId() + "", o.getTagName());
-            RedisUtils.setCacheMapValue(RedisKey.APP_TAG_CODE_NAME, o.getTagCode(), o.getTagName());
+//            RedisUtils.setCacheMapValue(RedisKey.APP_TAG_ID_CODE, o.getTagId() + "", o.getTagCode());
+//            RedisUtils.setCacheMapValue(RedisKey.APP_TAG_ID_NAME, o.getTagId() + "", o.getTagName());
+//            RedisUtils.setCacheMapValue(RedisKey.APP_TAG_CODE_NAME, o.getTagCode(), o.getTagName());
         });
     }
 
     @Override
     public void destroy() {
-        RedisUtils.deleteObject(RedisKey.APP_TAG_ID_CODE);
-        RedisUtils.deleteObject(RedisKey.APP_TAG_ID_NAME);
-        RedisUtils.deleteObject(RedisKey.APP_TAG_CODE_NAME);
+//        RedisUtils.deleteObject(RedisKey.APP_TAG_ID_CODE);
+//        RedisUtils.deleteObject(RedisKey.APP_TAG_ID_NAME);
+//        RedisUtils.deleteObject(RedisKey.APP_TAG_CODE_NAME);
     }
 
 }

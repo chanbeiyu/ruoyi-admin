@@ -43,7 +43,7 @@ public class MemberTypeController extends BaseController {
     @SaCheckPermission("member:type:list")
     @GetMapping("/list")
     public TableDataInfo<MemberTypeVo> list(MemberTypeBo bo, PageQuery pageQuery) {
-        return memberTypeService.queryPageList(bo, pageQuery, MemberTypeVo.class);
+        return memberTypeService.selectTableList(bo, pageQuery, MemberTypeVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MemberTypeController extends BaseController {
     @Log(title = "会员类型信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(MemberTypeBo bo, HttpServletResponse response) {
-        List<MemberTypeVo> list = memberTypeService.queryList(bo, MemberTypeVo.class);
+        List<MemberTypeVo> list = memberTypeService.selectList(bo, MemberTypeVo.class);
         ExcelUtil.exportExcel(list, "会员类型信息", MemberTypeVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class MemberTypeController extends BaseController {
     @SaCheckPermission("member:type:query")
     @GetMapping("/{typeId}")
     public R<MemberTypeVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long typeId) {
-        return R.ok(memberTypeService.queryById(typeId, MemberTypeVo.class));
+        return R.ok(memberTypeService.selectById(typeId, MemberTypeVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class MemberTypeController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody MemberTypeBo bo) {
-        return toAjax(memberTypeService.insertByBo(bo));
+        return toAjax(memberTypeService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class MemberTypeController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody MemberTypeBo bo) {
-        return toAjax(memberTypeService.updateByBo(bo));
+        return toAjax(memberTypeService.update(bo));
     }
 
     /**

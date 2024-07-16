@@ -2,14 +2,16 @@ package org.dromara.basis.constant;
 
 public interface TranslationConst {
 
-    String key = "PLATFORM_ID_TO_NAME";
+    String TYPE_KEY = "translation:platform:";
 
-    String APP_CODE = "app_code";
-    String APP_NAME = "app_name";
-    String MEMBER_INFO = "member_info";
-    String MEMBER_TYPE = "member_type";
-    String SOCIAL_SUBJECT = "subject";
-    String SOCIAL_NOTICE = "notice";
-    String SOCIAL_TAG = "tag";
+    String APP_INFO_CODE = "app:info:code";
+    String APP_INFO_NAME = "app:info:name";
+    String APP_SUBSCRIBE_CODE = "app:subscribe:code";
+    String APP_SUBSCRIBE_NAME = "app:subscribe:name";
+    String MEMBER_INFO_NAME = "member:info:name";
+    String MEMBER_TYPE_NAME = "member:type:name";
+    String SOCIAL_SUBJECT_NAME = "social:subject:name";
+    String SOCIAL_NOTICE_TYPE_NAME = "social:notice:type:name";
+    String SOCIAL_TAG_NAME = "social:tag:name";
 
 }

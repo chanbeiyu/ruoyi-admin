@@ -41,7 +41,7 @@ public class AppAdviceVo extends AppBaseVo {
      * 成员名称
      */
     @ExcelProperty(value = "成员名称")
-    @Translation(type = TranslationConst.key, mapper = "memberId", other = TranslationConst.MEMBER_INFO)
+    @Translation(type = TranslationConst.TYPE_KEY, mapper = "memberId", other = TranslationConst.MEMBER_INFO_NAME)
     private String memberName;
 
     /**

@@ -11,7 +11,6 @@ import org.dromara.common.excel.convert.ExcelDictConvert;
 import org.dromara.common.translation.annotation.Translation;
 import org.dromara.platform.core.AppBaseVo;
 import org.dromara.basis.social.entity.SocialTag;
-import org.dromara.platform.translation.PlatformTranslation;
 
 
 /**
@@ -58,7 +57,7 @@ public class SocialTagVo extends AppBaseVo {
     private Long subjectId;
 
     @ExcelProperty(value = "所属主题")
-    @Translation(type = TranslationConst.key, mapper = "subjectId", other = TranslationConst.SOCIAL_SUBJECT)
+    @Translation(type = TranslationConst.TYPE_KEY, mapper = "subjectId", other = TranslationConst.SOCIAL_SUBJECT_NAME)
     private String subjectName;
 
     /**

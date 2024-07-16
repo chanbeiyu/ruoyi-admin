@@ -24,14 +24,14 @@ public class AppBaseVo implements Serializable {
      * 编码
      */
     @ExcelProperty(value = "编码")
-    @Translation(type = TranslationConst.key, mapper = "appId", other = TranslationConst.APP_CODE)
+    @Translation(type = TranslationConst.TYPE_KEY, mapper = "appId", other = TranslationConst.APP_INFO_CODE)
     protected String appCode;
 
     /**
      * 名称
      */
     @ExcelProperty(value = "名称")
-    @Translation(type = TranslationConst.key, mapper = "appId", other = TranslationConst.APP_NAME)
+    @Translation(type = TranslationConst.TYPE_KEY, mapper = "appId", other = TranslationConst.APP_INFO_NAME)
     protected String appName;
 
 }

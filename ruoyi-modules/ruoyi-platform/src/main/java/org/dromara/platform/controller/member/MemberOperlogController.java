@@ -37,7 +37,7 @@ public class MemberOperlogController extends BaseController {
     @SaCheckPermission("member:operlog:list")
     @GetMapping("/list")
     public TableDataInfo<MemberOperLogVo> list(MemberOperLogBo operLog, PageQuery pageQuery) {
-        return memberOperLogService.queryPageList(operLog, pageQuery, MemberOperLogVo.class);
+        return memberOperLogService.selectTableList(operLog, pageQuery, MemberOperLogVo.class);
     }
 
     /**
@@ -47,7 +47,7 @@ public class MemberOperlogController extends BaseController {
     @SaCheckPermission("member:operlog:export")
     @PostMapping("/export")
     public void export(MemberOperLogBo operLog, HttpServletResponse response) {
-        List<MemberOperLogVo> list = memberOperLogService.queryList(operLog, MemberOperLogVo.class);
+        List<MemberOperLogVo> list = memberOperLogService.selectList(operLog, MemberOperLogVo.class);
         ExcelUtil.exportExcel(list, "操作日志", MemberOperLogVo.class, response);
     }
 

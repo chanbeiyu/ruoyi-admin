@@ -43,7 +43,7 @@ public class MemberPointsRecordController extends BaseController {
     @SaCheckPermission("member:points:record:list")
     @GetMapping("/list")
     public TableDataInfo<MemberPointsRecordVo> list(MemberPointsRecordBo bo, PageQuery pageQuery) {
-        return memberPointsRecordService.queryPageList(bo, pageQuery, MemberPointsRecordVo.class);
+        return memberPointsRecordService.selectTableList(bo, pageQuery, MemberPointsRecordVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MemberPointsRecordController extends BaseController {
     @Log(title = "会员积分记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(MemberPointsRecordBo bo, HttpServletResponse response) {
-        List<MemberPointsRecordVo> list = memberPointsRecordService.queryList(bo, MemberPointsRecordVo.class);
+        List<MemberPointsRecordVo> list = memberPointsRecordService.selectList(bo, MemberPointsRecordVo.class);
         ExcelUtil.exportExcel(list, "会员积分记录", MemberPointsRecordVo.class, response);
     }
 
@@ -65,7 +65,7 @@ public class MemberPointsRecordController extends BaseController {
     @SaCheckPermission("member:points:record:query")
     @GetMapping("/{recordId}")
     public R<MemberPointsRecordVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long recordId) {
-        return R.ok(memberPointsRecordService.queryById(recordId, MemberPointsRecordVo.class));
+        return R.ok(memberPointsRecordService.selectById(recordId, MemberPointsRecordVo.class));
     }
 
     /**
@@ -76,7 +76,7 @@ public class MemberPointsRecordController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody MemberPointsRecordBo bo) {
-        return toAjax(memberPointsRecordService.insertByBo(bo));
+        return toAjax(memberPointsRecordService.insert(bo));
     }
 
     /**
@@ -87,7 +87,7 @@ public class MemberPointsRecordController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody MemberPointsRecordBo bo) {
-        return toAjax(memberPointsRecordService.updateByBo(bo));
+        return toAjax(memberPointsRecordService.update(bo));
     }
 
     /**

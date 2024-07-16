@@ -43,7 +43,7 @@ public class ApptwQuotaController extends BaseController {
     @SaCheckPermission("apptw:quota:list")
     @GetMapping("/list")
     public TableDataInfo<ApptwQuotaVo> list(ApptwQuotaBo bo, PageQuery pageQuery) {
-        return apptwQuotaService.queryPageList(bo, pageQuery, ApptwQuotaVo.class);
+        return apptwQuotaService.selectTableList(bo, pageQuery, ApptwQuotaVo.class);
     }
 
     /**
@@ -53,7 +53,7 @@ public class ApptwQuotaController extends BaseController {
     @Log(title = "目标限额", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(ApptwQuotaBo bo, HttpServletResponse response) {
-        List<ApptwQuotaVo> list = apptwQuotaService.queryList(bo, ApptwQuotaVo.class);
+        List<ApptwQuotaVo> list = apptwQuotaService.selectList(bo, ApptwQuotaVo.class);
         ExcelUtil.exportExcel(list, "目标限额", ApptwQuotaVo.class, response);
     }
 
@@ -66,7 +66,7 @@ public class ApptwQuotaController extends BaseController {
     @GetMapping("/{id}")
     public R<ApptwQuotaVo> getInfo(@NotNull(message = "主键不能为空")
                                    @PathVariable Long id) {
-        return R.ok(apptwQuotaService.queryById(id, ApptwQuotaVo.class));
+        return R.ok(apptwQuotaService.selectById(id, ApptwQuotaVo.class));
     }
 
     /**
@@ -77,7 +77,7 @@ public class ApptwQuotaController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody ApptwQuotaBo bo) {
-        return toAjax(apptwQuotaService.insertByBo(bo));
+        return toAjax(apptwQuotaService.insert(bo));
     }
 
     /**
@@ -88,7 +88,7 @@ public class ApptwQuotaController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody ApptwQuotaBo bo) {
-        return toAjax(apptwQuotaService.updateByBo(bo));
+        return toAjax(apptwQuotaService.update(bo));
     }
 
     /**

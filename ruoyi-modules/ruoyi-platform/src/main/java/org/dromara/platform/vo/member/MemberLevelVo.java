@@ -39,7 +39,7 @@ public class MemberLevelVo extends AppBaseVo {
      * 会员类别名称
      */
     @ExcelProperty(value = "会员类别")
-    @Translation(type = TranslationConst.key, mapper = "memberTypeId", other = TranslationConst.MEMBER_TYPE)
+    @Translation(type = TranslationConst.TYPE_KEY, mapper = "memberTypeId", other = TranslationConst.MEMBER_TYPE_NAME)
     private String memberTypeName;
 
     /**

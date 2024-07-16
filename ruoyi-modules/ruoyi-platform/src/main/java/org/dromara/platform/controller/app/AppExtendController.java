@@ -44,7 +44,7 @@ public class AppExtendController extends BaseController {
     @SaCheckPermission("app:extend:list")
     @GetMapping("/list")
     public TableDataInfo<AppExtendVo> list(AppExtendBo bo, PageQuery pageQuery) {
-        return appExtendService.queryPageList(bo, pageQuery, AppExtendVo.class, "value");
+        return appExtendService.selectTableList(bo, pageQuery, AppExtendVo.class, "value");
     }
 
     /**
@@ -54,7 +54,7 @@ public class AppExtendController extends BaseController {
     @Log(title = "应用扩展信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(AppExtendBo bo, HttpServletResponse response) {
-        List<AppExtendVo> list = appExtendService.queryList(bo, AppExtendVo.class, "value");
+        List<AppExtendVo> list = appExtendService.selectList(bo, AppExtendVo.class, "value");
         ExcelUtil.exportExcel(list, "应用扩展信息", AppExtendVo.class, response);
     }
 
@@ -66,7 +66,7 @@ public class AppExtendController extends BaseController {
     @SaCheckPermission("app:extend:query")
     @GetMapping(value = "/content/{appId}", produces = MediaType.TEXT_HTML_VALUE)
     public String getContent(@NotNull(message = "主键不能为空") @PathVariable Long appId) {
-        return appExtendService.queryById(appId, AppExtendVo.class).getValue();
+        return appExtendService.selectById(appId, AppExtendVo.class).getValue();
     }
 
     /**
@@ -77,7 +77,7 @@ public class AppExtendController extends BaseController {
     @SaCheckPermission("app:extend:query")
     @GetMapping("/{appId}")
     public R<AppExtendVo> getInfo(@NotNull(message = "主键不能为空") @PathVariable Long appId) {
-        return R.ok(appExtendService.queryById(appId, AppExtendVo.class));
+        return R.ok(appExtendService.selectById(appId, AppExtendVo.class));
     }
 
     /**
@@ -88,7 +88,7 @@ public class AppExtendController extends BaseController {
     @RepeatSubmit()
     @PostMapping()
     public R<Void> add(@Validated(AddGroup.class) @RequestBody AppExtendBo bo) {
-        return toAjax(appExtendService.insertByBo(bo));
+        return toAjax(appExtendService.insert(bo));
     }
 
     /**
@@ -99,7 +99,7 @@ public class AppExtendController extends BaseController {
     @RepeatSubmit()
     @PutMapping()
     public R<Void> edit(@Validated(EditGroup.class) @RequestBody AppExtendBo bo) {
-        return toAjax(appExtendService.updateByBo(bo));
+        return toAjax(appExtendService.update(bo));
     }
 
     /**
