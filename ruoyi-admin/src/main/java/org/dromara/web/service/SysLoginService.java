@@ -22,6 +22,7 @@ import org.dromara.common.mybatis.helper.DataPermissionHelper;
 import org.dromara.common.redis.utils.RedisUtils;
 import org.dromara.common.satoken.utils.LoginHelper;
 import org.dromara.common.tenant.exception.TenantException;
+import org.dromara.common.tenant.helper.AppHelper;
 import org.dromara.common.tenant.helper.TenantHelper;
 import org.dromara.system.domain.SysUser;
 import org.dromara.system.domain.bo.SysSocialBo;
@@ -102,6 +103,7 @@ public class SysLoginService {
             }
             if (TenantHelper.isEnable() && LoginHelper.isSuperAdmin()) {
                 // 超级管理员 登出清除动态租户
+                AppHelper.clearDynamic();
                 TenantHelper.clearDynamic();
             }
             recordLogininfor(loginUser.getTenantId(), loginUser.getUsername(), Constants.LOGOUT, MessageUtils.message("user.logout.success"));

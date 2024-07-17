@@ -31,7 +31,7 @@ public class AppVersionBo extends BaseEntity {
     /**
      * AppId
      */
-    @NotNull(message = "应用不能为空", groups = { AddGroup.class, EditGroup.class })
+//    @NotNull(message = "应用不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long appId;
     private List<Long> appIds;
 
@@ -39,7 +39,7 @@ public class AppVersionBo extends BaseEntity {
      * 版本号
      */
     @NotBlank(message = "版本号不能为空", groups = { AddGroup.class, EditGroup.class })
-    private String version;
+    private String showVersion;
 
     /**
      * 内部版本号

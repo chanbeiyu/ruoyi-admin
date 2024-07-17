@@ -29,13 +29,6 @@ public class MemberActionBo extends BaseEntity {
     private Long actionId;
 
     /**
-     * 应用名称
-     */
-    @NotNull(message = "应用名称不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long appId;
-    private List<Long> appIds;
-
-    /**
      * 会员id
      */
     @NotNull(message = "会员id不能为空", groups = { AddGroup.class, EditGroup.class })

@@ -38,8 +38,6 @@ public class MemberTypeService implements IBaseService<MemberType, MemberTypeBo>
     public LambdaQueryWrapper<MemberType> buildQueryWrapper(MemberTypeBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<MemberType> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getAppId() != null, MemberType::getAppId, bo.getAppId());
-        lqw.in(CollectionUtils.isNotEmpty(bo.getAppIds()), MemberType::getAppId, bo.getAppIds());
         lqw.eq(StringUtils.isNotBlank(bo.getTypeCode()), MemberType::getTypeCode, bo.getTypeCode());
         lqw.like(StringUtils.isNotBlank(bo.getTypeName()), MemberType::getTypeName, bo.getTypeName());
         lqw.eq(StringUtils.isNotBlank(bo.getStatus()), MemberType::getStatus, bo.getStatus());

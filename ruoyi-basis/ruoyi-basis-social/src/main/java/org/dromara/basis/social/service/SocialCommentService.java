@@ -37,8 +37,6 @@ public class SocialCommentService implements IBaseService<SocialComment, SocialC
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<SocialComment> lqw = Wrappers.lambdaQuery();
         lqw.eq(bo.getCommentPid() != null, SocialComment::getCommentPid, bo.getCommentPid());
-        lqw.eq(Objects.nonNull(bo.getAppId()), SocialComment::getAppId, bo.getAppId());
-        lqw.in(CollectionUtils.isNotEmpty(bo.getAppIds()), SocialComment::getAppId, bo.getAppIds());
         lqw.eq(bo.getMemberId() != null, SocialComment::getMemberId, bo.getMemberId());
         lqw.eq(bo.getToMemberId() != null, SocialComment::getToMemberId, bo.getToMemberId());
         lqw.eq(bo.getSubjectId() != null, SocialComment::getSubjectId, bo.getSubjectId());

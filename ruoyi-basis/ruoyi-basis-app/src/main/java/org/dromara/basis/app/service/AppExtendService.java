@@ -34,7 +34,6 @@ public class AppExtendService implements IBaseService<AppExtend, AppExtendBo> {
     public LambdaQueryWrapper<AppExtend> buildQueryWrapper(AppExtendBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<AppExtend> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getAppId() != null, AppExtend::getAppId, bo.getAppId());
         lqw.like(StringUtils.isNotBlank(bo.getKey()), AppExtend::getKey, bo.getKey());
         lqw.like(StringUtils.isNotBlank(bo.getLabel()), AppExtend::getLabel, bo.getLabel());
         lqw.like(StringUtils.isNotBlank(bo.getVersion()), AppExtend::getVersion, bo.getVersion());

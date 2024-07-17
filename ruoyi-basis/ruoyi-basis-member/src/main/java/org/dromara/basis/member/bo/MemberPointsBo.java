@@ -28,12 +28,6 @@ public class MemberPointsBo extends BaseEntity {
     @NotNull(message = "积分id不能为空", groups = { EditGroup.class })
     private Long id;
 
-    /**
-     * 应用名称
-     */
-    @NotNull(message = "应用名称不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long appId;
-    private List<Long> appIds;
 
     /**
      * 成员id

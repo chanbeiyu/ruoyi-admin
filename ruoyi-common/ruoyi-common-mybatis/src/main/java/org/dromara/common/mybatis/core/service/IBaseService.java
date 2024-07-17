@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -70,6 +71,18 @@ public interface IBaseService<T, Q> {
         return mapper().selectList(qw.allEq(columnMap), classz);
     }
 
+    default List<T> selectList() {
+        return mapper().selectList();
+    }
+
+    default <V> List<V> selectList(Class<V> classz) {
+        return mapper().selectList(classz);
+    }
+
+    default <V> List<V> selectList(Function<T, V> mapper) {
+        return mapper().selectList(mapper);
+    }
+
     default List<T> selectList(Q query) {
         LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
         return mapper().selectList(lqw);
@@ -80,12 +93,25 @@ public interface IBaseService<T, Q> {
         return mapper().selectList(lqw, classz);
     }
 
+    default <V> List<V> selectList(Q query, Function<T, V> mapper) {
+        LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
+        return mapper().selectList(lqw, mapper);
+    }
+
     default <V> List<V> selectList(Q query, Class<V> classz, String... filters) {
         LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
         if (ArrayUtils.isNotEmpty(filters)) {
             lqw.select(modelClass(), entity -> !ArrayUtils.contains(filters, entity.getColumn()));
         }
         return mapper().selectList(lqw, classz);
+    }
+
+    default <V> List<V> selectList(Q query, Function<T, V> mapper, String... filters) {
+        LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
+        if (ArrayUtils.isNotEmpty(filters)) {
+            lqw.select(modelClass(), entity -> !ArrayUtils.contains(filters, entity.getColumn()));
+        }
+        return mapper().selectList(lqw, mapper);
     }
 
     default <V> List<V> selectList(Q query, Class<V> classz, Collection<String> filters) {
@@ -96,10 +122,24 @@ public interface IBaseService<T, Q> {
         return mapper().selectList(lqw, classz);
     }
 
+     default <V> List<V> selectList(Q query, Function<T, V> mapper, Collection<String> filters) {
+        LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
+        if (CollectionUtils.isNotEmpty(filters)) {
+            lqw.select(modelClass(), entity -> !filters.contains(entity.getColumn()));
+        }
+        return mapper().selectList(lqw, mapper);
+    }
+
     default <V> List<V> selectList(Q query, Class<V> classz, Predicate<TableFieldInfo> predicate) {
         LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
         lqw.select(predicate);
         return mapper().selectList(lqw, classz);
+    }
+
+    default <V> List<V> selectList(Q query, Function<T, V> mapper, Predicate<TableFieldInfo> predicate) {
+        LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
+        lqw.select(predicate);
+        return mapper().selectList(lqw, mapper);
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------
@@ -112,6 +152,11 @@ public interface IBaseService<T, Q> {
     default <V> Page<V> selectPageList(Q query, PageQuery pageQuery, Class<V> classz) {
         LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
         return mapper().selectPage(pageQuery.build(), lqw, classz);
+    }
+
+    default <V> Page<V> selectPageList(Q query, PageQuery pageQuery, Function<T, V> mapper) {
+        LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
+        return mapper().selectPage(pageQuery.build(), lqw, mapper);
     }
 
     default Page<T> selectPageList(Q query, PageQuery pageQuery, String... filters) {
@@ -130,6 +175,14 @@ public interface IBaseService<T, Q> {
         return mapper().selectPage(pageQuery.build(), lqw, classz);
     }
 
+    default <V> Page<V> selectPageList(Q query, PageQuery pageQuery, Function<T, V> mapper, String... filters) {
+        LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
+        if (ArrayUtils.isNotEmpty(filters)) {
+            lqw.select(modelClass(), entity -> !ArrayUtils.contains(filters, entity.getColumn()));
+        }
+        return mapper().selectPage(pageQuery.build(), lqw, mapper);
+    }
+
     default Page<T> selectPageList(Q query, PageQuery pageQuery, Collection<String> filters) {
         LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
         if (CollectionUtils.isNotEmpty(filters)) {
@@ -146,6 +199,14 @@ public interface IBaseService<T, Q> {
         return mapper().selectPage(pageQuery.build(), lqw, classz);
     }
 
+    default <V> Page<V> selectPageList(Q query, PageQuery pageQuery, Function<T, V> mapper, Collection<String> filters) {
+        LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
+        if (CollectionUtils.isNotEmpty(filters)) {
+            lqw.select(modelClass(), entity -> !filters.contains(entity.getColumn()));
+        }
+        return mapper().selectPage(pageQuery.build(), lqw, mapper);
+    }
+
     default Page<T> selectPageList(Q query, PageQuery pageQuery, Predicate<TableFieldInfo> predicate) {
         LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
         lqw.select(predicate);
@@ -158,6 +219,12 @@ public interface IBaseService<T, Q> {
         return mapper().selectPage(pageQuery.build(), lqw, classz);
     }
 
+    default <V> Page<V> selectPageList(Q query, PageQuery pageQuery, Function<T, V> mapper, Predicate<TableFieldInfo> predicate) {
+        LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
+        lqw.select(predicate);
+        return mapper().selectPage(pageQuery.build(), lqw, mapper);
+    }
+
      default Page<T> selectPageByMap(Map<String, Object> columnMap, PageQuery pageQuery) {
         QueryWrapper<T> qw = Wrappers.query();
         return mapper().selectPage(pageQuery.build(), qw.allEq(columnMap));
@@ -166,6 +233,11 @@ public interface IBaseService<T, Q> {
     default <V> Page<V> selectByMap(Map<String, Object> columnMap, PageQuery pageQuery, Class<V> classz) {
         QueryWrapper<T> qw = Wrappers.query();
         return mapper().selectPage(pageQuery.build(), qw.allEq(columnMap), classz);
+    }
+
+     default <V> Page<V> selectByMap(Map<String, Object> columnMap, PageQuery pageQuery, Function<T, V> mapper) {
+        QueryWrapper<T> qw = Wrappers.query();
+        return mapper().selectPage(pageQuery.build(), qw.allEq(columnMap), mapper);
     }
 
     // ---------------------------------------------------------------------------------------------------------------------------
@@ -179,6 +251,12 @@ public interface IBaseService<T, Q> {
     default <V> TableDataInfo<V> selectTableList(Q query, PageQuery pageQuery, Class<V> classz) {
         LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
         Page<V> result = mapper().selectPage(pageQuery.build(), lqw, classz);
+        return TableDataInfo.build(result);
+    }
+
+    default <V> TableDataInfo<V> selectTableList(Q query, PageQuery pageQuery, Function<T, V> mapper) {
+        LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
+        Page<V> result = mapper().selectPage(pageQuery.build(), lqw, mapper);
         return TableDataInfo.build(result);
     }
 
@@ -200,6 +278,15 @@ public interface IBaseService<T, Q> {
         return TableDataInfo.build(result);
     }
 
+    default <V> TableDataInfo<V> selectTableList(Q query, PageQuery pageQuery, Function<T, V> mapper, String... filters) {
+        LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
+        if (ArrayUtils.isNotEmpty(filters)) {
+            lqw.select(modelClass(), entity -> !ArrayUtils.contains(filters, entity.getColumn()));
+        }
+        Page<V> result = mapper().selectPage(pageQuery.build(), lqw, mapper);
+        return TableDataInfo.build(result);
+    }
+
     default TableDataInfo<T> selectTableList(Q query, PageQuery pageQuery, Collection<String> filters) {
         LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
         if (CollectionUtils.isNotEmpty(filters)) {
@@ -218,6 +305,15 @@ public interface IBaseService<T, Q> {
         return TableDataInfo.build(result);
     }
 
+    default <V> TableDataInfo<V> selectTableList(Q query, PageQuery pageQuery, Function<T, V> mapper, Collection<String> filters) {
+        LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
+        if (CollectionUtils.isNotEmpty(filters)) {
+            lqw.select(modelClass(), entity -> !filters.contains(entity.getColumn()));
+        }
+        Page<V> result = mapper().selectPage(pageQuery.build(), lqw, mapper);
+        return TableDataInfo.build(result);
+    }
+
     default TableDataInfo<T> selectTableList(Q query, PageQuery pageQuery, Predicate<TableFieldInfo> predicate) {
         LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
         lqw.select(predicate);
@@ -229,6 +325,13 @@ public interface IBaseService<T, Q> {
         LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
         lqw.select(predicate);
         Page<V> result = mapper().selectPage(pageQuery.build(), lqw, classz);
+        return TableDataInfo.build(result);
+    }
+
+    default <V> TableDataInfo<V> selectTableList(Q query, PageQuery pageQuery, Function<T, V> mapper, Predicate<TableFieldInfo> predicate) {
+        LambdaQueryWrapper<T> lqw = buildQueryWrapper(query);
+        lqw.select(predicate);
+        Page<V> result = mapper().selectPage(pageQuery.build(), lqw, mapper);
         return TableDataInfo.build(result);
     }
 

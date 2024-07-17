@@ -30,13 +30,6 @@ public class AppBackupBo extends BaseBo {
     private Long backupId;
 
     /**
-     * 应用ID
-     */
-    @NotNull(message = "应用ID不能为空", groups = {AddGroup.class, EditGroup.class})
-    private Long appId;
-    private List<Long> appIds;
-
-    /**
      * 成员ID
      */
     @NotNull(message = "成员ID不能为空", groups = {AddGroup.class, EditGroup.class})

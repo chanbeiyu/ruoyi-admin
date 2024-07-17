@@ -36,8 +36,6 @@ public class MemberActionService implements IBaseService<MemberAction, MemberAct
     public LambdaQueryWrapper<MemberAction> buildQueryWrapper(MemberActionBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<MemberAction> lqw = Wrappers.lambdaQuery();
-        lqw.eq(Objects.nonNull(bo.getAppId()), MemberAction::getAppId, bo.getAppId());
-        lqw.eq(CollectionUtils.isNotEmpty(bo.getAppIds()), MemberAction::getAppId, bo.getAppIds());
         lqw.eq(StringUtils.isNotBlank(bo.getActionCode()), MemberAction::getActionCode, bo.getActionCode());
         lqw.like(StringUtils.isNotBlank(bo.getActionName()), MemberAction::getActionName, bo.getActionName());
         lqw.eq(Objects.nonNull(bo.getStatus()), MemberAction::getStatus, bo.getStatus());

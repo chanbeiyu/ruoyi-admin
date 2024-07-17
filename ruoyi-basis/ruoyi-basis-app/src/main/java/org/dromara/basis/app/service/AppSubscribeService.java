@@ -36,8 +36,6 @@ public class AppSubscribeService implements IBaseService<AppSubscribe, AppSubscr
     public LambdaQueryWrapper<AppSubscribe> buildQueryWrapper(AppSubscribeBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<AppSubscribe> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getAppId() != null, AppSubscribe::getAppId, bo.getAppId());
-        lqw.in(CollectionUtils.isNotEmpty(bo.getAppIds()), AppSubscribe::getAppId, bo.getAppIds());
         lqw.eq(StringUtils.isNotBlank(bo.getCode()), AppSubscribe::getCode, bo.getCode());
         lqw.eq(StringUtils.isNotBlank(bo.getTitle()), AppSubscribe::getTitle, bo.getTitle());
         lqw.eq(bo.getCycleType() != null, AppSubscribe::getCycleType, bo.getCycleType());

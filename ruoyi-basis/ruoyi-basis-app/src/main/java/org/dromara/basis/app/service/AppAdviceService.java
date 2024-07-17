@@ -35,8 +35,6 @@ public class AppAdviceService implements IBaseService<AppAdvice, AppAdviceBo> {
     public LambdaQueryWrapper<AppAdvice> buildQueryWrapper(AppAdviceBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<AppAdvice> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getAppId() != null, AppAdvice::getAppId, bo.getAppId());
-        lqw.in(CollectionUtils.isNotEmpty(bo.getAppIds()), AppAdvice::getAppId, bo.getAppIds());
         lqw.eq(bo.getMemberId() != null, AppAdvice::getMemberId, bo.getMemberId());
         lqw.eq(StringUtils.isNotBlank(bo.getContact()), AppAdvice::getContact, bo.getContact());
         lqw.eq(StringUtils.isNotBlank(bo.getContent()), AppAdvice::getContent, bo.getContent());

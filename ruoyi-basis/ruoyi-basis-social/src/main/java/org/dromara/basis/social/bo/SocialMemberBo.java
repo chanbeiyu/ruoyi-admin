@@ -34,12 +34,6 @@ public class SocialMemberBo extends BaseEntity {
     @NotBlank(message = "关联用户标识不能为空", groups = { AddGroup.class, EditGroup.class })
     private String unionId;
 
-    /**
-     * 应用名称
-     */
-    @NotBlank(message = "应用名称不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long appId;
-    private List<Long> appIds;
 
     /**
      * 会员等级

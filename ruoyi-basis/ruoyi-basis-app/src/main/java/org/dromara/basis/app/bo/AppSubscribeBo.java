@@ -29,13 +29,6 @@ public class AppSubscribeBo extends BaseEntity {
     private Long subscribeId;
 
     /**
-     * 接入App标识
-     */
-    @NotNull(message = "接入App标识不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long appId;
-    private List<Long> appIds;
-
-    /**
      * 订阅编码
      */
     @NotBlank(message = "订阅编码不能为空", groups = { AddGroup.class, EditGroup.class })

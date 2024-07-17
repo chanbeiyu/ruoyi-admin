@@ -42,8 +42,6 @@ public class SocialNoticeTypeService implements IBaseService<SocialNoticeType, S
     public LambdaQueryWrapper<SocialNoticeType> buildQueryWrapper(SocialNoticeTypeBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<SocialNoticeType> lqw = Wrappers.lambdaQuery();
-        lqw.eq(Objects.nonNull(bo.getAppId()), SocialNoticeType::getAppId, bo.getAppId());
-        lqw.in(CollectionUtils.isNotEmpty(bo.getAppIds()), SocialNoticeType::getAppId, bo.getAppIds());
         lqw.like(StringUtils.isNotBlank(bo.getNoticeTypeCode()), SocialNoticeType::getNoticeTypeCode,
             bo.getNoticeTypeCode());
         lqw.like(StringUtils.isNotBlank(bo.getNoticeTypeName()), SocialNoticeType::getNoticeTypeName,

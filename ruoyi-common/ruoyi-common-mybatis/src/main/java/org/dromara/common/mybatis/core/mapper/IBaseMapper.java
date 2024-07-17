@@ -178,6 +178,28 @@ public interface IBaseMapper<T> extends BaseMapper<T> {
     /**
      * 根据 entity 条件，查询全部记录
      */
+    default <R> List<R> selectList(Class<R> rClass) {
+        List<T> list = this.selectList(new QueryWrapper<>());
+        if (CollUtil.isEmpty(list)) {
+            return CollUtil.newArrayList();
+        }
+        return MapstructUtils.convert(list, rClass);
+    }
+
+    /**
+     * 根据 entity 条件，查询全部记录
+     */
+    default <R> List<R> selectList(Function<T, R> mapper) {
+        List<T> list = this.selectList(new QueryWrapper<>());
+        if (CollUtil.isEmpty(list)) {
+            return CollUtil.newArrayList();
+        }
+         return list.stream().map(mapper).collect(Collectors.toList());
+    }
+
+    /**
+     * 根据 entity 条件，查询全部记录
+     */
     default <R> List<R> selectList(Wrapper<T> wrapper, Class<R> rClass) {
         List<T> list = this.selectList(wrapper);
         if (CollUtil.isEmpty(list)) {

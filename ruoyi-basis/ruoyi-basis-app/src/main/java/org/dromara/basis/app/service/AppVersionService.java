@@ -41,7 +41,7 @@ public class AppVersionService implements IBaseService<AppVersion, AppVersionBo>
         LambdaQueryWrapper<AppVersion> lqw = Wrappers.lambdaQuery();
         lqw.eq(bo.getAppId() != null, AppVersion::getAppId, bo.getAppId());
         lqw.in(CollectionUtils.isNotEmpty(bo.getAppIds()), AppVersion::getAppId, bo.getAppIds());
-        lqw.eq(StringUtils.isNotBlank(bo.getVersion()), AppVersion::getVersion, bo.getVersion());
+        lqw.eq(StringUtils.isNotBlank(bo.getShowVersion()), AppVersion::getShowVersion, bo.getShowVersion());
         lqw.eq(StringUtils.isNotBlank(bo.getBuildVersion()), AppVersion::getBuildVersion, bo.getBuildVersion());
         lqw.eq(bo.getForced() != null, AppVersion::getForced, bo.getForced());
         lqw.eq(bo.getPublishTime() != null, AppVersion::getPublishTime, bo.getPublishTime());

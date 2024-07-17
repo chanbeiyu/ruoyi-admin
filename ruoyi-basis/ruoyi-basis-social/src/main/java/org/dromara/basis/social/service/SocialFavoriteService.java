@@ -36,8 +36,6 @@ public class SocialFavoriteService implements IBaseService<SocialFavorite, Socia
     public LambdaQueryWrapper<SocialFavorite> buildQueryWrapper(SocialFavoriteBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<SocialFavorite> lqw = Wrappers.lambdaQuery();
-        lqw.eq(Objects.nonNull(bo.getAppId()), SocialFavorite::getAppId, bo.getAppId());
-        lqw.in(CollectionUtils.isNotEmpty(bo.getAppIds()), SocialFavorite::getAppId, bo.getAppIds());
         lqw.eq(bo.getMemberId() != null, SocialFavorite::getMemberId, bo.getMemberId());
         lqw.eq(bo.getToMemberId() != null, SocialFavorite::getToMemberId, bo.getToMemberId());
         lqw.eq(bo.getSubjectId() != null, SocialFavorite::getSubjectId, bo.getSubjectId());

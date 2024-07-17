@@ -3,7 +3,6 @@ package org.dromara.common.tenant.config;
 import cn.dev33.satoken.dao.SaTokenDao;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.handler.MultiDataPermissionHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.DataPermissionInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
@@ -12,9 +11,7 @@ import org.dromara.common.mybatis.config.MybatisPlusConfig;
 import org.dromara.common.redis.config.RedisConfig;
 import org.dromara.common.redis.config.properties.RedissonProperties;
 import org.dromara.common.tenant.core.TenantSaTokenDao;
-import org.dromara.common.tenant.handle.AppDataPermissionHandler;
-import org.dromara.common.tenant.handle.PlusTenantLineHandler;
-import org.dromara.common.tenant.handle.TenantKeyPrefixHandler;
+import org.dromara.common.tenant.handle.*;
 import org.dromara.common.tenant.manager.TenantSpringCacheManager;
 import org.dromara.common.tenant.properties.TenantProperties;
 import org.redisson.config.ClusterServersConfig;
@@ -44,12 +41,12 @@ public class TenantConfig {
      * 初始化租户配置
      */
     @Bean
-    public boolean tenantInit(MybatisPlusInterceptor mybatisPlusInterceptor,
-                              TenantProperties tenantProperties) {
+    public boolean tenantInit(MybatisPlusInterceptor mybatisPlusInterceptor, TenantProperties tenantProperties) {
         List<InnerInterceptor> interceptors = new ArrayList<>();
         // 多租户插件 必须放到第一位
         interceptors.add(tenantLineInnerInterceptor(tenantProperties));
-        interceptors.add(appDataPermissionInterceptor(tenantProperties));
+        interceptors.add(appLineInnerInterceptor(tenantProperties));
+        // interceptors.add(appDataPermissionInterceptor(tenantProperties));
         interceptors.addAll(mybatisPlusInterceptor.getInterceptors());
         mybatisPlusInterceptor.setInterceptors(interceptors);
         return true;
@@ -60,6 +57,9 @@ public class TenantConfig {
      */
     public TenantLineInnerInterceptor tenantLineInnerInterceptor(TenantProperties tenantProperties) {
         return new TenantLineInnerInterceptor(new PlusTenantLineHandler(tenantProperties));
+    }
+    public AppLineInnerInterceptor appLineInnerInterceptor(TenantProperties tenantProperties) {
+        return new AppLineInnerInterceptor(new PlusAppLineHandler(tenantProperties));
     }
     public DataPermissionInterceptor appDataPermissionInterceptor(TenantProperties tenantProperties) {
         return new DataPermissionInterceptor(new AppDataPermissionHandler(tenantProperties));

@@ -42,8 +42,6 @@ public class AppSubjectService implements IBaseService<AppSubject, AppSubjectBo>
     public LambdaQueryWrapper<AppSubject> buildQueryWrapper(AppSubjectBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<AppSubject> lqw = Wrappers.lambdaQuery();
-        lqw.eq(Objects.nonNull(bo.getAppId()), AppSubject::getAppId, bo.getAppId());
-        lqw.in(CollectionUtils.isNotEmpty(bo.getAppIds()), AppSubject::getAppId, bo.getAppIds());
         lqw.eq(StringUtils.isNotBlank(bo.getSubjectCode()), AppSubject::getSubjectCode, bo.getSubjectCode());
         lqw.like(StringUtils.isNotBlank(bo.getSubjectName()), AppSubject::getSubjectName, bo.getSubjectName());
         lqw.eq(StringUtils.isNotBlank(bo.getStatus()), AppSubject::getStatus, bo.getStatus());

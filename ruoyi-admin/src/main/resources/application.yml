@@ -143,11 +143,34 @@ tenant:
   app-includes:
     - app_advice
     - app_extend
-    - app_iap
-    - app_iap_record
     - app_subject
     - app_tag
     - app_version
+    - app_backup
+    - app_subscribe
+    - app_subscribe_record
+    - member_action
+    - member_coins
+    - member_coins_record
+    - member_info
+    - member_level
+    - member_login_log
+    - member_oper_log
+    - member_points
+    - member_points_record
+    - member_points_record
+    - member_type
+    - social_block
+    - social_comment
+    - social_favorite
+    - social_follow``social_like
+    - social_notice
+    - social_notice_type
+    - social_subject
+    - social_tag
+    - trade_order
+    - trade_order_invoice
+
 
 # MyBatisPlus配置
 # https://baomidou.com/config/

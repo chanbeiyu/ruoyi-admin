@@ -34,12 +34,6 @@ public class SocialCommentBo extends BaseEntity {
     @NotNull(message = "父评论(回复)id不能为空", groups = { AddGroup.class, EditGroup.class })
     private Long commentPid;
 
-    /**
-     * 应用名称
-     */
-    @NotBlank(message = "应用名称不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long appId;
-    private List<Long> appIds;
 
     /**
      * 评论用户id

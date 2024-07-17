@@ -35,7 +35,6 @@ public class MemberPointsRecordService
     public LambdaQueryWrapper<MemberPointsRecord> buildQueryWrapper(MemberPointsRecordBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<MemberPointsRecord> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getAppId() != null, MemberPointsRecord::getAppId, bo.getAppId());
         lqw.eq(bo.getMemberId() != null, MemberPointsRecord::getMemberId, bo.getMemberId());
         lqw.eq(bo.getMemberTypeId() != null, MemberPointsRecord::getMemberTypeId, bo.getMemberTypeId());
         lqw.eq(StringUtils.isNotBlank(bo.getActionCode()), MemberPointsRecord::getActionCode, bo.getActionCode());

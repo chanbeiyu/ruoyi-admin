@@ -53,12 +53,6 @@ public class AppTagBo extends BaseEntity {
     private String status;
 
     /**
-     * 应用名称
-     */
-    @NotBlank(message = "App标识不能为空", groups = {AddGroup.class, EditGroup.class})
-    private String appId;
-
-    /**
      * 所属主题
      */
     @NotNull(message = "所属主题不能为空", groups = {AddGroup.class, EditGroup.class})

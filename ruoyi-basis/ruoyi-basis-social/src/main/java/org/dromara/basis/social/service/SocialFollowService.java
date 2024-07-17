@@ -35,8 +35,6 @@ public class SocialFollowService implements IBaseService<SocialFollow, SocialFol
     public LambdaQueryWrapper<SocialFollow> buildQueryWrapper(SocialFollowBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<SocialFollow> lqw = Wrappers.lambdaQuery();
-        lqw.eq(Objects.nonNull(bo.getAppId()), SocialFollow::getAppId, bo.getAppId());
-        lqw.in(CollectionUtils.isNotEmpty(bo.getAppIds()), SocialFollow::getAppId, bo.getAppIds());
         lqw.eq(bo.getMemberId() != null, SocialFollow::getMemberId, bo.getMemberId());
         lqw.eq(bo.getToMemberId() != null, SocialFollow::getToMemberId, bo.getToMemberId());
         lqw.eq(bo.getStatus() != null, SocialFollow::getStatus, bo.getStatus());

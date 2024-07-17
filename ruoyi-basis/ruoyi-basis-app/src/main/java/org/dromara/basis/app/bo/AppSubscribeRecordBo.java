@@ -31,13 +31,6 @@ public class AppSubscribeRecordBo extends BaseEntity {
     private Long recordId;
 
     /**
-     * APPID
-     */
-    @NotNull(message = "应用不能为空", groups = {AddGroup.class, EditGroup.class})
-    private Long appId;
-    private List<Long> appIds;
-
-    /**
      * 订阅编码
      */
     @NotNull(message = "订阅编码不能为空", groups = {AddGroup.class, EditGroup.class})

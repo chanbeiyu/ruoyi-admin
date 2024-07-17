@@ -36,8 +36,6 @@ public class SocialNoticeService implements IBaseService<SocialNotice, SocialNot
     public LambdaQueryWrapper<SocialNotice> buildQueryWrapper(SocialNoticeBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<SocialNotice> lqw = Wrappers.lambdaQuery();
-        lqw.eq(Objects.nonNull(bo.getAppId()), SocialNotice::getAppId, bo.getAppId());
-        lqw.in(CollectionUtils.isNotEmpty(bo.getAppIds()), SocialNotice::getAppId, bo.getAppIds());
         lqw.eq(bo.getMemberId() != null, SocialNotice::getMemberId, bo.getMemberId());
         lqw.eq(bo.getTriggerMemberId() != null, SocialNotice::getTriggerMemberId, bo.getTriggerMemberId());
         lqw.eq(StringUtils.isNotBlank(bo.getTriggerId()), SocialNotice::getTriggerId, bo.getTriggerId());

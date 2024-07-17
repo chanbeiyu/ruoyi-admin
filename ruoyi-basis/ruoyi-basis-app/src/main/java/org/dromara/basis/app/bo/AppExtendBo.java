@@ -29,13 +29,6 @@ public class AppExtendBo extends BaseEntity {
     private Long extendId;
 
     /**
-     * AppId
-     */
-    @NotNull(message = "AppId不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long appId;
-    private List<Long> appIds;
-
-    /**
      * 数据key
      */
     @NotBlank(message = "数据key不能为空", groups = { AddGroup.class, EditGroup.class })

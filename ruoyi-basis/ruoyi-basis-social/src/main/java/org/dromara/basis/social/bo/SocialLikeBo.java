@@ -28,12 +28,6 @@ public class SocialLikeBo extends BaseEntity {
     @NotNull(message = "主键id不能为空", groups = { EditGroup.class })
     private Long likeId;
 
-    /**
-     * 应用名称
-     */
-    @NotBlank(message = "应用名称不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long appId;
-    private List<Long> appIds;
 
     /**
      * 点赞用户id

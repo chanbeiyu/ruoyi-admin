@@ -34,8 +34,8 @@ public class AppVersionVo extends AppBaseVo {
     /**
      * 版本号
      */
-    @ExcelProperty(value = "版本号")
-    private String version;
+    @ExcelProperty(value = "显示版本号")
+    private String showVersion;
 
     /**
      * 内部版本号

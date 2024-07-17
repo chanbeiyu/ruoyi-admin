@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.dromara.basis.app.bo.AppInfoBo;
+import org.dromara.basis.app.entity.AppInfo;
 import org.dromara.basis.app.service.AppInfoService;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.validate.AddGroup;
@@ -114,29 +115,5 @@ public class AppInfoController extends BaseController {
     public R<Void> remove(@NotEmpty(message = "主键不能为空") @PathVariable Long[] appIds) {
         return toAjax(appInfoService.deleteByIds(List.of(appIds)));
     }
-
-
-    /**
-     * 动态切换应用
-     *
-     * @param appIds 应用ID
-     */
-    //@SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
-    @GetMapping("/dynamic/{appIds}")
-    public R<Void> dynamicTenant(@NotBlank(message = "AppId不能为空") @PathVariable String appIds) {
-        AppHelper.setDynamic(appIds);
-        return R.ok();
-    }
-
-    /**
-     * 清除动态应用
-     */
-    //@SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
-    @GetMapping("/dynamic/clear")
-    public R<Void> dynamicClear() {
-        AppHelper.clearDynamic();
-        return R.ok();
-    }
-
 
 }

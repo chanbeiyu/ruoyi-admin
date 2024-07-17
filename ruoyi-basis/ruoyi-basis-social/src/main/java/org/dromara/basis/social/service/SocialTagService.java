@@ -43,7 +43,6 @@ public class SocialTagService implements IBaseService<SocialTag, SocialTagBo> {
     public LambdaQueryWrapper<SocialTag> buildQueryWrapper(SocialTagBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<SocialTag> lqw = Wrappers.lambdaQuery();
-        lqw.eq(StringUtils.isNotBlank(bo.getAppId()), SocialTag::getAppId, bo.getAppId());
         lqw.eq(Objects.nonNull(bo.getSubjectId()), SocialTag::getSubjectId, bo.getSubjectId());
         lqw.in(CollectionUtils.isNotEmpty(bo.getSubjectIds()), SocialTag::getSubjectId, bo.getSubjectIds());
         lqw.like(StringUtils.isNotBlank(bo.getTagCode()), SocialTag::getTagCode, bo.getTagCode());

@@ -35,8 +35,6 @@ public class TradeOrderInvoiceService
     public LambdaQueryWrapper<TradeOrderInvoice> buildQueryWrapper(TradeOrderInvoiceBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<TradeOrderInvoice> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getAppId() != null, TradeOrderInvoice::getAppId, bo.getAppId());
-        lqw.in(bo.getAppIds() != null, TradeOrderInvoice::getAppId, bo.getAppIds());
         lqw.eq(bo.getMemberId() != null, TradeOrderInvoice::getMemberId, bo.getMemberId());
         lqw.like(bo.getOrderId() != null, TradeOrderInvoice::getOrderId, bo.getOrderId());
         lqw.like(StringUtils.isNotBlank(bo.getOrderNo()), TradeOrderInvoice::getOrderNo, bo.getOrderNo());

@@ -30,13 +30,6 @@ public class AppSubjectBo extends BaseEntity {
     private Long subjectId;
 
     /**
-     * 应用名称
-     */
-    @NotNull(message = "应用名称不能为空", groups = {AddGroup.class, EditGroup.class})
-    private Long appId;
-    private List<Long> appIds;
-
-    /**
      * 主题编码
      */
     @NotBlank(message = "主题编码不能为空", groups = {AddGroup.class, EditGroup.class})

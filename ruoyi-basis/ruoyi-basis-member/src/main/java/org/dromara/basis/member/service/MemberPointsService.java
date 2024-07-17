@@ -36,9 +36,7 @@ public class MemberPointsService implements IBaseService<MemberPoints, MemberPoi
     public LambdaQueryWrapper<MemberPoints> buildQueryWrapper(MemberPointsBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<MemberPoints> lqw = Wrappers.lambdaQuery();
-        lqw.eq(Objects.nonNull(bo.getAppId()), MemberPoints::getAppId, bo.getAppId());
         lqw.eq(Objects.nonNull(bo.getMemberId()), MemberPoints::getMemberId, bo.getMemberId());
-        lqw.in(CollectionUtils.isNotEmpty(bo.getAppIds()), MemberPoints::getAppId, bo.getAppIds());
         lqw.in(CollectionUtils.isNotEmpty(bo.getMemberTypeIds()), MemberPoints::getMemberTypeId, bo.getMemberTypeIds());
         lqw.eq(Objects.nonNull(bo.getMemberTypeId()), MemberPoints::getMemberTypeId, bo.getMemberTypeId());
         lqw.eq(Objects.nonNull(bo.getStatus()), MemberPoints::getStatus, bo.getStatus());

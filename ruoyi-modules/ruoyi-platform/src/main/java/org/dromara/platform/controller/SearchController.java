@@ -3,7 +3,7 @@ package org.dromara.apptw.controller;
 import lombok.RequiredArgsConstructor;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
 import org.dromara.common.web.core.BaseController;
-import org.dromara.platform.vo.search.SearchVo;
+import org.dromara.basis.constant.SearchVo;
 import org.dromara.platform.search.SearchService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;

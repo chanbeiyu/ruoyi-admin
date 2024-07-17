@@ -109,10 +109,13 @@ public class SysUserController extends BaseController {
         UserInfoVo userInfoVo = new UserInfoVo();
         LoginUser loginUser = LoginHelper.getLoginUser();
         if (TenantHelper.isEnable() && LoginHelper.isSuperAdmin()) {
-            // 超级管理员 如果重新加载用户信息需清除动态租户
-            TenantHelper.clearDynamic();
+             //超级管理员 如果重新加载用户信息需清除动态租户
+            TenantHelper.enableIgnore();
         }
         SysUserVo user = userService.selectUserById(loginUser.getUserId());
+        if (TenantHelper.isEnable() && LoginHelper.isSuperAdmin()) {
+            TenantHelper.disableIgnore();
+        }
         if (ObjectUtil.isNull(user)) {
             return R.fail("没有权限访问用户数据!");
         }

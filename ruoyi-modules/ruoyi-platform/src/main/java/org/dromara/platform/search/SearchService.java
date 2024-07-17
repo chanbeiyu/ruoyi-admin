@@ -13,7 +13,7 @@ import org.dromara.basis.member.mapper.MemberInfoMapper;
 import org.dromara.basis.member.mapper.MemberTypeMapper;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.platform.vo.search.SearchVo;
+import org.dromara.basis.constant.SearchVo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public class SearchService {
         List<SearchVo> subjects = searchSubject(query, appId);
         if (cascade) {
             List<SearchVo> apps = searchApp(null, appId);
-            Map<Long, List<SearchVo>> subjectMap = subjects.stream()
+            Map<String, List<SearchVo>> subjectMap = subjects.stream()
                 .collect(Collectors.groupingBy(SearchVo::getParentValue));
             apps.forEach(app -> {
                 app.setChildren(subjectMap.get(app.getValue()));
@@ -58,7 +58,7 @@ public class SearchService {
         List<SearchVo> memberInfos = searchMemberInfo(query, appId);
         if (cascade) {
             List<SearchVo> apps = searchApp(null, appId);
-            Map<Long, List<SearchVo>> memberInfoMap = memberInfos.stream()
+            Map<String, List<SearchVo>> memberInfoMap = memberInfos.stream()
                 .collect(Collectors.groupingBy(SearchVo::getParentValue));
             apps.forEach(app -> {
                 app.setChildren(memberInfoMap.get(app.getValue()));
@@ -72,7 +72,7 @@ public class SearchService {
         List<SearchVo> memberTypes = searchMemberType(query, appId);
         if (cascade) {
             List<SearchVo> apps = searchApp(null, appId);
-            Map<Long, List<SearchVo>> memberTypeMap = memberTypes.stream()
+            Map<String, List<SearchVo>> memberTypeMap = memberTypes.stream()
                 .collect(Collectors.groupingBy(SearchVo::getParentValue));
             apps.forEach(app -> {
                 app.setChildren(memberTypeMap.get(app.getValue()));
@@ -84,7 +84,7 @@ public class SearchService {
 
     private SearchVo searchApp(Long appId) {
         return appInfoMapper.selectById(appId, appInfo -> SearchVo.builder()
-            .value(appInfo.getAppId())
+            .value(appInfo.getAppId() + "")
             .code(appInfo.getAppCode())
             .label(appInfo.getAppName())
             .build());
@@ -95,7 +95,7 @@ public class SearchService {
         lqw.in(AppInfo::getAppId, appIds);
         return appInfoMapper.selectList(lqw, appInfo -> {
             return SearchVo.builder()
-                .value(appInfo.getAppId())
+                .value(appInfo.getAppId() + "")
                 .label(appInfo.getAppName())
                 .code(appInfo.getAppCode())
                 .build();
@@ -114,7 +114,7 @@ public class SearchService {
 
         return appInfoMapper.selectList(lqw, appInfo -> {
             return SearchVo.builder()
-                .value(appInfo.getAppId())
+                .value(appInfo.getAppId() + "")
                 .code(appInfo.getAppCode())
                 .label(appInfo.getAppName())
                 .build();
@@ -133,10 +133,10 @@ public class SearchService {
         }
 
         return appSubjectMapper.selectList(lqw, appSubject -> {
-            return SearchVo.builder().value(appSubject.getSubjectId())
+            return SearchVo.builder().value(appSubject.getSubjectId() + "")
                 .code(appSubject.getSubjectCode())
                 .label(appSubject.getSubjectName())
-                .parentValue(appSubject.getAppId()).build();
+                .parentValue(appSubject.getAppId() + "").build();
         });
     }
 
@@ -153,10 +153,10 @@ public class SearchService {
 
         return memberTypeMapper.selectList(lqw, memberType -> {
             return SearchVo.builder()
-                .value(memberType.getTypeId())
+                .value(memberType.getTypeId() + "")
                 .code(memberType.getTypeCode())
                 .label(memberType.getTypeName())
-                .parentValue(memberType.getAppId())
+                .parentValue(memberType.getAppId() + "")
                 .build();
         });
     }
@@ -174,10 +174,10 @@ public class SearchService {
 
         return memberInfoMapper.selectList(lqw, memberInfo -> {
             return SearchVo.builder()
-                .value(memberInfo.getMemberId())
+                .value(memberInfo.getMemberId() + "")
                 .code(memberInfo.getUnionId())
                 .label(memberInfo.getNickName())
-                .parentValue(memberInfo.getAppId())
+                .parentValue(memberInfo.getAppId() + "")
                 .build();
         });
     }

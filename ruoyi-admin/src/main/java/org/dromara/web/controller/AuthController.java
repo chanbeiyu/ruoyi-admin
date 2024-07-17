@@ -11,7 +11,9 @@ import me.zhyd.oauth.model.AuthUser;
 import me.zhyd.oauth.request.AuthRequest;
 import me.zhyd.oauth.utils.AuthStateUtils;
 import org.dromara.basis.app.bo.AppInfoBo;
+import org.dromara.basis.app.entity.AppInfo;
 import org.dromara.basis.app.service.AppInfoService;
+import org.dromara.basis.constant.SearchVo;
 import org.dromara.common.core.constant.UserConstants;
 import org.dromara.common.core.domain.R;
 import org.dromara.common.core.domain.model.LoginBody;
@@ -97,6 +99,7 @@ public class AuthController {
         }
         // 校验租户
         loginService.checkTenant(loginBody.getTenantId());
+
         // 登录
         LoginVo loginVo = IAuthStrategy.login(body, client, grantType);
 
@@ -104,6 +107,10 @@ public class AuthController {
         scheduledExecutorService.schedule(() -> {
             WebSocketUtils.sendMessage(userId, "欢迎登录RuoYi-Vue-Plus后台管理系统");
         }, 3, TimeUnit.SECONDS);
+
+        TenantHelper.setDynamic(loginBody.getTenantId());
+        AppHelper.setDynamic(loginBody.getAppId());
+
         return R.ok(loginVo);
     }
 
@@ -187,10 +194,10 @@ public class AuthController {
      */
     @GetMapping("/tenant/list")
     public R<LoginTenantVo> tenantList(HttpServletRequest request) throws Exception {
-        List<SysTenantVo> tenantList = tenantService.queryList(new SysTenantBo());
-        List<AppInfoVo> appVoList = appInfoService.selectList(new AppInfoBo(), AppInfoVo.class);
-        List<TenantListVo> voList = MapstructUtils.convert(tenantList, TenantListVo.class);
-        List<AppListVo> appListVos = MapstructUtils.convert(appVoList, AppListVo.class);
+
+        TenantHelper.enableIgnore();
+        List<AppInfo> appList = appInfoService.selectList();
+        TenantHelper.disableIgnore();
 
         // 获取域名
         String host;
@@ -201,17 +208,25 @@ public class AuthController {
         } else {
             host = new URL(request.getRequestURL().toString()).getHost();
         }
-        // 根据域名进行筛选
-        List<TenantListVo> list = StreamUtils.filter(voList, vo ->
-                StringUtils.equals(vo.getDomain(), host));
+        List<SysTenantVo> tenantList = tenantService.queryList(new SysTenantBo());
+        tenantList = tenantList.stream()
+            .filter(vo -> StringUtils.equals(vo.getDomain(), host) || StringUtils.isBlank(vo.getDomain()))
+            .toList();
+
+       List<SearchVo> tenants = tenantList.stream().map(o -> {
+            List<SearchVo> children = appList.stream()
+                .filter(app -> app.getTenantId().equals(o.getTenantId()))
+                .map(app -> SearchVo.builder().label(app.getAppName()).value(app.getAppId() + "").code(app.getAppCode()).parentValue(o.getTenantId()).build())
+                .toList();
+            return SearchVo.builder().label(o.getCompanyName()).value(o.getTenantId()).code(o.getTenantId()).children(children).build();
+        }).toList();
 
         // 返回对象
         LoginTenantVo vo = new LoginTenantVo();
-        vo.setVoList(CollUtil.isNotEmpty(list) ? list : voList);
-        vo.setAppList(appListVos);
+        vo.setTenants(tenants);
         vo.setTenantEnabled(TenantHelper.isEnable());
         vo.setTenantId(TenantHelper.getTenantId());
-        vo.setAppIds(AppHelper.getAppId());
+        vo.setAppId(AppHelper.getAppId());
         return R.ok(vo);
     }
 

@@ -29,13 +29,6 @@ public class TradeOrderBo extends BaseEntity {
     private Long orderId;
 
     /**
-     * 订单来源应用
-     */
-    @NotNull(message = "订单来源应用不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long appId;
-    private List<Long> appIds;
-
-    /**
      * 订单用户id
      */
     @NotNull(message = "订单用户id不能为空", groups = { AddGroup.class, EditGroup.class })

@@ -1,6 +1,7 @@
 package org.dromara.web.domain.vo;
 
 import lombok.Data;
+import org.dromara.basis.constant.SearchVo;
 
 import java.util.List;
 
@@ -21,16 +22,11 @@ public class LoginTenantVo {
      * 当前值
      */
     private String tenantId;
-    private List<Long> appIds;
-
-    /**
-     * 租户对象列表
-     */
-    private List<TenantListVo> voList;
+    private Long appId;
 
     /**
      * 应用对象列表
      */
-    private List<AppListVo> appList;
+    private List<SearchVo> tenants;
 
 }

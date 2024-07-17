@@ -34,7 +34,6 @@ public class AppBackupService implements IBaseService<AppBackup, AppBackupBo> {
     public LambdaQueryWrapper<AppBackup> buildQueryWrapper(AppBackupBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<AppBackup> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getAppId() != null, AppBackup::getAppId, bo.getAppId());
         lqw.eq(bo.getMemberId() != null, AppBackup::getMemberId, bo.getMemberId());
         lqw.like(StringUtils.isNotBlank(bo.getTitle()), AppBackup::getTitle, bo.getTitle());
         lqw.between(params.get("beginTime") != null && params.get("endTime") != null,

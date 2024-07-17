@@ -37,8 +37,6 @@ public class MemberCoinsService implements IBaseService<MemberCoins, MemberCoins
     public LambdaQueryWrapper<MemberCoins> buildQueryWrapper(MemberCoinsBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<MemberCoins> lqw = Wrappers.lambdaQuery();
-        lqw.eq(Objects.nonNull(bo.getAppId()), MemberCoins::getAppId, bo.getAppId());
-        lqw.in(CollectionUtils.isNotEmpty(bo.getAppIds()), MemberCoins::getAppId, bo.getAppIds());
         lqw.eq(Objects.nonNull(bo.getMemberId()), MemberCoins::getMemberId, bo.getMemberId());
         lqw.eq(Objects.nonNull(bo.getCoinsType()), MemberCoins::getCoinsType, bo.getCoinsType());
         lqw.eq(Objects.nonNull(bo.getStatus()), MemberCoins::getStatus, bo.getStatus());

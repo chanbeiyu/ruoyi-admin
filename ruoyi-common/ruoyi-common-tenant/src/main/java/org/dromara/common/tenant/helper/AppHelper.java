@@ -2,9 +2,6 @@ package org.dromara.common.tenant.helper;
 
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.collection.ListUtil;
-import com.alibaba.fastjson2.JSON;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.baomidou.mybatisplus.core.plugins.IgnoreStrategy;
 import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
@@ -12,11 +9,10 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.dromara.common.core.constant.GlobalConstants;
+import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.redis.utils.RedisUtils;
 import org.dromara.common.satoken.utils.LoginHelper;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -29,7 +25,7 @@ import java.util.function.Supplier;
 public class AppHelper {
 
     private static final String DYNAMIC_APP_KEY = GlobalConstants.GLOBAL_REDIS_KEY + "dynamicApp";
-    private static final ThreadLocal<List<Long>> TEMP_DYNAMIC_APP = new TransmittableThreadLocal<>();
+    private static final ThreadLocal<Long> TEMP_DYNAMIC_APP = new TransmittableThreadLocal<>();
 
     /**
      * 开启忽略APP(开启后需手动调用 {@link #disableIgnore()} 关闭)
@@ -78,21 +74,15 @@ public class AppHelper {
      * <p>
      * 如果为未登录状态下 那么只在当前线程内生效
      */
-    public static void setDynamic(String appIds) {
-        setDynamic(Arrays.stream(appIds.split(","))
-            .map(Long::valueOf)
-            .toList());
-    }
-
-    public static void setDynamic(List<Long> appIds) {
+    public static void setDynamic(Long appId) {
         if (!isLogin()) {
-            TEMP_DYNAMIC_APP.set(appIds);
+            TEMP_DYNAMIC_APP.set(appId);
             return;
         }
         clearDynamic();
         String cacheKey = DYNAMIC_APP_KEY + ":" + LoginHelper.getUserId();
-        RedisUtils.setCacheList(cacheKey, appIds);
-        SaHolder.getStorage().set(cacheKey, JSON.toJSONString(appIds));
+        RedisUtils.setCacheObject(cacheKey, appId + "");
+        SaHolder.getStorage().set(cacheKey, appId);
     }
 
     /**
@@ -100,18 +90,20 @@ public class AppHelper {
      * <p>
      * 如果为未登录状态下 那么只在当前线程内生效
      */
-    public static List<Long> getDynamic() {
+    public static Long getDynamic() {
         if (!isLogin()) {
             return TEMP_DYNAMIC_APP.get();
         }
         String cacheKey = DYNAMIC_APP_KEY + ":" + LoginHelper.getUserId();
-        List<Long> appIds = JSON.parseArray(SaHolder.getStorage().getString(cacheKey), Long.class);
-        if (CollUtil.isNotEmpty(appIds)) {
-            return appIds;
+        if (SaHolder.getStorage().has(cacheKey)) {
+            return SaHolder.getStorage().getLong(cacheKey);
         }
-        appIds = RedisUtils.getCacheList(cacheKey);
-        SaHolder.getStorage().set(cacheKey, appIds);
-        return appIds;
+        if (RedisUtils.hasKey(cacheKey)) {
+            Long value = Long.valueOf(RedisUtils.getCacheObject(cacheKey));
+            SaHolder.getStorage().set(cacheKey, value);
+            return value;
+        }
+        return null;
     }
 
     /**
@@ -132,12 +124,14 @@ public class AppHelper {
      *
      * @param handle 处理执行方法
      */
-    public static void dynamic(String appId, Runnable handle) {
+    public static void dynamic(Long appId, Runnable handle) {
+        Long _appId = getAppId();
         setDynamic(appId);
         try {
             handle.run();
         } finally {
             clearDynamic();
+            setDynamic(_appId);
         }
     }
 
@@ -147,19 +141,22 @@ public class AppHelper {
      * @param handle 处理执行方法
      */
     public static <T> T dynamic(Long appId, Supplier<T> handle) {
-        setDynamic(ListUtil.list(false, appId));
+        Long _appId = getAppId();
+        setDynamic(appId);
         try {
             return handle.get();
         } finally {
             clearDynamic();
+            setDynamic(_appId);
         }
     }
 
     /**
      * 获取当前appId
      */
-    public static List<Long> getAppId() {
+    public static Long getAppId() {
         return AppHelper.getDynamic();
+
     }
 
     private static boolean isLogin() {

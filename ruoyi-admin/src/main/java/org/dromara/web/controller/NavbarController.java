@@ -1,25 +1,25 @@
 package org.dromara.web.controller;
 
-import cn.hutool.core.collection.CollUtil;
+import cn.dev33.satoken.annotation.SaCheckRole;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.basis.app.bo.AppInfoBo;
+import org.dromara.basis.app.entity.AppInfo;
 import org.dromara.basis.app.service.AppInfoService;
+import org.dromara.basis.constant.SearchVo;
+import org.dromara.common.core.constant.TenantConstants;
 import org.dromara.common.core.domain.R;
-import org.dromara.common.core.utils.MapstructUtils;
-import org.dromara.common.core.utils.StreamUtils;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.tenant.helper.AppHelper;
 import org.dromara.common.tenant.helper.TenantHelper;
-import org.dromara.platform.vo.app.AppInfoVo;
 import org.dromara.system.domain.bo.SysTenantBo;
 import org.dromara.system.domain.vo.SysTenantVo;
 import org.dromara.system.service.ISysTenantService;
-import org.dromara.web.domain.vo.AppListVo;
 import org.dromara.web.domain.vo.LoginTenantVo;
-import org.dromara.web.domain.vo.TenantListVo;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,10 +45,9 @@ public class NavbarController {
      */
     @GetMapping("/tenant/list")
     public R<LoginTenantVo> tenantList(HttpServletRequest request) throws Exception {
-        List<SysTenantVo> tenantList = tenantService.queryList(new SysTenantBo());
-        List<AppInfoVo> appVoList = appInfoService.selectList(new AppInfoBo(),  AppInfoVo.class);
-        List<TenantListVo> voList = MapstructUtils.convert(tenantList, TenantListVo.class);
-        List<AppListVo> appListVos = MapstructUtils.convert(appVoList, AppListVo.class);
+        TenantHelper.enableIgnore();
+        List<AppInfo> appList = appInfoService.selectList();
+        TenantHelper.disableIgnore();
 
         // 获取域名
         String host;
@@ -59,18 +58,51 @@ public class NavbarController {
         } else {
             host = new URL(request.getRequestURL().toString()).getHost();
         }
-        // 根据域名进行筛选
-        List<TenantListVo> list = StreamUtils.filter(voList, vo ->
-            StringUtils.equals(vo.getDomain(), host));
+        List<SysTenantVo> tenantList = tenantService.queryList(new SysTenantBo());
+        tenantList = tenantList.stream()
+            .filter(vo -> StringUtils.equals(vo.getDomain(), host) || StringUtils.isBlank(vo.getDomain()))
+            .toList();
+
+        List<SearchVo> tenants = tenantList.stream().map(o -> {
+            List<SearchVo> children = appList.stream()
+                .filter(app -> app.getTenantId().equals(o.getTenantId()))
+                .map(app -> SearchVo.builder().label(app.getAppName()).value(app.getAppId() + "").code(app.getAppCode()).parentValue(o.getTenantId()).build())
+                .toList();
+            return SearchVo.builder().label(o.getCompanyName()).value(o.getTenantId()).code(o.getTenantId()).children(children).build();
+        }).toList();
 
         // 返回对象
         LoginTenantVo vo = new LoginTenantVo();
-        vo.setVoList(CollUtil.isNotEmpty(list) ? list : voList);
-        vo.setAppList(appListVos);
+        vo.setTenants(tenants);
         vo.setTenantEnabled(TenantHelper.isEnable());
         vo.setTenantId(TenantHelper.getTenantId());
-        vo.setAppIds(AppHelper.getAppId());
+        vo.setAppId(AppHelper.getAppId());
         return R.ok(vo);
+    }
+
+    /**
+     * 动态切换租户
+     *
+     * @param tenantId 租户ID
+     */
+    @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
+    @GetMapping("/tenant/dynamic/{tenantId}/{appId}")
+    public R<Void> dynamicTenant(@NotBlank(message = "租户ID不能为空") @PathVariable String tenantId,
+                                 @NotNull(message = "应用ID不能为空") @PathVariable Long appId) {
+        TenantHelper.setDynamic(tenantId);
+        AppHelper.setDynamic(appId);
+        return R.ok();
+    }
+
+    /**
+     * 清除动态租户
+     */
+    @SaCheckRole(TenantConstants.SUPER_ADMIN_ROLE_KEY)
+    @GetMapping("/tenant/dynamic/clear")
+    public R<Void> dynamicClear() {
+        TenantHelper.clearDynamic();
+        AppHelper.clearDynamic();
+        return R.ok();
     }
 
 }

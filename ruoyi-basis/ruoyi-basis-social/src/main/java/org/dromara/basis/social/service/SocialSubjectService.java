@@ -42,8 +42,6 @@ public class SocialSubjectService implements IBaseService<SocialSubject, SocialS
     public LambdaQueryWrapper<SocialSubject> buildQueryWrapper(SocialSubjectBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<SocialSubject> lqw = Wrappers.lambdaQuery();
-        lqw.eq(Objects.nonNull(bo.getAppId()), SocialSubject::getAppId, bo.getAppId());
-        lqw.in(CollectionUtils.isNotEmpty(bo.getAppIds()), SocialSubject::getAppId, bo.getAppIds());
         lqw.eq(StringUtils.isNotBlank(bo.getSubjectCode()), SocialSubject::getSubjectCode, bo.getSubjectCode());
         lqw.like(StringUtils.isNotBlank(bo.getSubjectName()), SocialSubject::getSubjectName, bo.getSubjectName());
         lqw.eq(StringUtils.isNotBlank(bo.getStatus()), SocialSubject::getStatus, bo.getStatus());

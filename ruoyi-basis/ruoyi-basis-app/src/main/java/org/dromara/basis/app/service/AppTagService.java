@@ -42,7 +42,6 @@ public class AppTagService implements IBaseService<AppTag, AppTagBo> {
     public LambdaQueryWrapper<AppTag> buildQueryWrapper(AppTagBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<AppTag> lqw = Wrappers.lambdaQuery();
-        lqw.eq(StringUtils.isNotBlank(bo.getAppId()), AppTag::getAppId, bo.getAppId());
         lqw.eq(Objects.nonNull(bo.getSubjectId()), AppTag::getSubjectId, bo.getSubjectId());
         lqw.in(CollectionUtils.isNotEmpty(bo.getSubjectIds()), AppTag::getSubjectId, bo.getSubjectIds());
         lqw.like(StringUtils.isNotBlank(bo.getTagCode()), AppTag::getTagCode, bo.getTagCode());

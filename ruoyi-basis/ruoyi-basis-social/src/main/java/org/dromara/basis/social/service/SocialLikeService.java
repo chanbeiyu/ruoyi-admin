@@ -36,8 +36,6 @@ public class SocialLikeService implements IBaseService<SocialLike, SocialLikeBo>
     public LambdaQueryWrapper<SocialLike> buildQueryWrapper(SocialLikeBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<SocialLike> lqw = Wrappers.lambdaQuery();
-        lqw.eq(Objects.nonNull(bo.getAppId()), SocialLike::getAppId, bo.getAppId());
-        lqw.in(CollectionUtils.isNotEmpty(bo.getAppIds()), SocialLike::getAppId, bo.getAppIds());
         lqw.eq(bo.getMemberId() != null, SocialLike::getMemberId, bo.getMemberId());
         lqw.eq(bo.getToMemberId() != null, SocialLike::getToMemberId, bo.getToMemberId());
         lqw.eq(bo.getSubjectId() != null, SocialLike::getSubjectId, bo.getSubjectId());

@@ -28,12 +28,6 @@ public class SocialNoticeTypeBo extends BaseEntity {
     @NotNull(message = "通知类型id不能为空", groups = { EditGroup.class })
     private Long noticeTypeId;
 
-    /**
-     * 应用名称
-     */
-    @NotNull(message = "应用名称不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long appId;
-    private List<Long> appIds;
 
     /**
      * 通知类型编码

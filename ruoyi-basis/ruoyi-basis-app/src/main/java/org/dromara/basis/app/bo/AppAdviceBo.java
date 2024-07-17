@@ -29,13 +29,6 @@ public class AppAdviceBo extends BaseEntity {
     private Long adviceId;
 
     /**
-     * AppId
-     */
-    @NotNull(message = "AppId不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long appId;
-    private List<Long> appIds;
-
-    /**
      * 成员id
      */
     @NotNull(message = "成员id不能为空", groups = { AddGroup.class, EditGroup.class })

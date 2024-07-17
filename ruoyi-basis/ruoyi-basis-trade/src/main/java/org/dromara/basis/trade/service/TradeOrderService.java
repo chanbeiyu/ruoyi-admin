@@ -34,8 +34,6 @@ public class TradeOrderService implements IBaseService<TradeOrder, TradeOrderBo>
     public LambdaQueryWrapper<TradeOrder> buildQueryWrapper(TradeOrderBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<TradeOrder> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getAppId() != null, TradeOrder::getAppId, bo.getAppId());
-        lqw.in(bo.getAppIds() != null, TradeOrder::getAppId, bo.getAppIds());
         lqw.eq(bo.getMemberId() != null, TradeOrder::getMemberId, bo.getMemberId());
         lqw.eq(bo.getOrderType() != null, TradeOrder::getOrderType, bo.getOrderType());
         lqw.eq(bo.getPaymentType() != null, TradeOrder::getPaymentType, bo.getPaymentType());

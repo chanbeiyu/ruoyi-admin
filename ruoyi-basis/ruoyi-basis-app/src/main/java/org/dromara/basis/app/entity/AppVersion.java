@@ -38,8 +38,7 @@ public class AppVersion extends TenantEntity {
     /**
      * 版本号
      */
-    @Version
-    private String version;
+    private String showVersion;
 
     /**
      * 内部版本号

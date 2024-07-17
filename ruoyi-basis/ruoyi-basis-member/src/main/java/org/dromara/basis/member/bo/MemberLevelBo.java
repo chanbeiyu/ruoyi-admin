@@ -27,12 +27,6 @@ public class MemberLevelBo extends BaseEntity {
     private Long levelId;
 
     /**
-     * 应用名称
-     */
-    @NotNull(message = "应用名称不能为空", groups = { AddGroup.class, EditGroup.class })
-    private Long appId;
-
-    /**
      * 会员类别
      */
     @NotNull(message = "会员类别不能为空", groups = { AddGroup.class, EditGroup.class })

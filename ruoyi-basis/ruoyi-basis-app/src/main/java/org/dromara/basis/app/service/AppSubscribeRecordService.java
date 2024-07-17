@@ -35,8 +35,6 @@ public class AppSubscribeRecordService implements IBaseService<AppSubscribeRecor
     public LambdaQueryWrapper<AppSubscribeRecord> buildQueryWrapper(AppSubscribeRecordBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<AppSubscribeRecord> lqw = Wrappers.lambdaQuery();
-        lqw.eq(bo.getAppId() != null, AppSubscribeRecord::getAppId, bo.getAppId());
-        lqw.in(CollectionUtils.isNotEmpty(bo.getAppIds()), AppSubscribeRecord::getAppId, bo.getAppIds());
         lqw.eq(bo.getSubscribeId() != null, AppSubscribeRecord::getSubscribeId, bo.getSubscribeId());
         lqw.eq(bo.getMemberId() != null, AppSubscribeRecord::getMemberId, bo.getMemberId());
         lqw.like(bo.getOrderId() != null, AppSubscribeRecord::getOrderId, bo.getOrderId());

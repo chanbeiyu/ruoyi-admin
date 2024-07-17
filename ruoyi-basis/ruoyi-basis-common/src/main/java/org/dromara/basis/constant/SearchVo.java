@@ -1,7 +1,7 @@
-package org.dromara.platform.vo.search;
+package org.dromara.basis.constant;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+//import com.fasterxml.jackson.annotation.JsonIgnore;
+//import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,17 +29,17 @@ public class SearchVo implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private Long value;
+    private String value;
     private String label;
     private String code;
 
-    @JsonIgnore
-    private Long parentValue;
+//    @JsonIgnore
+    private String parentValue;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Map<String, Object> extend;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<SearchVo> children;
 
     public SearchVo putExtend(String key, Object obj) {

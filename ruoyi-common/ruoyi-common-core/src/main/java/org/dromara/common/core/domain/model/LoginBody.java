@@ -34,6 +34,7 @@ public class LoginBody implements Serializable {
      * 租户ID
      */
     private String tenantId;
+    private Long appId;
 
     /**
      * 验证码

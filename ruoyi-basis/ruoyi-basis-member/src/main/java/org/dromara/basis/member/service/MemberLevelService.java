@@ -41,7 +41,6 @@ public class MemberLevelService implements IBaseService<MemberLevel, MemberLevel
     public LambdaQueryWrapper<MemberLevel> buildQueryWrapper(MemberLevelBo bo) {
         Map<String, Object> params = bo.getParams();
         LambdaQueryWrapper<MemberLevel> lqw = Wrappers.lambdaQuery();
-        lqw.eq(Objects.nonNull(bo.getAppId()), MemberLevel::getAppId, bo.getAppId());
         lqw.eq(Objects.nonNull(bo.getMemberTypeId()), MemberLevel::getMemberTypeId, bo.getMemberTypeId());
         lqw.like(StringUtils.isNotBlank(bo.getLevelCode()), MemberLevel::getLevelCode, bo.getLevelCode());
         lqw.like(StringUtils.isNotBlank(bo.getLevelName()), MemberLevel::getLevelName, bo.getLevelName());
