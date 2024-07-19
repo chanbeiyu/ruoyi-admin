@@ -2,30 +2,29 @@ package org.dromara.common.tenant.config;
 
 import cn.dev33.satoken.dao.SaTokenDao;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.inner.DataPermissionInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
 import org.dromara.common.core.utils.reflect.ReflectUtils;
 import org.dromara.common.mybatis.config.MybatisPlusConfig;
 import org.dromara.common.redis.config.RedisConfig;
 import org.dromara.common.redis.config.properties.RedissonProperties;
 import org.dromara.common.tenant.core.TenantSaTokenDao;
-import org.dromara.common.tenant.handle.*;
+import org.dromara.common.tenant.handle.AppLineInnerInterceptor;
+import org.dromara.common.tenant.handle.PlusAppLineHandler;
+import org.dromara.common.tenant.handle.PlusTenantLineHandler;
+import org.dromara.common.tenant.handle.TenantKeyPrefixHandler;
 import org.dromara.common.tenant.manager.TenantSpringCacheManager;
 import org.dromara.common.tenant.properties.TenantProperties;
 import org.redisson.config.ClusterServersConfig;
 import org.redisson.config.SingleServerConfig;
 import org.redisson.spring.starter.RedissonAutoConfigurationCustomizer;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.dromara.common.tenant.handle.*;
 
 /**
  * 租户配置类
@@ -33,36 +32,28 @@ import java.util.List;
  * @author Lion Li
  */
 @EnableConfigurationProperties(TenantProperties.class)
-@AutoConfiguration(after = {RedisConfig.class, MybatisPlusConfig.class})
+@AutoConfiguration(after = {RedisConfig.class})
 @ConditionalOnProperty(value = "tenant.enable", havingValue = "true")
 public class TenantConfig {
 
-    /**
-     * 初始化租户配置
-     */
-    @Bean
-    public boolean tenantInit(MybatisPlusInterceptor mybatisPlusInterceptor, TenantProperties tenantProperties) {
-        List<InnerInterceptor> interceptors = new ArrayList<>();
-        // 多租户插件 必须放到第一位
-        interceptors.add(tenantLineInnerInterceptor(tenantProperties));
-        interceptors.add(appLineInnerInterceptor(tenantProperties));
-        // interceptors.add(appDataPermissionInterceptor(tenantProperties));
-        interceptors.addAll(mybatisPlusInterceptor.getInterceptors());
-        mybatisPlusInterceptor.setInterceptors(interceptors);
-        return true;
-    }
+    @ConditionalOnBean(MybatisPlusConfig.class)
+    @AutoConfiguration(after = {MybatisPlusConfig.class})
+    static class MybatisPlusConfiguration {
+        /**
+         * 多租户插件
+         */
+        public TenantLineInnerInterceptor tenantLineInnerInterceptor(TenantProperties tenantProperties) {
+            return new TenantLineInnerInterceptor(new PlusTenantLineHandler(tenantProperties));
+        }
 
-    /**
-     * 多租户插件
-     */
-    public TenantLineInnerInterceptor tenantLineInnerInterceptor(TenantProperties tenantProperties) {
-        return new TenantLineInnerInterceptor(new PlusTenantLineHandler(tenantProperties));
-    }
-    public AppLineInnerInterceptor appLineInnerInterceptor(TenantProperties tenantProperties) {
-        return new AppLineInnerInterceptor(new PlusAppLineHandler(tenantProperties));
-    }
-    public DataPermissionInterceptor appDataPermissionInterceptor(TenantProperties tenantProperties) {
-        return new DataPermissionInterceptor(new AppDataPermissionHandler(tenantProperties));
+        public AppLineInnerInterceptor appLineInnerInterceptor(TenantProperties tenantProperties) {
+            return new AppLineInnerInterceptor(new PlusAppLineHandler(tenantProperties));
+        }
+
+//        public DataPermissionInterceptor appDataPermissionInterceptor(TenantProperties tenantProperties) {
+//            return new DataPermissionInterceptor(new AppDataPermissionHandler(tenantProperties));
+//        }
+
     }
 
     @Bean

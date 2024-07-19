@@ -154,6 +154,7 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
             }
             row = baseMapper.updateById(config);
         } else {
+            CacheUtils.evict(CacheNames.SYS_CONFIG, config.getConfigKey());
             row = baseMapper.update(config, new LambdaQueryWrapper<SysConfig>()
                 .eq(SysConfig::getConfigKey, config.getConfigKey()));
         }
@@ -177,7 +178,7 @@ public class SysConfigServiceImpl implements ISysConfigService, ConfigService {
             }
             CacheUtils.evict(CacheNames.SYS_CONFIG, config.getConfigKey());
         }
-        baseMapper.deleteBatchIds(Arrays.asList(configIds));
+        baseMapper.deleteByIds(Arrays.asList(configIds));
     }
 
     /**

@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>ensoul-admin-service</artifactId>
+        <artifactId>ruoyi-vue-plus</artifactId>
         <groupId>org.dromara</groupId>
         <version>${revision}</version>
     </parent>
@@ -14,6 +14,7 @@
         <module>ruoyi-generator</module>
         <module>ruoyi-job</module>
         <module>ruoyi-system</module>
+        <module>ruoyi-workflow</module>
         <module>ruoyi-platform</module>
         <module>ruoyi-apptw</module>
     </modules>
