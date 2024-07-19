@@ -42,17 +42,19 @@ public class TenantConfig {
         /**
          * 多租户插件
          */
+        @Bean
         public TenantLineInnerInterceptor tenantLineInnerInterceptor(TenantProperties tenantProperties) {
             return new TenantLineInnerInterceptor(new PlusTenantLineHandler(tenantProperties));
         }
 
+        @Bean
         public AppLineInnerInterceptor appLineInnerInterceptor(TenantProperties tenantProperties) {
             return new AppLineInnerInterceptor(new PlusAppLineHandler(tenantProperties));
         }
 
-//        public DataPermissionInterceptor appDataPermissionInterceptor(TenantProperties tenantProperties) {
-//            return new DataPermissionInterceptor(new AppDataPermissionHandler(tenantProperties));
-//        }
+        // public DataPermissionInterceptor appDataPermissionInterceptor(TenantProperties tenantProperties) {
+        //    return new DataPermissionInterceptor(new AppDataPermissionHandler(tenantProperties));
+        // }
 
     }
 

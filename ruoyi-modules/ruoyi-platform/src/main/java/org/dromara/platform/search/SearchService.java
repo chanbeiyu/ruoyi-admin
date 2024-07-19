@@ -5,15 +5,17 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import org.dromara.basis.app.entity.AppInfo;
 import org.dromara.basis.app.entity.AppSubject;
+import org.dromara.basis.app.entity.AppSubscribe;
 import org.dromara.basis.app.mapper.AppInfoMapper;
 import org.dromara.basis.app.mapper.AppSubjectMapper;
+import org.dromara.basis.app.mapper.AppSubscribeMapper;
+import org.dromara.basis.constant.SearchVo;
 import org.dromara.basis.member.entity.MemberInfo;
 import org.dromara.basis.member.entity.MemberType;
 import org.dromara.basis.member.mapper.MemberInfoMapper;
 import org.dromara.basis.member.mapper.MemberTypeMapper;
 import org.dromara.common.core.utils.StringUtils;
 import org.dromara.common.mybatis.core.page.TableDataInfo;
-import org.dromara.basis.constant.SearchVo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,6 +36,7 @@ public class SearchService {
     private final MemberInfoMapper memberInfoMapper;
     private final MemberTypeMapper memberTypeMapper;
     private final AppSubjectMapper appSubjectMapper;
+    private final AppSubscribeMapper appSubscribeMapper;
 
     public TableDataInfo<SearchVo> searchAppList(String query, Long appId) {
         return TableDataInfo.build(searchApp(query, appId));
@@ -42,6 +45,20 @@ public class SearchService {
 
     public TableDataInfo<SearchVo> searchSubjectList(String query, Long appId, boolean cascade) {
         List<SearchVo> subjects = searchSubject(query, appId);
+        if (cascade) {
+            List<SearchVo> apps = searchApp(null, appId);
+            Map<String, List<SearchVo>> subjectMap = subjects.stream()
+                .collect(Collectors.groupingBy(SearchVo::getParentValue));
+            apps.forEach(app -> {
+                app.setChildren(subjectMap.get(app.getValue()));
+            });
+            return TableDataInfo.build(apps);
+        }
+        return TableDataInfo.build(subjects);
+    }
+
+    public TableDataInfo<SearchVo> searchSubscribeList(String query, Long appId, boolean cascade) {
+        List<SearchVo> subjects = searchSubscribe(query, appId);
         if (cascade) {
             List<SearchVo> apps = searchApp(null, appId);
             Map<String, List<SearchVo>> subjectMap = subjects.stream()
@@ -137,6 +154,25 @@ public class SearchService {
                 .code(appSubject.getSubjectCode())
                 .label(appSubject.getSubjectName())
                 .parentValue(appSubject.getAppId() + "").build();
+        });
+    }
+
+    private List<SearchVo> searchSubscribe(String query, Long appId) {
+
+        LambdaQueryWrapper<AppSubscribe> lqw = Wrappers.lambdaQuery();
+        lqw.eq(appId != null, AppSubscribe::getAppId, appId);
+
+        if (StringUtils.isNotBlank(query)) {
+            lqw.and(i -> i.like(AppSubscribe::getSubscribeId, query)
+                .or().like(AppSubscribe::getTitle, query)
+                .or().like(AppSubscribe::getCode, query));
+        }
+
+        return appSubscribeMapper.selectList(lqw, appSubscribe -> {
+            return SearchVo.builder().value(appSubscribe.getSubscribeId() + "")
+                .code(appSubscribe.getCode())
+                .label(appSubscribe.getTitle())
+                .parentValue(appSubscribe.getAppId() + "").build();
         });
     }
 

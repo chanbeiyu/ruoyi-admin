@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
@@ -36,6 +37,10 @@ public class MybatisPlusConfig {
         try {
             TenantLineInnerInterceptor tenant = SpringUtils.getBean(TenantLineInnerInterceptor.class);
             interceptor.addInnerInterceptor(tenant);
+            Object appLineInnerInterceptor = SpringUtils.getBean("appLineInnerInterceptor");
+            if(appLineInnerInterceptor != null) {
+                interceptor.addInnerInterceptor((InnerInterceptor) appLineInnerInterceptor);
+            }
         } catch (BeansException ignore) {
         }
         // 数据权限处理

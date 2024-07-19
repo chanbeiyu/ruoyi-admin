@@ -46,6 +46,17 @@ public class SearchController extends BaseController {
     }
 
     /**
+     * 查询订阅列表，用于搜索/选择
+     */
+    //@SaCheckPermission("platfrom:search:style")
+    @GetMapping("/app/subscribe/search")
+    public TableDataInfo<SearchVo> searchSubscribe(@RequestParam(required = false) String query,
+                                                    @RequestParam(required = false) Long appId,
+                                                    @RequestParam(required = false, defaultValue = "false") boolean cascade) {
+        return searchService.searchSubscribeList(query, appId, cascade);
+    }
+
+    /**
      * 查询主题列表，用于搜索/选择
      */
     //@SaCheckPermission("platfrom:search:style")

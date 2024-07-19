@@ -12,8 +12,7 @@ import net.sf.jsqlparser.expression.RowConstructor;
 import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
-import net.sf.jsqlparser.expression.operators.relational.ItemsList;
-import net.sf.jsqlparser.expression.operators.relational.MultiExpressionList;
+import net.sf.jsqlparser.expression.operators.relational.ParenthesedExpressionList;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.delete.Delete;
@@ -31,7 +30,6 @@ import org.apache.ibatis.session.RowBounds;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -46,7 +44,7 @@ public class AppLineInnerInterceptor extends BaseMultiTableInnerInterceptor impl
 
     @Override
     public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
-        if (InterceptorIgnoreHelper.willIgnoreTenantLine(ms.getId())) {
+        if (InterceptorIgnoreHelper.willIgnoreDataPermission(ms.getId())) {
             return;
         }
         PluginUtils.MPBoundSql mpBs = PluginUtils.mpBoundSql(boundSql);
@@ -59,7 +57,7 @@ public class AppLineInnerInterceptor extends BaseMultiTableInnerInterceptor impl
         MappedStatement ms = mpSh.mappedStatement();
         SqlCommandType sct = ms.getSqlCommandType();
         if (sct == SqlCommandType.INSERT || sct == SqlCommandType.UPDATE || sct == SqlCommandType.DELETE) {
-            if (InterceptorIgnoreHelper.willIgnoreTenantLine(ms.getId())) {
+            if (InterceptorIgnoreHelper.willIgnoreDataPermission(ms.getId())) {
                 return;
             }
             PluginUtils.MPBoundSql mpBs = mpSh.mPBoundSql();
@@ -70,7 +68,7 @@ public class AppLineInnerInterceptor extends BaseMultiTableInnerInterceptor impl
     @Override
     protected void processSelect(Select select, int index, String sql, Object obj) {
         final String whereSegment = (String) obj;
-        processSelectBody(select.getSelectBody(), whereSegment);
+        processSelectBody(select, whereSegment);
         List<WithItem> withItemsList = select.getWithItemsList();
         if (!CollectionUtils.isEmpty(withItemsList)) {
             withItemsList.forEach(withItem -> processSelectBody(withItem, whereSegment));
@@ -88,51 +86,48 @@ public class AppLineInnerInterceptor extends BaseMultiTableInnerInterceptor impl
             // 针对不给列名的insert 不处理
             return;
         }
-        String tenantIdColumn = appLineHandler.getAppIdColumn();
-        if (appLineHandler.ignoreInsert(columns, tenantIdColumn)) {
+        String appIdColumn = appLineHandler.getAppIdColumn();
+        if (appLineHandler.ignoreInsert(columns, appIdColumn)) {
             // 针对已给出租户列的insert 不处理
             return;
         }
-        columns.add(new Column(tenantIdColumn));
-
+        columns.add(new Column(appIdColumn));
+        Expression tenantId = appLineHandler.getAppId();
         // fixed gitee pulls/141 duplicate update
-        List<Expression> duplicateUpdateColumns = insert.getDuplicateUpdateExpressionList();
+        List<UpdateSet> duplicateUpdateColumns = insert.getDuplicateUpdateSets();
         if (CollectionUtils.isNotEmpty(duplicateUpdateColumns)) {
             EqualsTo equalsTo = new EqualsTo();
-            equalsTo.setLeftExpression(new StringValue(tenantIdColumn));
-            equalsTo.setRightExpression(appLineHandler.getAppId());
-            duplicateUpdateColumns.add(equalsTo);
+            equalsTo.setLeftExpression(new StringValue(appIdColumn));
+            equalsTo.setRightExpression(tenantId);
+            duplicateUpdateColumns.add(new UpdateSet(new Column(appIdColumn), tenantId));
         }
 
         Select select = insert.getSelect();
-        if (select != null && (select.getSelectBody() instanceof PlainSelect)) { //fix github issue 4998  修复升级到4.5版本的问题
-            this.processInsertSelect(select.getSelectBody(), (String) obj);
-        } else if (insert.getItemsList() != null) {
+        if (select instanceof PlainSelect) { //fix github issue 4998  修复升级到4.5版本的问题
+            this.processInsertSelect(select, (String) obj);
+        } else if (insert.getValues() != null) {
             // fixed github pull/295
-            ItemsList itemsList = insert.getItemsList();
-            Expression appId = appLineHandler.getAppId();
-            if (itemsList instanceof MultiExpressionList) {
-                ((MultiExpressionList) itemsList).getExpressionLists().forEach(el -> el.getExpressions().add(appId));
+            Values values = insert.getValues();
+            ExpressionList<Expression> expressions = (ExpressionList<Expression>) values.getExpressions();
+            if (expressions instanceof ParenthesedExpressionList) {
+                expressions.addExpression(tenantId);
             } else {
-                List<Expression> expressions = ((ExpressionList) itemsList).getExpressions();
                 if (CollectionUtils.isNotEmpty(expressions)) {//fix github issue 4998 jsqlparse 4.5 批量insert ItemsList不是MultiExpressionList 了，需要特殊处理
                     int len = expressions.size();
                     for (int i = 0; i < len; i++) {
                         Expression expression = expressions.get(i);
-                        if (expression instanceof RowConstructor) {
-                            ((RowConstructor) expression).getExprList().getExpressions().add(appId);
-                        } else if (expression instanceof Parenthesis) {
-                            RowConstructor rowConstructor = new RowConstructor()
-                                .withExprList(new ExpressionList(((Parenthesis) expression).getExpression(), appId));
+                        if (expression instanceof Parenthesis) {
+                            ExpressionList rowConstructor = new RowConstructor<>()
+                                .withExpressions(new ExpressionList<>(((Parenthesis) expression).getExpression(), tenantId));
                             expressions.set(i, rowConstructor);
+                        } else if (expression instanceof ParenthesedExpressionList) {
+                            ((ParenthesedExpressionList) expression).addExpression(tenantId);
                         } else {
-                            if (len - 1 == i) { // (?,?) 只有最后一个expre的时候才拼接tenantId
-                                expressions.add(appId);
-                            }
+                            expressions.add(tenantId);
                         }
                     }
                 } else {
-                    expressions.add(appId);
+                    expressions.add(tenantId);
                 }
             }
         } else {
@@ -150,11 +145,11 @@ public class AppLineInnerInterceptor extends BaseMultiTableInnerInterceptor impl
             // 过滤退出执行
             return;
         }
-        ArrayList<UpdateSet> sets = update.getUpdateSets();
+        List<UpdateSet> sets = update.getUpdateSets();
         if (!CollectionUtils.isEmpty(sets)) {
-            sets.forEach(us -> us.getExpressions().forEach(ex -> {
-                if (ex instanceof SubSelect) {
-                    processSelectBody(((SubSelect) ex).getSelectBody(), (String) obj);
+            sets.forEach(us -> us.getValues().forEach(ex -> {
+                if (ex instanceof Select) {
+                    processSelectBody(((Select) ex), (String) obj);
                 }
             }));
         }
@@ -180,17 +175,23 @@ public class AppLineInnerInterceptor extends BaseMultiTableInnerInterceptor impl
      *
      * @param selectBody SelectBody
      */
-    protected void processInsertSelect(SelectBody selectBody, final String whereSegment) {
-        PlainSelect plainSelect = (PlainSelect) selectBody;
-        FromItem fromItem = plainSelect.getFromItem();
-        if (fromItem instanceof Table) {
-            // fixed gitee pulls/141 duplicate update
-            processPlainSelect(plainSelect, whereSegment);
-            appendSelectItem(plainSelect.getSelectItems());
-        } else if (fromItem instanceof SubSelect) {
-            SubSelect subSelect = (SubSelect) fromItem;
-            appendSelectItem(plainSelect.getSelectItems());
-            processInsertSelect(subSelect.getSelectBody(), whereSegment);
+    protected void processInsertSelect(Select selectBody, final String whereSegment) {
+        if (selectBody instanceof PlainSelect) {
+            PlainSelect plainSelect = (PlainSelect) selectBody;
+            FromItem fromItem = plainSelect.getFromItem();
+            if (fromItem instanceof Table) {
+                // fixed gitee pulls/141 duplicate update
+                processPlainSelect(plainSelect, whereSegment);
+                appendSelectItem(plainSelect.getSelectItems());
+            } else if (fromItem instanceof Select) {
+                Select subSelect = (Select) fromItem;
+                appendSelectItem(plainSelect.getSelectItems());
+                processInsertSelect(subSelect, whereSegment);
+            }
+        } else if (selectBody instanceof ParenthesedSelect) {
+            ParenthesedSelect parenthesedSelect = (ParenthesedSelect) selectBody;
+            processInsertSelect(parenthesedSelect.getSelect(), whereSegment);
+
         }
     }
 
@@ -199,17 +200,18 @@ public class AppLineInnerInterceptor extends BaseMultiTableInnerInterceptor impl
      *
      * @param selectItems SelectItem
      */
-    protected void appendSelectItem(List<SelectItem> selectItems) {
+    protected void appendSelectItem(List<SelectItem<?>> selectItems) {
         if (CollectionUtils.isEmpty(selectItems)) {
             return;
         }
         if (selectItems.size() == 1) {
             SelectItem item = selectItems.get(0);
-            if (item instanceof AllColumns || item instanceof AllTableColumns) {
+            Expression expression = item.getExpression();
+            if (expression instanceof AllColumns) {
                 return;
             }
         }
-        selectItems.add(new SelectExpressionItem(new Column(appLineHandler.getAppIdColumn())));
+        selectItems.add(new SelectItem<>(new Column(appLineHandler.getAppIdColumn())));
     }
 
     /**
@@ -231,7 +233,7 @@ public class AppLineInnerInterceptor extends BaseMultiTableInnerInterceptor impl
 
     @Override
     public void setProperties(Properties properties) {
-        PropertyMapper.newInstance(properties).whenNotBlank("tenantLineHandler",
+        PropertyMapper.newInstance(properties).whenNotBlank("appLineHandler",
             ClassUtils::newInstance, this::setAppLineHandler);
     }
 
